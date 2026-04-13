@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR BPJS System - Dashboard Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS for Excel Reading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- SweetAlert2 for nice alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar for tables */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 md:relative absolute z-30 h-full transform -translate-x-full md:translate-x-0 shadow-xl" id="sidebar">
+            <div class="p-6 flex items-center justify-between border-b border-slate-800">
+                <div class="flex items-center gap-3 font-bold text-xl text-white">
+                    <div class="w-8 h-8 rounded bg-teal-500 flex items-center justify-center">
+                        <i class="fa-solid fa-layer-group text-sm"></i>
+                    </div>
+                    <span>HR BPJS</span>
+                </div>
+                <button id="closeSidebar" class="md:hidden text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="px-4 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Navigasi Utama</div>
+            <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-teal-500/10 text-teal-400 font-medium transition-colors">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard
+                </button>
+                
+                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Database</div>
+                
+                <button onclick="switchTab('data', 'STAFF')" id="nav-staff" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-user-tie w-5 text-center"></i> Data Staff
+                </button>
+                <button onclick="switchTab('data', 'WORKER')" id="nav-worker" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-users-gear w-5 text-center"></i> Data Worker
+                </button>
+                <button onclick="switchTab('data', 'DATA_UPAH')" id="nav-upah" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-money-bill-wave w-5 text-center"></i> Data Upah
+                </button>
+
+                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Manajemen Data</div>
+                
+                <button onclick="switchTab('import')" id="nav-import" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-file-import w-5 text-center"></i> Import / Upload</div>
+                    <span class="bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded">Baru</span>
+                </button>
+                <button onclick="switchTab('pengaturan')" id="nav-pengaturan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-server w-5 text-center"></i> Pengaturan API
+                </button>
+            </nav>
+
+            <div class="p-4 bg-slate-950 text-xs flex justify-between items-center">
+                <span class="text-slate-500">Koneksi Database:</span>
+                <span id="status-badge" class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 font-semibold border border-yellow-500/30">Lokal</span>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full relative">
+            <!-- Header -->
+            <header class="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200 z-10 px-6 py-4 flex items-center justify-between sticky top-0">
+                <div class="flex items-center gap-4">
+                    <button id="openSidebar" class="md:hidden text-slate-500 hover:text-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-slate-800" id="page-title">Dashboard Analitik</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="loading-indicator" class="text-sm font-medium text-teal-600 hidden">
+                        <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Memuat...
+                    </span>
+                    <button onclick="fetchCurrentSheetData()" class="p-2 w-10 h-10 rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-600 transition-colors tooltip" title="Muat Ulang Data">
+                        <i class="fa-solid fa-rotate-right" id="refresh-icon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Alert Box (No API Setup) -->
+            <div id="api-alert" class="bg-blue-50 border-l-4 border-blue-500 p-4 m-6 mb-0 rounded shadow-sm hidden">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 text-blue-800">
+                        <i class="fa-solid fa-circle-info text-xl"></i>
+                        <div>
+                            <p class="font-bold text-sm">Mode Pratinjau (Data Dummy Lokal)</p>
+                            <p class="text-xs mt-0.5 opacity-80">Data hanya disimpan sementara. Untuk integrasi Google Sheets, masukkan URL Web App di menu Pengaturan.</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('pengaturan')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">Setup Sekarang</button>
+                </div>
+            </div>
+
+            <!-- Scrollable Content Area -->
+            <div class="flex-1 overflow-auto p-6">
+                
+                <!-- TAB: DASHBOARD -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 border-l-4 border-l-teal-500 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-1">Total Staff</p>
+                                    <h3 class="text-3xl font-bold text-slate-800" id="dash-staff">0</h3>
+                                </div>
+                                <div class="w-12 h-12 rounded-lg bg-teal-50 flex items-center justify-center text-teal-500 text-xl"><i class="fa-solid fa-user-tie"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-1">Total Worker</p>
+                                    <h3 class="text-3xl font-bold text-slate-800" id="dash-worker">0</h3>
+                                </div>
+                                <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 text-xl"><i class="fa-solid fa-users-gear"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-100 border-l-4 border-l-indigo-500 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-1">Data Upah</p>
+                                    <h3 class="text-3xl font-bold text-slate-800" id="dash-upah">0</h3>
+                                </div>
+                                <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500 text-xl"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Status Kepesertaan BPJS (Staff & Worker)</h3>
+                            <div class="flex items-center gap-6 mt-4">
+                                <div class="w-32 h-32 rounded-full border-8 border-slate-100 relative flex items-center justify-center">
+                                    <div class="absolute inset-0 rounded-full border-8 border-green-500" style="clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0); transform: rotate(45deg);"></div>
+                                    <span class="text-xl font-bold text-slate-700" id="chart-percent">0%</span>
+                                </div>
+                                <div class="flex-1 space-y-3">
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-green-500"></div> Aktif (OK)</span>
+                                            <span class="font-bold" id="stat-ok">0</span>
+                                        </div>
+                                        <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-green-500 h-2 rounded-full" id="bar-ok" style="width:0%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-400"></div> Bermasalah/Kosong</span>
+                                            <span class="font-bold" id="stat-notok">0</span>
+                                        </div>
+                                        <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-red-400 h-2 rounded-full" id="bar-notok" style="width:0%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Solusi "Koneksi Gagal / Fetch Error"</h3>
+                            <ul class="space-y-4 text-sm text-slate-600">
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div>
+                                    <p>Jika gagal dan dialihkan ke Mode Lokal, gunakan fitur <b>Diagnosa</b> di menu Pengaturan API.</p>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-wrench text-xs"></i></div>
+                                    <p>Pastikan deployment Anda menggunakan email Pribadi (@gmail.com) jika email perusahaan memblokir akses publik.</p>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-check text-xs"></i></div>
+                                    <p>Setiap ada perubahan kode di Apps Script, Anda <b>WAJIB</b> membuat <i>Deployment Versi Baru</i> (bukan mengedit yang lama).</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: DATA TABLE -->
+                <div id="tab-data" class="tab-content h-full">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-[calc(100vh-140px)]">
+                        <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50 rounded-t-xl">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800" id="table-title">Data Kepesertaan</h2>
+                                <p class="text-xs text-slate-500" id="table-subtitle">Menampilkan data dari database</p>
+                            </div>
+                            <div class="flex items-center gap-3 w-full md:w-auto">
+                                <div class="relative flex-1 md:w-64">
+                                    <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                                    <input type="text" id="searchInput" oninput="filterTable()" placeholder="Cari ID, NIK, atau Nama..." class="pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 w-full shadow-sm">
+                                </div>
+                                <button onclick="openModal('add')" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2 shrink-0">
+                                    <i class="fa-solid fa-plus"></i> <span class="hidden md:inline">Tambah Data</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-auto relative">
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-100/80 text-slate-600 text-xs uppercase font-bold sticky top-0 z-10 shadow-sm" id="table-head">
+                                    <!-- Dynamic Headers -->
+                                </thead>
+                                <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700">
+                                    <!-- Dynamic Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-slate-100 bg-white rounded-b-xl flex justify-between items-center text-xs text-slate-500">
+                            <span id="record-count">Menampilkan 0 data</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: IMPORT DATA -->
+                <div id="tab-import" class="tab-content">
+                    <div class="max-w-4xl mx-auto space-y-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                            <h2 class="text-xl font-bold text-slate-800 mb-2">Import / Upload Data Excel</h2>
+                            <p class="text-sm text-slate-500 mb-6">Unggah file Excel (.xlsx, .xls) atau CSV untuk memperbarui database secara otomatis tanpa takut double data (fitur Upsert otomatis berdasarkan ID).</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Pilih Sheet Target -->
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">1. Pilih Tujuan Database</label>
+                                    <select id="import-target" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm cursor-pointer">
+                                        <option value="STAFF">Data STAFF (Sesuai Format: ID, NIK, NAMA, POSITION...)</option>
+                                        <option value="WORKER">Data WORKER (Sesuai Format: ID, NIK, NAMA, POSITION...)</option>
+                                        <option value="DATA_UPAH">Data UPAH (Sesuai Format: ID, NIK, NAMA, KPJ, UPAH...)</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- File Upload Box -->
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">2. Upload File Dokumen</label>
+                                    <div class="relative border-2 border-dashed border-slate-300 bg-slate-50 rounded-lg p-6 flex flex-col items-center justify-center hover:border-teal-500 hover:bg-teal-50 transition-colors cursor-pointer" onclick="document.getElementById('file-upload').click()">
+                                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-3"></i>
+                                        <span class="text-sm font-medium text-slate-600" id="file-name-display">Klik untuk memilih file Excel</span>
+                                        <span class="text-xs text-slate-400 mt-1">.xlsx, .xls, .csv</span>
+                                        <input type="file" id="file-upload" class="hidden" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(event)">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="preview-section" class="mt-8 hidden">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-bold text-slate-800">Preview Data (<span id="preview-count">0</span> baris terdeteksi)</h3>
+                                    <button onclick="processImport()" id="btn-process-import" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold shadow transition-colors flex items-center gap-2">
+                                        <i class="fa-solid fa-database"></i> Sinkronisasi ke Database
+                                    </button>
+                                </div>
+                                <div class="overflow-x-auto border border-slate-200 rounded-lg max-h-64">
+                                    <table class="w-full text-left text-xs whitespace-nowrap">
+                                        <thead class="bg-slate-100 text-slate-600 font-bold sticky top-0" id="preview-head"></thead>
+                                        <tbody id="preview-body" class="divide-y divide-slate-100 text-slate-600"></tbody>
+                                    </table>
+                                </div>
+                                <p class="text-xs text-red-500 mt-2 font-medium"><i class="fa-solid fa-triangle-exclamation"></i> Pastikan baris pertama pada file Excel adalah Header (Judul Kolom) yang sesuai dengan database.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: PENGATURAN -->
+                <div id="tab-pengaturan" class="tab-content">
+                    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                        <div class="flex items-center justify-between mb-6 pb-6 border-b border-slate-100">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-2xl">
+                                    <i class="fa-solid fa-link"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800">Koneksi API Google Sheets</h2>
+                                    <p class="text-sm text-slate-500">Hubungkan interface web ini dengan database Anda.</p>
+                                </div>
+                            </div>
+                            <button onclick="diagnoseConnection()" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded text-xs font-bold hover:bg-indigo-100 transition-colors">
+                                <i class="fa-solid fa-stethoscope"></i> Diagnosa Error
+                            </button>
+                        </div>
+
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Web App URL (Dari Google Apps Script)</label>
+                                <textarea id="input-api-url" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm font-mono break-all" placeholder="https://script.google.com/macros/s/AKfycby.../exec"></textarea>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-end pt-4">
+                                <button onclick="clearApiUrl()" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">Putuskan API</button>
+                                <button onclick="saveApiUrl()" class="px-6 py-2.5 text-sm font-bold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 shadow-sm">
+                                    <i class="fa-solid fa-save"></i> Simpan URL
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL FOR ADD/EDIT -->
+    <div id="data-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-xl">
+                <h3 class="text-lg font-bold text-slate-800" id="modal-title">Tambah Data</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <form id="data-form" class="space-y-4">
+                    <!-- Dinamis dibentuk via JS sesuai Sheet aktif -->
+                </form>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="submitDataForm()" id="btn-save-modal" class="px-5 py-2.5 text-sm font-bold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-save"></i> Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- System State ---
+        let gasApiUrl = localStorage.getItem('bpjs_gas_url') || '';
+        let currentActiveTab = 'dashboard';
+        let currentSheet = 'STAFF'; 
+        
+        let database = {
+            'STAFF': [],
+            'WORKER': [],
+            'DATA_UPAH': []
+        };
+        
+        let filteredData = [];
+        let editingRowIndex = null;
+        let pendingImportData = []; 
+
+        // --- Demo Data (Ditampilkan jika tidak konek API) ---
+        const DEMO_DATA = {
+            'STAFF': [
+                { _rowIndex: 2, ID_PEGAWAI: 'SR110553', NIK: '3374126805840001', NAMA: 'WAIKA ISMALIA DEWI', POSITION: 'MARKER MAKER', DEPARTEMENT: 'CUTTING', STATUS_KEPESERTAAN: 'OK', NO_KARTU: '0001142928663', NO_HP: '085876345643' }
+            ],
+            'WORKER': [
+                { _rowIndex: 2, ID_PEGAWAI: 'SR200617', NIK: '3322156308950002', NAMA: 'MAELI WAFDA IMALA', POSITION: 'NURSE', DEPARTEMENT: 'PEOPLE & CULTURE', STATUS_KEPESERTAAN: 'OK', NO_KARTU_BPJS: '0000603115211', NO_HP: '088228913371' }
+            ],
+            'DATA_UPAH': [
+                { _rowIndex: 2, ID_PEGAWAI: 'SR251141', NIK: '3322161706030001', NAMA: 'AAN ARDIANSYAH', KPJ: '26012192469', UPAH: '2940088', RAPEL: '0', BLTH: '01-04-2026' }
+            ]
+        };
+
+        const HEADERS = {
+            'STAFF': ['ID_PEGAWAI', 'NIK', 'NAMA', 'POSITION', 'DEPARTEMENT', 'STATUS_KEPESERTAAN', 'NO_KARTU', 'NO_HP'],
+            'WORKER': ['ID_PEGAWAI', 'NIK', 'NAMA', 'POSITION', 'DEPARTEMENT', 'STATUS_KEPESERTAAN', 'NO_KARTU_BPJS', 'NO_HP'],
+            'DATA_UPAH': ['ID_PEGAWAI', 'NIK', 'NAMA', 'KPJ', 'UPAH', 'RAPEL', 'BLTH']
+        };
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('input-api-url').value = gasApiUrl;
+            checkConnectionStatus();
+            
+            // Sidebar Mobile Handling
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            document.getElementById('openSidebar').addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            });
+            
+            const closeNav = () => {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            };
+            
+            document.getElementById('closeSidebar').addEventListener('click', closeNav);
+            overlay.addEventListener('click', closeNav);
+
+            loadAllDataForDashboard();
+        });
+
+        // --- Navigation Logic ---
+        function switchTab(tabId, sheetContext = null) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-teal-500/10', 'text-teal-400');
+                btn.classList.add('hover:bg-slate-800', 'text-slate-300');
+            });
+            
+            let btnId = `nav-${tabId}`;
+            if(sheetContext) {
+                if(sheetContext === 'STAFF') btnId = 'nav-staff';
+                if(sheetContext === 'WORKER') btnId = 'nav-worker';
+                if(sheetContext === 'DATA_UPAH') btnId = 'nav-upah';
+            }
+            
+            const activeBtn = document.getElementById(btnId);
+            if(activeBtn) {
+                activeBtn.classList.remove('hover:bg-slate-800', 'text-slate-300');
+                activeBtn.classList.add('bg-teal-500/10', 'text-teal-400');
+            }
+
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            if (tabId === 'data') {
+                currentSheet = sheetContext;
+                document.getElementById('table-title').innerText = `Data ${sheetContext.replace('_', ' ')}`;
+                document.getElementById('tab-data').classList.add('active');
+                document.getElementById('page-title').innerText = `Manajemen ${sheetContext.replace('_', ' ')}`;
+                fetchCurrentSheetData(); 
+            } else {
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+                const titles = {
+                    'dashboard': 'Dashboard Analitik',
+                    'import': 'Import Data Massal',
+                    'pengaturan': 'Pengaturan Database'
+                };
+                document.getElementById('page-title').innerText = titles[tabId] || tabId;
+                if(tabId === 'dashboard') updateDashboardUI();
+            }
+
+            if(window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.add('hidden');
+            }
+        }
+
+        function checkConnectionStatus() {
+            const isValidUrl = gasApiUrl && gasApiUrl.startsWith('http') && gasApiUrl.includes('/exec');
+            document.getElementById('status-badge').innerText = !isValidUrl ? 'Mode Lokal' : 'Online (API)';
+            document.getElementById('status-badge').className = !isValidUrl 
+                ? 'px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 font-semibold border border-yellow-500/30'
+                : 'px-2 py-1 rounded bg-green-500/20 text-green-500 font-semibold border border-green-500/30';
+            
+            document.getElementById('api-alert').style.display = !isValidUrl ? 'block' : 'none';
+        }
+
+        // --- FETCHING LOGIC (SUPER CLEAN METHOD) ---
+        
+        async function fetchCurrentSheetData() {
+            setLoading(true);
+            document.getElementById('searchInput').value = '';
+            
+            if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
+                await new Promise(r => setTimeout(r, 400));
+                useDemoDataFallback();
+                setLoading(false);
+                return;
+            }
+
+            try {
+                // HANYA MENGGUNAKAN FETCH POLOS TANPA HEADER APAPUN AGAR GOOGLE TIDAK MEMBLOKIR
+                const response = await fetch(`${gasApiUrl}?sheet=${currentSheet}`);
+                
+                // Ambil respons dalam bentuk text dulu untuk dicek
+                const textResult = await response.text();
+                
+                // Jika Google memberikan halaman Login (HTML), bukan JSON
+                if (textResult.trim().startsWith('<')) {
+                    throw new Error("HTML_RESPONSE");
+                }
+
+                // Jika lolos, jadikan JSON
+                const result = JSON.parse(textResult);
+
+                if (result.status === 'success') {
+                    database[currentSheet] = result.data;
+                    filteredData = database[currentSheet];
+                    renderTable();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                console.warn("Fetch Gagal:", error);
+                
+                if(error.message === "HTML_RESPONSE") {
+                     Swal.fire({
+                        title: 'Akses Diblokir Google',
+                        html: `API mengembalikan halaman Login.<br><br><b>Penyebab Utama:</b><br>Anda mendeploy Apps Script menggunakan email perusahaan/Workspace. Sistem perusahaan Anda menolak akses dari web luar.<br><br><b>Solusi:</b> Gunakan Email <b>@gmail.com</b> biasa untuk mendeploy Apps Script.`,
+                        icon: 'error'
+                    });
+                } else {
+                     Swal.fire({
+                        title: 'Gagal Menghubungi API',
+                        text: 'Terjadi error CORS atau Script URL salah. Aplikasi beralih ke Mode Lokal Sementara.',
+                        icon: 'warning'
+                    });
+                }
+                useDemoDataFallback();
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        function useDemoDataFallback() {
+            database[currentSheet] = JSON.parse(JSON.stringify(DEMO_DATA[currentSheet] || []));
+            filteredData = database[currentSheet];
+            renderTable();
+        }
+
+        async function loadAllDataForDashboard() {
+            setLoading(true);
+            try {
+                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
+                    useDemoDataFallback();
+                } else {
+                    for (let s of ['STAFF', 'WORKER', 'DATA_UPAH']) {
+                        try {
+                            // Fetch super polos
+                            const res = await fetch(`${gasApiUrl}?sheet=${s}`);
+                            const textResult = await res.text();
+                            
+                            if (!textResult.trim().startsWith('<')) {
+                                const json = JSON.parse(textResult);
+                                if (json.status === 'success') database[s] = json.data;
+                            }
+                        } catch (err) {
+                            console.warn(`Gagal autoload sheet ${s}`);
+                        }
+                    }
+                }
+                updateDashboardUI();
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(isLoading) {
+            const icon = document.getElementById('refresh-icon');
+            const ind = document.getElementById('loading-indicator');
+            if(isLoading) {
+                icon.classList.add('fa-spin');
+                ind.classList.remove('hidden');
+            } else {
+                icon.classList.remove('fa-spin');
+                ind.classList.add('hidden');
+            }
+        }
+
+        // --- RENDER TABLE LOGIC ---
+        function renderTable() {
+            const tHead = document.getElementById('table-head');
+            const tBody = document.getElementById('table-body');
+            
+            tHead.innerHTML = '';
+            tBody.innerHTML = '';
+            
+            const cols = HEADERS[currentSheet];
+            
+            let trHead = document.createElement('tr');
+            cols.forEach(col => {
+                let th = document.createElement('th');
+                th.className = "px-4 py-3";
+                th.innerText = col.replace(/_/g, ' ');
+                trHead.appendChild(th);
+            });
+            let thAction = document.createElement('th');
+            thAction.className = "px-4 py-3 text-right";
+            thAction.innerText = "Aksi";
+            trHead.appendChild(thAction);
+            tHead.appendChild(trHead);
+
+            if (filteredData.length === 0) {
+                tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-4 py-8 text-center text-slate-500 italic">Tidak ada data ditemukan di sheet ${currentSheet}</td></tr>`;
+            } else {
+                filteredData.forEach((row, index) => {
+                    let tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    
+                    cols.forEach(col => {
+                        let td = document.createElement('td');
+                        td.className = "px-4 py-3 border-t border-slate-100 max-w-[200px] truncate";
+                        let val = row[col] || '-';
+                        
+                        if(col.includes('STATUS')) {
+                            if(val === 'OK') {
+                                td.innerHTML = `<span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-bold border border-green-200">OK</span>`;
+                            } else if(val === '-' || val === '') {
+                                td.innerHTML = `<span class="px-2 py-0.5 bg-red-50 text-red-500 rounded text-xs border border-red-100">Kosong</span>`;
+                            } else {
+                                td.innerHTML = `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">${val}</span>`;
+                            }
+                        } else {
+                            td.innerText = val;
+                            td.title = val;
+                        }
+                        tr.appendChild(td);
+                    });
+
+                    let tdAction = document.createElement('td');
+                    tdAction.className = "px-4 py-3 border-t border-slate-100 text-right";
+                    tdAction.innerHTML = `
+                        <div class="flex justify-end gap-2">
+                            <button onclick='openModal("edit", ${JSON.stringify(row).replace(/'/g, "&#39;")})' class="w-8 h-8 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors flex items-center justify-center" title="Edit">
+                                <i class="fa-solid fa-pen text-xs"></i>
+                            </button>
+                            <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 rounded bg-red-50 text-red-600 hover:bg-red-100 transition-colors flex items-center justify-center" title="Hapus">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                    tr.appendChild(tdAction);
+                    tBody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('record-count').innerText = `Menampilkan ${filteredData.length} baris data`;
+        }
+
+        function filterTable() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            if(!q) {
+                filteredData = database[currentSheet];
+            } else {
+                filteredData = database[currentSheet].filter(row => {
+                    return Object.values(row).some(val => 
+                        String(val).toLowerCase().includes(q)
+                    );
+                });
+            }
+            renderTable();
+        }
+
+        // --- Dashboard Logic ---
+        function updateDashboardUI() {
+            document.getElementById('dash-staff').innerText = database['STAFF'] ? database['STAFF'].length : 0;
+            document.getElementById('dash-worker').innerText = database['WORKER'] ? database['WORKER'].length : 0;
+            document.getElementById('dash-upah').innerText = database['DATA_UPAH'] ? database['DATA_UPAH'].length : 0;
+
+            let total = 0; let okCount = 0; let notOkCount = 0;
+            const countStatus = (dataArray) => {
+                if(!dataArray) return;
+                dataArray.forEach(item => {
+                    total++;
+                    let st = item['STATUS_KEPESERTAAN'] || item['STATUS_KEPESERTAAN  TMT APR 2026'] || item['STATUS_KEPESERTAAN APR 2026'];
+                    if (st === 'OK' || st === 'AKTIF') okCount++;
+                    else notOkCount++;
+                });
+            }
+
+            countStatus(database['STAFF']);
+            countStatus(database['WORKER']);
+
+            document.getElementById('stat-ok').innerText = okCount;
+            document.getElementById('stat-notok').innerText = notOkCount;
+
+            let pctOk = total === 0 ? 0 : Math.round((okCount / total) * 100);
+            let pctNot = total === 0 ? 0 : Math.round((notOkCount / total) * 100);
+
+            document.getElementById('bar-ok').style.width = pctOk + '%';
+            document.getElementById('bar-notok').style.width = pctNot + '%';
+            document.getElementById('chart-percent').innerText = pctOk + '%';
+        }
+
+
+        // --- Create / Edit Modal Logic ---
+        function openModal(mode, rowData = null) {
+            editingRowIndex = mode === 'edit' ? rowData._rowIndex : null;
+            document.getElementById('modal-title').innerText = mode === 'edit' ? `Edit Data ${currentSheet}` : `Tambah Data ${currentSheet}`;
+            
+            const form = document.getElementById('data-form');
+            form.innerHTML = '';
+            
+            const cols = HEADERS[currentSheet];
+            cols.forEach(col => {
+                let val = mode === 'edit' && rowData ? rowData[col] : '';
+                let inputType = (col.includes('UPAH') || col.includes('RAPEL')) ? 'number' : 'text';
+                
+                let html = `
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">${col.replace(/_/g, ' ')}</label>
+                        <input type="${inputType}" id="input_${col}" value="${val}" class="w-full px-4 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-sm bg-white text-slate-800" ${col === 'ID_PEGAWAI' && mode === 'edit' ? 'readonly class="bg-slate-100 cursor-not-allowed"' : ''}>
+                    </div>
+                `;
+                form.insertAdjacentHTML('beforeend', html);
+            });
+
+            const modal = document.getElementById('data-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('data-modal');
+            const content = document.getElementById('modal-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- POST DATA Logic ---
+        async function submitDataForm() {
+            const cols = HEADERS[currentSheet];
+            let payloadData = {};
+            
+            cols.forEach(col => { payloadData[col] = document.getElementById(`input_${col}`).value; });
+
+            const action = editingRowIndex ? 'edit' : 'add';
+            const payload = { sheetName: currentSheet, action: action, rowIndex: editingRowIndex, data: payloadData };
+
+            const btn = document.getElementById('btn-save-modal');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memproses...';
+            btn.disabled = true;
+
+            try {
+                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
+                    await new Promise(r => setTimeout(r, 600)); 
+                    Swal.fire('Sukses', 'Data disimpan (Mode Lokal)', 'success');
+                    closeModal();
+                    fetchCurrentSheetData();
+                } else {
+                    // Mengirim POST sebagai String (Text) tanpa Header Json
+                    const response = await fetch(gasApiUrl, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const textRes = await response.text();
+                    
+                    if (textRes.trim().startsWith('<')) {
+                       throw new Error("HTML_RESPONSE");
+                    }
+                    
+                    const res = JSON.parse(textRes);
+                    if(res.status === 'success') {
+                        Swal.fire('Tersimpan', res.message || 'Perubahan berhasil dikirim ke server.', 'success');
+                        closeModal();
+                        fetchCurrentSheetData();
+                    } else {
+                        throw new Error(res.message);
+                    }
+                }
+            } catch (err) {
+                 if(err.message === "HTML_RESPONSE") {
+                     Swal.fire('Akses Ditolak', 'Google meminta otentikasi. Aplikasi tidak dapat menyimpan data. Gunakan email @gmail.com.', 'error');
+                 } else {
+                     Swal.fire('Error', 'Gagal mengirim data. Coba lagi nanti.', 'error');
+                 }
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan';
+                btn.disabled = false;
+            }
+        }
+
+        async function deleteRow(rowIndex) {
+            const confirm = await Swal.fire({
+                title: 'Hapus Data?',
+                text: "Data yang dihapus dari server tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#94a3b8',
+                confirmButtonText: 'Ya, Hapus!'
+            });
+
+            if (!confirm.isConfirmed) return;
+            setLoading(true);
+
+            try {
+                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
+                    await new Promise(r => setTimeout(r, 400));
+                    Swal.fire('Terhapus!', 'Data berhasil dihapus (Lokal).', 'success');
+                    fetchCurrentSheetData();
+                } else {
+                    const response = await fetch(gasApiUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({ sheetName: currentSheet, action: 'delete', rowIndex: rowIndex })
+                    });
+                    const textRes = await response.text();
+                    if (textRes.trim().startsWith('<')) throw new Error("HTML_RESPONSE");
+                    
+                    Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+                    fetchCurrentSheetData();
+                }
+            } catch (err) {
+                 Swal.fire('Error', 'Gagal menghapus data.', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // --- Import Excel / SheetJS Logic ---
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('file-name-display').innerText = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet, {defval: ""});
+                
+                if(json.length > 0) {
+                    pendingImportData = json;
+                    renderPreviewImport(json);
+                } else {
+                    Swal.fire('Peringatan', 'File Excel kosong atau format tidak terbaca.', 'warning');
+                    document.getElementById('preview-section').classList.add('hidden');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function renderPreviewImport(data) {
+            document.getElementById('preview-section').classList.remove('hidden');
+            document.getElementById('preview-count').innerText = data.length;
+            
+            const tHead = document.getElementById('preview-head');
+            const tBody = document.getElementById('preview-body');
+            tHead.innerHTML = '';
+            tBody.innerHTML = '';
+
+            const headers = Object.keys(data[0]);
+            
+            let trHead = document.createElement('tr');
+            headers.forEach(h => {
+                let th = document.createElement('th');
+                th.className = "px-4 py-2 border-b";
+                th.innerText = h;
+                trHead.appendChild(th);
+            });
+            tHead.appendChild(trHead);
+
+            const previewLimit = Math.min(5, data.length);
+            for(let i=0; i<previewLimit; i++) {
+                let tr = document.createElement('tr');
+                headers.forEach(h => {
+                    let td = document.createElement('td');
+                    td.className = "px-4 py-2 border-b max-w-[150px] truncate";
+                    td.innerText = data[i][h] || '';
+                    tr.appendChild(td);
+                });
+                tBody.appendChild(tr);
+            }
+        }
+
+        async function processImport() {
+            if(pendingImportData.length === 0) return;
+            
+            const targetSheet = document.getElementById('import-target').value;
+            
+            const confirm = await Swal.fire({
+                title: 'Mulai Sinkronisasi?',
+                text: `Akan mengimpor ${pendingImportData.length} baris ke sheet ${targetSheet}. Data lama dengan ID yang sama akan ditimpa secara otomatis.`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Jalankan!'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            const btn = document.getElementById('btn-process-import');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses ke Server...';
+            btn.disabled = true;
+
+            const payload = { sheetName: targetSheet, action: 'import', data: pendingImportData };
+
+            try {
+                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
+                    await new Promise(r => setTimeout(r, 1500));
+                    Swal.fire('Selesai', `Simulasi Import ${pendingImportData.length} baris sukses.`, 'info');
+                    bersihkanPreview();
+                } else {
+                    const response = await fetch(gasApiUrl, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const textRes = await response.text();
+                    if (textRes.trim().startsWith('<')) throw new Error("HTML_RESPONSE");
+
+                    Swal.fire('Sinkronisasi Sukses', `Perintah import data telah berhasil dieksekusi.`, 'success');
+                    bersihkanPreview();
+                }
+            } catch (err) {
+                 if(err.message === "HTML_RESPONSE") {
+                     Swal.fire('Akses Ditolak', 'Google meminta otentikasi. Gunakan email @gmail.com.', 'error');
+                 } else {
+                     Swal.fire('Error Import', 'Terjadi kesalahan jaringan atau payload terlalu besar.', 'error');
+                 }
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-database"></i> Sinkronisasi ke Database';
+                btn.disabled = false;
+            }
+        }
+
+        function bersihkanPreview() {
+             document.getElementById('preview-section').classList.add('hidden');
+             document.getElementById('file-upload').value = '';
+             document.getElementById('file-name-display').innerText = 'Klik untuk memilih file Excel';
+             pendingImportData = [];
+        }
+
+        // --- Settings & Diagnosa ---
+        function saveApiUrl() {
+            let url = document.getElementById('input-api-url').value.trim();
+            
+            if (url.includes('/edit')) {
+                url = url.split('/edit')[0] + '/exec';
+                document.getElementById('input-api-url').value = url;
+            }
+            
+            if (url && (!url.startsWith('https://script.google.com') || !url.endsWith('/exec'))) {
+                Swal.fire('Format Salah', 'URL API harus berakhiran /exec dari script.google.com', 'warning');
+                return;
+            }
+
+            localStorage.setItem('bpjs_gas_url', url);
+            gasApiUrl = url;
+            checkConnectionStatus();
+            Swal.fire('Tersimpan', 'API URL Berhasil dihubungkan. Mencoba menarik data...', 'success');
+            loadAllDataForDashboard(); 
+            
+            if(currentActiveTab === 'data') fetchCurrentSheetData();
+        }
+
+        function clearApiUrl() {
+            document.getElementById('input-api-url').value = '';
+            localStorage.removeItem('bpjs_gas_url');
+            gasApiUrl = '';
+            checkConnectionStatus();
+            Swal.fire('Direset', 'Kembali ke mode lokal/demo.', 'info');
+            loadAllDataForDashboard();
+        }
+
+        async function diagnoseConnection() {
+            let url = document.getElementById('input-api-url').value.trim();
+            if(!url) return Swal.fire('Error', 'URL API masih kosong', 'error');
+
+            Swal.fire({
+                title: 'Mendiagnosa Koneksi...',
+                text: 'Harap tunggu, memeriksa respon server Google.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            try {
+                const response = await fetch(`${url}?sheet=STAFF&t=${Date.now()}`);
+                const text = await response.text();
+                
+                if (text.trim().startsWith('<')) {
+                    Swal.fire({
+                        title: 'Diagnosa: BLOCKED 🛑',
+                        html: `<div class="text-left text-sm">
+                            <p>Server merespon dengan halaman Login/HTML. Ini berarti:</p>
+                            <ul class="list-disc ml-5 mt-2 text-red-600 font-medium">
+                                <li>Anda menggunakan Email Kantor/Perusahaan yang memblokir akses publik.</li>
+                                <li>Pengaturan Deployment bukan "Anyone".</li>
+                            </ul>
+                            <p class="mt-2 text-green-600 font-bold">SOLUSI: Buat Google Sheet & Apps Script baru menggunakan Email @gmail.com pribadi.</p>
+                        </div>`,
+                        icon: 'error'
+                    });
+                } else {
+                    const json = JSON.parse(text);
+                    if(json.status === 'error' && json.message.includes('Sheet tidak ditemukan')) {
+                        Swal.fire('Diagnosa: SHEET ERROR ⚠️', 'Koneksi Sukses, tetapi sheet "STAFF" tidak ditemukan di Spreadsheet Anda. Buat sheet dengan nama STAFF, WORKER, dan DATA_UPAH.', 'warning');
+                    } else if (json.status === 'error' && json.message.includes('null')) {
+                         Swal.fire('Diagnosa: SPREADSHEET ID SALAH ⚠️', 'Koneksi Sukses, tetapi Apps Script tidak dapat menemukan ID Spreadsheet Anda. Cek kembali baris ke-2 di kode Apps Script.', 'warning');
+                    } else {
+                        Swal.fire('Diagnosa: PERFECT ✅', 'Koneksi API Anda berjalan 100% sempurna tanpa masalah CORS atau Hak Akses.', 'success');
+                    }
+                }
+            } catch (err) {
+                Swal.fire('Diagnosa: CORS ERROR ❌', 'Terjadi error jaringan murni (Kemungkinan salah penulisan URL atau browser terlalu ketat). Error: ' + err.message, 'error');
+            }
+        }
+
+    </script>
+</body>
+</html>
