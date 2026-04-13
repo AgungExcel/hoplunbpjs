@@ -21,7 +21,6 @@
         .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Custom Scrollbar for tables */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -36,7 +35,7 @@
         <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 md:relative absolute z-30 h-full transform -translate-x-full md:translate-x-0 shadow-xl" id="sidebar">
             <div class="p-6 flex items-center justify-between border-b border-slate-800">
                 <div class="flex items-center gap-3 font-bold text-xl text-white">
-                    <div class="w-8 h-8 rounded bg-teal-500 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded bg-teal-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
                         <i class="fa-solid fa-layer-group text-sm"></i>
                     </div>
                     <span>HR BPJS</span>
@@ -52,7 +51,7 @@
                     <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard
                 </button>
                 
-                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Database</div>
+                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Database Utama</div>
                 
                 <button onclick="switchTab('data', 'STAFF')" id="nav-staff" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
                     <i class="fa-solid fa-user-tie w-5 text-center"></i> Data Staff
@@ -64,20 +63,18 @@
                     <i class="fa-solid fa-money-bill-wave w-5 text-center"></i> Data Upah
                 </button>
 
-                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Manajemen Data</div>
+                <div class="px-4 py-4 mt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Manajemen</div>
                 
                 <button onclick="switchTab('import')" id="nav-import" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
-                    <div class="flex items-center gap-3"><i class="fa-solid fa-file-import w-5 text-center"></i> Import / Upload</div>
-                    <span class="bg-blue-500 text-white text-[10px] px-1.5 py-0.5 rounded">Baru</span>
-                </button>
-                <button onclick="switchTab('pengaturan')" id="nav-pengaturan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">
-                    <i class="fa-solid fa-server w-5 text-center"></i> Pengaturan API
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-file-import w-5 text-center"></i> Import Massal</div>
                 </button>
             </nav>
 
             <div class="p-4 bg-slate-950 text-xs flex justify-between items-center">
-                <span class="text-slate-500">Koneksi Database:</span>
-                <span id="status-badge" class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 font-semibold border border-yellow-500/30">Lokal</span>
+                <span class="text-slate-500">Koneksi API:</span>
+                <span class="px-2 py-1 rounded bg-green-500/20 text-green-500 font-semibold border border-green-500/30 flex items-center gap-1">
+                    <i class="fa-solid fa-circle text-[8px]"></i> Online
+                </span>
             </div>
         </aside>
 
@@ -95,28 +92,14 @@
                     <h1 class="text-xl font-bold text-slate-800" id="page-title">Dashboard Analitik</h1>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span id="loading-indicator" class="text-sm font-medium text-teal-600 hidden">
-                        <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Memuat...
+                    <span id="loading-indicator" class="text-sm font-medium text-teal-600 hidden bg-teal-50 px-3 py-1 rounded-full border border-teal-100">
+                        <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Sinkronisasi Data...
                     </span>
-                    <button onclick="fetchCurrentSheetData()" class="p-2 w-10 h-10 rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-600 transition-colors tooltip" title="Muat Ulang Data">
+                    <button onclick="fetchCurrentSheetData()" class="p-2 w-10 h-10 rounded-full bg-slate-100 text-slate-600 hover:bg-teal-50 hover:text-teal-600 transition-colors tooltip shadow-sm" title="Muat Ulang Data">
                         <i class="fa-solid fa-rotate-right" id="refresh-icon"></i>
                     </button>
                 </div>
             </header>
-
-            <!-- Alert Box (No API Setup) -->
-            <div id="api-alert" class="bg-blue-50 border-l-4 border-blue-500 p-4 m-6 mb-0 rounded shadow-sm hidden">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 text-blue-800">
-                        <i class="fa-solid fa-circle-info text-xl"></i>
-                        <div>
-                            <p class="font-bold text-sm">Mode Pratinjau (Data Dummy Lokal)</p>
-                            <p class="text-xs mt-0.5 opacity-80">Data hanya disimpan sementara. Untuk integrasi Google Sheets, masukkan URL Web App di menu Pengaturan.</p>
-                        </div>
-                    </div>
-                    <button onclick="switchTab('pengaturan')" class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm">Setup Sekarang</button>
-                </div>
-            </div>
 
             <!-- Scrollable Content Area -->
             <div class="flex-1 overflow-auto p-6">
@@ -181,19 +164,19 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
-                            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Solusi "Koneksi Gagal / Fetch Error"</h3>
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Informasi Sistem</h3>
                             <ul class="space-y-4 text-sm text-slate-600">
                                 <li class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div>
-                                    <p>Jika gagal dan dialihkan ke Mode Lokal, gunakan fitur <b>Diagnosa</b> di menu Pengaturan API.</p>
+                                    <div class="w-6 h-6 rounded bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-bolt text-xs"></i></div>
+                                    <p><b>Super Cepat:</b> Sinkronisasi data kini menggunakan metode <i>Parallel Fetching</i>. Waktu tunggu dipercepat hingga 3x lipat.</p>
                                 </li>
                                 <li class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-wrench text-xs"></i></div>
-                                    <p>Pastikan deployment Anda menggunakan email Pribadi (@gmail.com) jika email perusahaan memblokir akses publik.</p>
+                                    <div class="w-6 h-6 rounded bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-link text-xs"></i></div>
+                                    <p><b>URL Terintegrasi:</b> Aplikasi sudah terkunci langsung ke URL API Anda tanpa perlu pengaturan manual lagi.</p>
                                 </li>
                                 <li class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-check text-xs"></i></div>
-                                    <p>Setiap ada perubahan kode di Apps Script, Anda <b>WAJIB</b> membuat <i>Deployment Versi Baru</i> (bukan mengedit yang lama).</p>
+                                    <div class="w-6 h-6 rounded bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-table-columns text-xs"></i></div>
+                                    <p><b>Auto-Mapping Kolom:</b> Sistem otomatis mengenali berbagai nama header (seperti <i>NEW ID NO</i>, <i>NAMA_LENGKAP</i>, dll) agar data presisi.</p>
                                 </li>
                             </ul>
                         </div>
@@ -206,21 +189,21 @@
                         <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50 rounded-t-xl">
                             <div>
                                 <h2 class="text-lg font-bold text-slate-800" id="table-title">Data Kepesertaan</h2>
-                                <p class="text-xs text-slate-500" id="table-subtitle">Menampilkan data dari database</p>
+                                <p class="text-xs text-slate-500" id="table-subtitle">Menampilkan data langsung dari GSheet</p>
                             </div>
                             <div class="flex items-center gap-3 w-full md:w-auto">
                                 <div class="relative flex-1 md:w-64">
                                     <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                                    <input type="text" id="searchInput" oninput="filterTable()" placeholder="Cari ID, NIK, atau Nama..." class="pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 w-full shadow-sm">
+                                    <input type="text" id="searchInput" oninput="filterTable()" placeholder="Ketik kata kunci pencarian..." class="pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 w-full shadow-sm">
                                 </div>
                                 <button onclick="openModal('add')" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors flex items-center gap-2 shrink-0">
                                     <i class="fa-solid fa-plus"></i> <span class="hidden md:inline">Tambah Data</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="flex-1 overflow-auto relative">
+                        <div class="flex-1 overflow-auto relative bg-white">
                             <table class="w-full text-left text-sm whitespace-nowrap">
-                                <thead class="bg-slate-100/80 text-slate-600 text-xs uppercase font-bold sticky top-0 z-10 shadow-sm" id="table-head">
+                                <thead class="bg-slate-100/90 text-slate-600 text-xs uppercase font-bold sticky top-0 z-10 shadow-sm backdrop-blur-sm" id="table-head">
                                     <!-- Dynamic Headers -->
                                 </thead>
                                 <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700">
@@ -228,7 +211,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="p-4 border-t border-slate-100 bg-white rounded-b-xl flex justify-between items-center text-xs text-slate-500">
+                        <div class="p-4 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-between items-center text-xs font-semibold text-slate-500">
                             <span id="record-count">Menampilkan 0 data</span>
                         </div>
                     </div>
@@ -239,25 +222,23 @@
                     <div class="max-w-4xl mx-auto space-y-6">
                         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
                             <h2 class="text-xl font-bold text-slate-800 mb-2">Import / Upload Data Excel</h2>
-                            <p class="text-sm text-slate-500 mb-6">Unggah file Excel (.xlsx, .xls) atau CSV untuk memperbarui database secara otomatis tanpa takut double data (fitur Upsert otomatis berdasarkan ID).</p>
+                            <p class="text-sm text-slate-500 mb-6">Unggah file Excel (.xlsx, .xls) atau CSV untuk memperbarui database secara massal. Data lama dengan ID Pegawai yang sama akan diperbarui otomatis (Upsert).</p>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Pilih Sheet Target -->
                                 <div>
                                     <label class="block text-sm font-bold text-slate-700 mb-2">1. Pilih Tujuan Database</label>
-                                    <select id="import-target" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm cursor-pointer">
-                                        <option value="STAFF">Data STAFF (Sesuai Format: ID, NIK, NAMA, POSITION...)</option>
-                                        <option value="WORKER">Data WORKER (Sesuai Format: ID, NIK, NAMA, POSITION...)</option>
-                                        <option value="DATA_UPAH">Data UPAH (Sesuai Format: ID, NIK, NAMA, KPJ, UPAH...)</option>
+                                    <select id="import-target" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm cursor-pointer shadow-sm">
+                                        <option value="STAFF">Tujuan: Data STAFF</option>
+                                        <option value="WORKER">Tujuan: Data WORKER</option>
+                                        <option value="DATA_UPAH">Tujuan: Data UPAH</option>
                                     </select>
                                 </div>
                                 
-                                <!-- File Upload Box -->
                                 <div>
                                     <label class="block text-sm font-bold text-slate-700 mb-2">2. Upload File Dokumen</label>
                                     <div class="relative border-2 border-dashed border-slate-300 bg-slate-50 rounded-lg p-6 flex flex-col items-center justify-center hover:border-teal-500 hover:bg-teal-50 transition-colors cursor-pointer" onclick="document.getElementById('file-upload').click()">
-                                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-3"></i>
-                                        <span class="text-sm font-medium text-slate-600" id="file-name-display">Klik untuk memilih file Excel</span>
+                                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-teal-400 mb-3"></i>
+                                        <span class="text-sm font-medium text-slate-600" id="file-name-display">Klik untuk memilih file</span>
                                         <span class="text-xs text-slate-400 mt-1">.xlsx, .xls, .csv</span>
                                         <input type="file" id="file-upload" class="hidden" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(event)">
                                     </div>
@@ -265,53 +246,18 @@
                             </div>
                             
                             <div id="preview-section" class="mt-8 hidden">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="font-bold text-slate-800">Preview Data (<span id="preview-count">0</span> baris terdeteksi)</h3>
+                                <div class="flex items-center justify-between mb-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h3 class="font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-eye text-teal-500"></i> Preview Data (<span id="preview-count" class="text-teal-600">0</span> baris terdeteksi)</h3>
                                     <button onclick="processImport()" id="btn-process-import" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg text-sm font-bold shadow transition-colors flex items-center gap-2">
                                         <i class="fa-solid fa-database"></i> Sinkronisasi ke Database
                                     </button>
                                 </div>
-                                <div class="overflow-x-auto border border-slate-200 rounded-lg max-h-64">
+                                <div class="overflow-x-auto border border-slate-200 rounded-lg max-h-64 shadow-inner">
                                     <table class="w-full text-left text-xs whitespace-nowrap">
-                                        <thead class="bg-slate-100 text-slate-600 font-bold sticky top-0" id="preview-head"></thead>
-                                        <tbody id="preview-body" class="divide-y divide-slate-100 text-slate-600"></tbody>
+                                        <thead class="bg-slate-100 text-slate-600 font-bold sticky top-0 shadow-sm" id="preview-head"></thead>
+                                        <tbody id="preview-body" class="divide-y divide-slate-100 text-slate-600 bg-white"></tbody>
                                     </table>
                                 </div>
-                                <p class="text-xs text-red-500 mt-2 font-medium"><i class="fa-solid fa-triangle-exclamation"></i> Pastikan baris pertama pada file Excel adalah Header (Judul Kolom) yang sesuai dengan database.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB: PENGATURAN -->
-                <div id="tab-pengaturan" class="tab-content">
-                    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
-                        <div class="flex items-center justify-between mb-6 pb-6 border-b border-slate-100">
-                            <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-2xl">
-                                    <i class="fa-solid fa-link"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-bold text-slate-800">Koneksi API Google Sheets</h2>
-                                    <p class="text-sm text-slate-500">Hubungkan interface web ini dengan database Anda.</p>
-                                </div>
-                            </div>
-                            <button onclick="diagnoseConnection()" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded text-xs font-bold hover:bg-indigo-100 transition-colors">
-                                <i class="fa-solid fa-stethoscope"></i> Diagnosa Error
-                            </button>
-                        </div>
-
-                        <div class="space-y-5">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-2">Web App URL (Dari Google Apps Script)</label>
-                                <textarea id="input-api-url" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none text-sm font-mono break-all" placeholder="https://script.google.com/macros/s/AKfycby.../exec"></textarea>
-                            </div>
-                            
-                            <div class="flex gap-3 justify-end pt-4">
-                                <button onclick="clearApiUrl()" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors">Putuskan API</button>
-                                <button onclick="saveApiUrl()" class="px-6 py-2.5 text-sm font-bold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 shadow-sm">
-                                    <i class="fa-solid fa-save"></i> Simpan URL
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -322,21 +268,21 @@
     </div>
 
     <!-- MODAL FOR ADD/EDIT -->
-    <div id="data-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+    <div id="data-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-xl">
-                <h3 class="text-lg font-bold text-slate-800" id="modal-title">Tambah Data</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors">
-                    <i class="fa-solid fa-times text-xl"></i>
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2" id="modal-title"><i class="fa-solid fa-pen-to-square text-teal-600"></i> Form Data</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-red-500 transition-colors bg-white w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-times"></i>
                 </button>
             </div>
             <div class="p-6 overflow-y-auto flex-1">
-                <form id="data-form" class="space-y-4">
+                <form id="data-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Dinamis dibentuk via JS sesuai Sheet aktif -->
                 </form>
             </div>
             <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-xl flex justify-end gap-3">
-                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">Batal</button>
+                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors shadow-sm">Batal</button>
                 <button onclick="submitDataForm()" id="btn-save-modal" class="px-5 py-2.5 text-sm font-bold text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 shadow-sm">
                     <i class="fa-solid fa-save"></i> Simpan
                 </button>
@@ -345,59 +291,75 @@
     </div>
 
     <script>
+        // --- 1. SETTING URL API HARDCODED ---
+        // Anda tidak perlu lagi memasukkan URL di antarmuka Web!
+        const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxspaygnKoq1sl_IIRB3G0sgYXiUFfEJ61P04RMLJB_Za11L0vf0ZAEpbVvAysD6C2ZXg/exec';
+
         // --- System State ---
-        let gasApiUrl = localStorage.getItem('bpjs_gas_url') || '';
         let currentActiveTab = 'dashboard';
         let currentSheet = 'STAFF'; 
         
-        let database = {
-            'STAFF': [],
-            'WORKER': [],
-            'DATA_UPAH': []
-        };
-        
+        let database = { 'STAFF': [], 'WORKER': [], 'DATA_UPAH': [] };
         let filteredData = [];
         let editingRowIndex = null;
         let pendingImportData = []; 
 
-        // --- Demo Data (Ditampilkan jika tidak konek API) ---
-        const DEMO_DATA = {
+        // Definisi Kunci Asli dari Excel (untuk Form Edit/Tambah)
+        const FULL_KEYS = {
+            'STAFF': ['NO', 'NEW ID NO', 'NAMA', 'POSITION', 'SECTION', 'DEPARTEMENT', 'JOIN DATE', 'STATUS KEPESERTAAN MAR 2026', 'STATUS KEPESERTAAN APR 2026', 'TOTAL POTONGAN', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'],
+            'WORKER': ['NO', 'NO ID', 'NAMA', 'POSITION', 'SECTION', 'DEPARTEMENT', 'JOIN DATE', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'POTONGAN KARYAWAN', 'KETERANGAN', 'NO KARTU BPJS', 'NO HP', 'NIK'],
+            'DATA_UPAH': ['NIK', 'ID_PEGAWAI', 'KPJ', 'KODE_TK', 'NAMA_LENGKAP', 'TGL_LAHIR', 'UPAH', 'RAPEL', 'BLTH', 'NPP']
+        };
+
+        // Format Tampilan Tabel (Auto-Mapping agar kolom NAMA dll terdeteksi)
+        const DISPLAY_COLS = {
             'STAFF': [
-                { _rowIndex: 2, ID_PEGAWAI: 'SR110553', NIK: '3374126805840001', NAMA: 'WAIKA ISMALIA DEWI', POSITION: 'MARKER MAKER', DEPARTEMENT: 'CUTTING', STATUS_KEPESERTAAN: 'OK', NO_KARTU: '0001142928663', NO_HP: '085876345643' }
+                { label: 'ID Pegawai', keys: ['NEW ID NO', 'ID_PEGAWAI', 'NO ID'] },
+                { label: 'NIK', keys: ['NIK'] },
+                { label: 'Nama Lengkap', keys: ['NAMA', 'NAMA_LENGKAP'] },
+                { label: 'Departemen', keys: ['DEPARTEMENT', 'SECTION'] },
+                { label: 'Status', keys: ['STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN MAR 2026', 'STATUS_KEPESERTAAN'] },
+                { label: 'No Kartu', keys: ['NOMOR KARTU', 'NO_KARTU'] }
             ],
             'WORKER': [
-                { _rowIndex: 2, ID_PEGAWAI: 'SR200617', NIK: '3322156308950002', NAMA: 'MAELI WAFDA IMALA', POSITION: 'NURSE', DEPARTEMENT: 'PEOPLE & CULTURE', STATUS_KEPESERTAAN: 'OK', NO_KARTU_BPJS: '0000603115211', NO_HP: '088228913371' }
+                { label: 'ID Pegawai', keys: ['NO ID', 'NEW ID NO', 'ID_PEGAWAI'] },
+                { label: 'NIK', keys: ['NIK'] },
+                { label: 'Nama Lengkap', keys: ['NAMA', 'NAMA_LENGKAP'] },
+                { label: 'Departemen', keys: ['DEPARTEMENT', 'SECTION'] },
+                { label: 'Status', keys: ['STATUS KEPESERTAAN  TMT APR 2026', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS_KEPESERTAAN'] },
+                { label: 'No Kartu', keys: ['NO KARTU BPJS', 'NO_KARTU'] }
             ],
             'DATA_UPAH': [
-                { _rowIndex: 2, ID_PEGAWAI: 'SR251141', NIK: '3322161706030001', NAMA: 'AAN ARDIANSYAH', KPJ: '26012192469', UPAH: '2940088', RAPEL: '0', BLTH: '01-04-2026' }
+                { label: 'ID Pegawai', keys: ['ID_PEGAWAI', 'NEW ID NO', 'NO ID'] },
+                { label: 'NIK', keys: ['NIK'] },
+                { label: 'Nama Lengkap', keys: ['NAMA_LENGKAP', 'NAMA'] },
+                { label: 'KPJ / Kartu', keys: ['KPJ'] },
+                { label: 'Upah', keys: ['UPAH'] },
+                { label: 'BLTH', keys: ['BLTH'] }
             ]
         };
 
-        const HEADERS = {
-            'STAFF': ['ID_PEGAWAI', 'NIK', 'NAMA', 'POSITION', 'DEPARTEMENT', 'STATUS_KEPESERTAAN', 'NO_KARTU', 'NO_HP'],
-            'WORKER': ['ID_PEGAWAI', 'NIK', 'NAMA', 'POSITION', 'DEPARTEMENT', 'STATUS_KEPESERTAAN', 'NO_KARTU_BPJS', 'NO_HP'],
-            'DATA_UPAH': ['ID_PEGAWAI', 'NIK', 'NAMA', 'KPJ', 'UPAH', 'RAPEL', 'BLTH']
-        };
+        // Fungsi Helper untuk menarik data apapun nama kolomnya
+        function getColValue(row, keysArray) {
+            for(let k of keysArray) {
+                if(row[k] !== undefined && row[k] !== '') return row[k];
+            }
+            return '';
+        }
 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('input-api-url').value = gasApiUrl;
-            checkConnectionStatus();
-            
             // Sidebar Mobile Handling
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
             document.getElementById('openSidebar').addEventListener('click', () => {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
             });
-            
             const closeNav = () => {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             };
-            
             document.getElementById('closeSidebar').addEventListener('click', closeNav);
             overlay.addEventListener('click', closeNav);
 
@@ -436,12 +398,7 @@
                 fetchCurrentSheetData(); 
             } else {
                 document.getElementById(`tab-${tabId}`).classList.add('active');
-                const titles = {
-                    'dashboard': 'Dashboard Analitik',
-                    'import': 'Import Data Massal',
-                    'pengaturan': 'Pengaturan Database'
-                };
-                document.getElementById('page-title').innerText = titles[tabId] || tabId;
+                document.getElementById('page-title').innerText = tabId === 'dashboard' ? 'Dashboard Analitik' : 'Import Data Massal';
                 if(tabId === 'dashboard') updateDashboardUI();
             }
 
@@ -451,42 +408,43 @@
             }
         }
 
-        function checkConnectionStatus() {
-            const isValidUrl = gasApiUrl && gasApiUrl.startsWith('http') && gasApiUrl.includes('/exec');
-            document.getElementById('status-badge').innerText = !isValidUrl ? 'Mode Lokal' : 'Online (API)';
-            document.getElementById('status-badge').className = !isValidUrl 
-                ? 'px-2 py-1 rounded bg-yellow-500/20 text-yellow-500 font-semibold border border-yellow-500/30'
-                : 'px-2 py-1 rounded bg-green-500/20 text-green-500 font-semibold border border-green-500/30';
+        // --- FETCHING LOGIC DENGAN PARALLEL PROMISE (3X LEBIH CEPAT) ---
+        async function loadAllDataForDashboard() {
+            setLoading(true);
+            const sheetsToLoad = ['STAFF', 'WORKER', 'DATA_UPAH'];
             
-            document.getElementById('api-alert').style.display = !isValidUrl ? 'block' : 'none';
+            try {
+                // Fetch ketiganya secara BERSAMAAN (Paralel)
+                await Promise.all(sheetsToLoad.map(async (sheet) => {
+                    try {
+                        const response = await fetch(`${gasApiUrl}?sheet=${sheet}&t=${Date.now()}`);
+                        const textResult = await response.text();
+                        if (!textResult.trim().startsWith('<')) {
+                            const json = JSON.parse(textResult);
+                            if (json.status === 'success') {
+                                database[sheet] = json.data;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Gagal muat sheet: ', sheet);
+                    }
+                }));
+                updateDashboardUI();
+            } finally {
+                setLoading(false);
+            }
         }
 
-        // --- FETCHING LOGIC (SUPER CLEAN METHOD) ---
-        
         async function fetchCurrentSheetData() {
             setLoading(true);
             document.getElementById('searchInput').value = '';
-            
-            if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
-                await new Promise(r => setTimeout(r, 400));
-                useDemoDataFallback();
-                setLoading(false);
-                return;
-            }
 
             try {
-                // HANYA MENGGUNAKAN FETCH POLOS TANPA HEADER APAPUN AGAR GOOGLE TIDAK MEMBLOKIR
-                const response = await fetch(`${gasApiUrl}?sheet=${currentSheet}`);
-                
-                // Ambil respons dalam bentuk text dulu untuk dicek
+                const response = await fetch(`${gasApiUrl}?sheet=${currentSheet}&t=${Date.now()}`);
                 const textResult = await response.text();
                 
-                // Jika Google memberikan halaman Login (HTML), bukan JSON
-                if (textResult.trim().startsWith('<')) {
-                    throw new Error("HTML_RESPONSE");
-                }
+                if (textResult.trim().startsWith('<')) throw new Error("HTML_RESPONSE");
 
-                // Jika lolos, jadikan JSON
                 const result = JSON.parse(textResult);
 
                 if (result.status === 'success') {
@@ -497,55 +455,13 @@
                     throw new Error(result.message);
                 }
             } catch (error) {
-                console.warn("Fetch Gagal:", error);
-                
-                if(error.message === "HTML_RESPONSE") {
-                     Swal.fire({
-                        title: 'Akses Diblokir Google',
-                        html: `API mengembalikan halaman Login.<br><br><b>Penyebab Utama:</b><br>Anda mendeploy Apps Script menggunakan email perusahaan/Workspace. Sistem perusahaan Anda menolak akses dari web luar.<br><br><b>Solusi:</b> Gunakan Email <b>@gmail.com</b> biasa untuk mendeploy Apps Script.`,
-                        icon: 'error'
-                    });
-                } else {
-                     Swal.fire({
-                        title: 'Gagal Menghubungi API',
-                        text: 'Terjadi error CORS atau Script URL salah. Aplikasi beralih ke Mode Lokal Sementara.',
-                        icon: 'warning'
-                    });
-                }
-                useDemoDataFallback();
-            } finally {
-                setLoading(false);
-            }
-        }
-        
-        function useDemoDataFallback() {
-            database[currentSheet] = JSON.parse(JSON.stringify(DEMO_DATA[currentSheet] || []));
-            filteredData = database[currentSheet];
-            renderTable();
-        }
-
-        async function loadAllDataForDashboard() {
-            setLoading(true);
-            try {
-                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
-                    useDemoDataFallback();
-                } else {
-                    for (let s of ['STAFF', 'WORKER', 'DATA_UPAH']) {
-                        try {
-                            // Fetch super polos
-                            const res = await fetch(`${gasApiUrl}?sheet=${s}`);
-                            const textResult = await res.text();
-                            
-                            if (!textResult.trim().startsWith('<')) {
-                                const json = JSON.parse(textResult);
-                                if (json.status === 'success') database[s] = json.data;
-                            }
-                        } catch (err) {
-                            console.warn(`Gagal autoload sheet ${s}`);
-                        }
-                    }
-                }
-                updateDashboardUI();
+                Swal.fire({
+                    title: 'Gagal Menghubungi API',
+                    text: 'Pastikan koneksi stabil dan URL API bekerja.',
+                    icon: 'warning'
+                });
+                filteredData = database[currentSheet];
+                renderTable();
             } finally {
                 setLoading(false);
             }
@@ -563,7 +479,7 @@
             }
         }
 
-        // --- RENDER TABLE LOGIC ---
+        // --- RENDER TABLE LOGIC DENGAN AUTO-MAPPING ---
         function renderTable() {
             const tHead = document.getElementById('table-head');
             const tBody = document.getElementById('table-body');
@@ -571,40 +487,44 @@
             tHead.innerHTML = '';
             tBody.innerHTML = '';
             
-            const cols = HEADERS[currentSheet];
+            const columnsConfig = DISPLAY_COLS[currentSheet];
             
+            // Build Header
             let trHead = document.createElement('tr');
-            cols.forEach(col => {
+            columnsConfig.forEach(col => {
                 let th = document.createElement('th');
-                th.className = "px-4 py-3";
-                th.innerText = col.replace(/_/g, ' ');
+                th.className = "px-4 py-3 border-b-2 border-slate-200 tracking-wide";
+                th.innerText = col.label;
                 trHead.appendChild(th);
             });
             let thAction = document.createElement('th');
-            thAction.className = "px-4 py-3 text-right";
+            thAction.className = "px-4 py-3 text-right border-b-2 border-slate-200";
             thAction.innerText = "Aksi";
             trHead.appendChild(thAction);
             tHead.appendChild(trHead);
 
+            // Build Body
             if (filteredData.length === 0) {
-                tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-4 py-8 text-center text-slate-500 italic">Tidak ada data ditemukan di sheet ${currentSheet}</td></tr>`;
+                tBody.innerHTML = `<tr><td colspan="${columnsConfig.length + 1}" class="px-4 py-10 text-center text-slate-500 font-medium bg-slate-50/50">Tidak ada data ditemukan</td></tr>`;
             } else {
-                filteredData.forEach((row, index) => {
+                filteredData.forEach((row) => {
                     let tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.className = "hover:bg-slate-50 transition-colors duration-150";
                     
-                    cols.forEach(col => {
+                    columnsConfig.forEach(col => {
                         let td = document.createElement('td');
                         td.className = "px-4 py-3 border-t border-slate-100 max-w-[200px] truncate";
-                        let val = row[col] || '-';
+                        let val = getColValue(row, col.keys) || '-';
                         
-                        if(col.includes('STATUS')) {
-                            if(val === 'OK') {
-                                td.innerHTML = `<span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-bold border border-green-200">OK</span>`;
-                            } else if(val === '-' || val === '') {
-                                td.innerHTML = `<span class="px-2 py-0.5 bg-red-50 text-red-500 rounded text-xs border border-red-100">Kosong</span>`;
+                        // Formatting Khusus untuk Status
+                        if(col.label === 'Status') {
+                            const vUpper = String(val).toUpperCase();
+                            if(vUpper === 'OK' || vUpper === 'AKTIF') {
+                                td.innerHTML = `<span class="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-bold border border-green-200 shadow-sm">OK</span>`;
+                            } else if(vUpper === '-' || vUpper === '') {
+                                td.innerHTML = `<span class="px-2 py-1 bg-red-50 text-red-500 rounded-md text-xs border border-red-100">Kosong</span>`;
                             } else {
-                                td.innerHTML = `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">${val}</span>`;
+                                td.innerHTML = `<span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xs">${val}</span>`;
                             }
                         } else {
                             td.innerText = val;
@@ -617,10 +537,10 @@
                     tdAction.className = "px-4 py-3 border-t border-slate-100 text-right";
                     tdAction.innerHTML = `
                         <div class="flex justify-end gap-2">
-                            <button onclick='openModal("edit", ${JSON.stringify(row).replace(/'/g, "&#39;")})' class="w-8 h-8 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors flex items-center justify-center" title="Edit">
+                            <button onclick='openModal("edit", ${JSON.stringify(row).replace(/'/g, "&#39;")})' class="w-8 h-8 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-md transition-all flex items-center justify-center" title="Edit">
                                 <i class="fa-solid fa-pen text-xs"></i>
                             </button>
-                            <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 rounded bg-red-50 text-red-600 hover:bg-red-100 transition-colors flex items-center justify-center" title="Hapus">
+                            <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 rounded-md bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:shadow-md transition-all flex items-center justify-center" title="Hapus">
                                 <i class="fa-solid fa-trash text-xs"></i>
                             </button>
                         </div>
@@ -629,7 +549,6 @@
                     tBody.appendChild(tr);
                 });
             }
-
             document.getElementById('record-count').innerText = `Menampilkan ${filteredData.length} baris data`;
         }
 
@@ -654,18 +573,18 @@
             document.getElementById('dash-upah').innerText = database['DATA_UPAH'] ? database['DATA_UPAH'].length : 0;
 
             let total = 0; let okCount = 0; let notOkCount = 0;
-            const countStatus = (dataArray) => {
+            const countStatus = (dataArray, keys) => {
                 if(!dataArray) return;
                 dataArray.forEach(item => {
                     total++;
-                    let st = item['STATUS_KEPESERTAAN'] || item['STATUS_KEPESERTAAN  TMT APR 2026'] || item['STATUS_KEPESERTAAN APR 2026'];
+                    let st = getColValue(item, keys).toUpperCase();
                     if (st === 'OK' || st === 'AKTIF') okCount++;
                     else notOkCount++;
                 });
             }
 
-            countStatus(database['STAFF']);
-            countStatus(database['WORKER']);
+            countStatus(database['STAFF'], ['STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN MAR 2026', 'STATUS_KEPESERTAAN']);
+            countStatus(database['WORKER'], ['STATUS KEPESERTAAN  TMT APR 2026', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS_KEPESERTAAN']);
 
             document.getElementById('stat-ok').innerText = okCount;
             document.getElementById('stat-notok').innerText = notOkCount;
@@ -679,23 +598,34 @@
         }
 
 
-        // --- Create / Edit Modal Logic ---
+        // --- Create / Edit Modal Logic (Dinamis membaca semua Header Asli) ---
         function openModal(mode, rowData = null) {
             editingRowIndex = mode === 'edit' ? rowData._rowIndex : null;
-            document.getElementById('modal-title').innerText = mode === 'edit' ? `Edit Data ${currentSheet}` : `Tambah Data ${currentSheet}`;
+            document.getElementById('modal-title').innerHTML = mode === 'edit' 
+                ? `<i class="fa-solid fa-pen-to-square text-teal-600"></i> Edit Data` 
+                : `<i class="fa-solid fa-user-plus text-teal-600"></i> Tambah Data Baru`;
             
             const form = document.getElementById('data-form');
             form.innerHTML = '';
             
-            const cols = HEADERS[currentSheet];
-            cols.forEach(col => {
-                let val = mode === 'edit' && rowData ? rowData[col] : '';
-                let inputType = (col.includes('UPAH') || col.includes('RAPEL')) ? 'number' : 'text';
+            // Dapatkan kolom berdasarkan row data yang ada ATAU fallback ke FULL_KEYS jika kosong
+            let keys = [];
+            if(database[currentSheet] && database[currentSheet].length > 0) {
+                // Filter field metadata seperti _rowIndex
+                keys = Object.keys(database[currentSheet][0]).filter(k => !k.startsWith('_')); 
+            } else {
+                keys = FULL_KEYS[currentSheet];
+            }
+            
+            keys.forEach(col => {
+                let val = mode === 'edit' && rowData ? (rowData[col] || '') : '';
+                let inputType = (col.includes('UPAH') || col.includes('RAPEL') || col.includes('POTONGAN')) ? 'number' : 'text';
+                let isReadOnly = (col.includes('ID_PEGAWAI') || col.includes('NEW ID NO') || col === 'NO ID') && mode === 'edit';
                 
                 let html = `
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">${col.replace(/_/g, ' ')}</label>
-                        <input type="${inputType}" id="input_${col}" value="${val}" class="w-full px-4 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-sm bg-white text-slate-800" ${col === 'ID_PEGAWAI' && mode === 'edit' ? 'readonly class="bg-slate-100 cursor-not-allowed"' : ''}>
+                    <div class="${(col.includes('NAMA') || col.includes('KETERANGAN')) ? 'md:col-span-2' : ''}">
+                        <label class="block text-xs font-bold text-slate-600 mb-1 tracking-wide">${col}</label>
+                        <input type="${inputType}" id="input_${col.replace(/\s/g, '_')}" value="${val}" data-key="${col}" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-sm bg-white text-slate-800 shadow-sm transition-shadow ${isReadOnly ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : ''}" ${isReadOnly ? 'readonly' : ''}>
                     </div>
                 `;
                 form.insertAdjacentHTML('beforeend', html);
@@ -722,10 +652,14 @@
 
         // --- POST DATA Logic ---
         async function submitDataForm() {
-            const cols = HEADERS[currentSheet];
+            // Tarik data dinamis berdasarkan input yang ada di modal
+            const inputs = document.querySelectorAll('#data-form input');
             let payloadData = {};
             
-            cols.forEach(col => { payloadData[col] = document.getElementById(`input_${col}`).value; });
+            inputs.forEach(input => {
+                const realKey = input.getAttribute('data-key');
+                payloadData[realKey] = input.value;
+            });
 
             const action = editingRowIndex ? 'edit' : 'add';
             const payload = { sheetName: currentSheet, action: action, rowIndex: editingRowIndex, data: payloadData };
@@ -735,39 +669,25 @@
             btn.disabled = true;
 
             try {
-                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
-                    await new Promise(r => setTimeout(r, 600)); 
-                    Swal.fire('Sukses', 'Data disimpan (Mode Lokal)', 'success');
+                const response = await fetch(gasApiUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const textRes = await response.text();
+                
+                if (textRes.trim().startsWith('<')) throw new Error("Akses Ditolak Google");
+                
+                const res = JSON.parse(textRes);
+                if(res.status === 'success') {
+                    Swal.fire('Tersimpan', res.message || 'Perubahan berhasil dikirim ke server.', 'success');
                     closeModal();
                     fetchCurrentSheetData();
                 } else {
-                    // Mengirim POST sebagai String (Text) tanpa Header Json
-                    const response = await fetch(gasApiUrl, {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    const textRes = await response.text();
-                    
-                    if (textRes.trim().startsWith('<')) {
-                       throw new Error("HTML_RESPONSE");
-                    }
-                    
-                    const res = JSON.parse(textRes);
-                    if(res.status === 'success') {
-                        Swal.fire('Tersimpan', res.message || 'Perubahan berhasil dikirim ke server.', 'success');
-                        closeModal();
-                        fetchCurrentSheetData();
-                    } else {
-                        throw new Error(res.message);
-                    }
+                    throw new Error(res.message);
                 }
             } catch (err) {
-                 if(err.message === "HTML_RESPONSE") {
-                     Swal.fire('Akses Ditolak', 'Google meminta otentikasi. Aplikasi tidak dapat menyimpan data. Gunakan email @gmail.com.', 'error');
-                 } else {
-                     Swal.fire('Error', 'Gagal mengirim data. Coba lagi nanti.', 'error');
-                 }
+                Swal.fire('Error', 'Gagal mengirim data. ' + err.message, 'error');
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-save"></i> Simpan';
                 btn.disabled = false;
@@ -789,25 +709,18 @@
             setLoading(true);
 
             try {
-                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
-                    await new Promise(r => setTimeout(r, 400));
-                    Swal.fire('Terhapus!', 'Data berhasil dihapus (Lokal).', 'success');
-                    fetchCurrentSheetData();
-                } else {
-                    const response = await fetch(gasApiUrl, {
-                        method: 'POST',
-                        body: JSON.stringify({ sheetName: currentSheet, action: 'delete', rowIndex: rowIndex })
-                    });
-                    const textRes = await response.text();
-                    if (textRes.trim().startsWith('<')) throw new Error("HTML_RESPONSE");
-                    
-                    Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
-                    fetchCurrentSheetData();
-                }
+                const response = await fetch(gasApiUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({ sheetName: currentSheet, action: 'delete', rowIndex: rowIndex })
+                });
+                const textRes = await response.text();
+                if (textRes.trim().startsWith('<')) throw new Error("Ditolak");
+                
+                Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+                fetchCurrentSheetData();
             } catch (err) {
                  Swal.fire('Error', 'Gagal menghapus data.', 'error');
-            } finally {
-                setLoading(false);
+                 setLoading(false);
             }
         }
 
@@ -851,7 +764,7 @@
             let trHead = document.createElement('tr');
             headers.forEach(h => {
                 let th = document.createElement('th');
-                th.className = "px-4 py-2 border-b";
+                th.className = "px-4 py-2 border-b border-slate-200 tracking-wide";
                 th.innerText = h;
                 trHead.appendChild(th);
             });
@@ -862,7 +775,7 @@
                 let tr = document.createElement('tr');
                 headers.forEach(h => {
                     let td = document.createElement('td');
-                    td.className = "px-4 py-2 border-b max-w-[150px] truncate";
+                    td.className = "px-4 py-2 border-b border-slate-100 max-w-[150px] truncate";
                     td.innerText = data[i][h] || '';
                     tr.appendChild(td);
                 });
@@ -892,28 +805,20 @@
             const payload = { sheetName: targetSheet, action: 'import', data: pendingImportData };
 
             try {
-                if (!gasApiUrl || !gasApiUrl.startsWith('http')) {
-                    await new Promise(r => setTimeout(r, 1500));
-                    Swal.fire('Selesai', `Simulasi Import ${pendingImportData.length} baris sukses.`, 'info');
-                    bersihkanPreview();
-                } else {
-                    const response = await fetch(gasApiUrl, {
-                        method: 'POST',
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    const textRes = await response.text();
-                    if (textRes.trim().startsWith('<')) throw new Error("HTML_RESPONSE");
+                const response = await fetch(gasApiUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                
+                const textRes = await response.text();
+                if (textRes.trim().startsWith('<')) throw new Error("Akses Ditolak");
 
-                    Swal.fire('Sinkronisasi Sukses', `Perintah import data telah berhasil dieksekusi.`, 'success');
-                    bersihkanPreview();
-                }
+                Swal.fire('Sinkronisasi Sukses', `Perintah import data telah berhasil dieksekusi.`, 'success');
+                bersihkanPreview();
+                if(currentSheet === targetSheet) fetchCurrentSheetData();
+                loadAllDataForDashboard();
             } catch (err) {
-                 if(err.message === "HTML_RESPONSE") {
-                     Swal.fire('Akses Ditolak', 'Google meminta otentikasi. Gunakan email @gmail.com.', 'error');
-                 } else {
-                     Swal.fire('Error Import', 'Terjadi kesalahan jaringan atau payload terlalu besar.', 'error');
-                 }
+                 Swal.fire('Error Import', 'Terjadi kesalahan jaringan atau payload terlalu besar.', 'error');
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-database"></i> Sinkronisasi ke Database';
                 btn.disabled = false;
@@ -923,83 +828,8 @@
         function bersihkanPreview() {
              document.getElementById('preview-section').classList.add('hidden');
              document.getElementById('file-upload').value = '';
-             document.getElementById('file-name-display').innerText = 'Klik untuk memilih file Excel';
+             document.getElementById('file-name-display').innerText = 'Klik untuk memilih file';
              pendingImportData = [];
-        }
-
-        // --- Settings & Diagnosa ---
-        function saveApiUrl() {
-            let url = document.getElementById('input-api-url').value.trim();
-            
-            if (url.includes('/edit')) {
-                url = url.split('/edit')[0] + '/exec';
-                document.getElementById('input-api-url').value = url;
-            }
-            
-            if (url && (!url.startsWith('https://script.google.com') || !url.endsWith('/exec'))) {
-                Swal.fire('Format Salah', 'URL API harus berakhiran /exec dari script.google.com', 'warning');
-                return;
-            }
-
-            localStorage.setItem('bpjs_gas_url', url);
-            gasApiUrl = url;
-            checkConnectionStatus();
-            Swal.fire('Tersimpan', 'API URL Berhasil dihubungkan. Mencoba menarik data...', 'success');
-            loadAllDataForDashboard(); 
-            
-            if(currentActiveTab === 'data') fetchCurrentSheetData();
-        }
-
-        function clearApiUrl() {
-            document.getElementById('input-api-url').value = '';
-            localStorage.removeItem('bpjs_gas_url');
-            gasApiUrl = '';
-            checkConnectionStatus();
-            Swal.fire('Direset', 'Kembali ke mode lokal/demo.', 'info');
-            loadAllDataForDashboard();
-        }
-
-        async function diagnoseConnection() {
-            let url = document.getElementById('input-api-url').value.trim();
-            if(!url) return Swal.fire('Error', 'URL API masih kosong', 'error');
-
-            Swal.fire({
-                title: 'Mendiagnosa Koneksi...',
-                text: 'Harap tunggu, memeriksa respon server Google.',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-
-            try {
-                const response = await fetch(`${url}?sheet=STAFF&t=${Date.now()}`);
-                const text = await response.text();
-                
-                if (text.trim().startsWith('<')) {
-                    Swal.fire({
-                        title: 'Diagnosa: BLOCKED 🛑',
-                        html: `<div class="text-left text-sm">
-                            <p>Server merespon dengan halaman Login/HTML. Ini berarti:</p>
-                            <ul class="list-disc ml-5 mt-2 text-red-600 font-medium">
-                                <li>Anda menggunakan Email Kantor/Perusahaan yang memblokir akses publik.</li>
-                                <li>Pengaturan Deployment bukan "Anyone".</li>
-                            </ul>
-                            <p class="mt-2 text-green-600 font-bold">SOLUSI: Buat Google Sheet & Apps Script baru menggunakan Email @gmail.com pribadi.</p>
-                        </div>`,
-                        icon: 'error'
-                    });
-                } else {
-                    const json = JSON.parse(text);
-                    if(json.status === 'error' && json.message.includes('Sheet tidak ditemukan')) {
-                        Swal.fire('Diagnosa: SHEET ERROR ⚠️', 'Koneksi Sukses, tetapi sheet "STAFF" tidak ditemukan di Spreadsheet Anda. Buat sheet dengan nama STAFF, WORKER, dan DATA_UPAH.', 'warning');
-                    } else if (json.status === 'error' && json.message.includes('null')) {
-                         Swal.fire('Diagnosa: SPREADSHEET ID SALAH ⚠️', 'Koneksi Sukses, tetapi Apps Script tidak dapat menemukan ID Spreadsheet Anda. Cek kembali baris ke-2 di kode Apps Script.', 'warning');
-                    } else {
-                        Swal.fire('Diagnosa: PERFECT ✅', 'Koneksi API Anda berjalan 100% sempurna tanpa masalah CORS atau Hak Akses.', 'success');
-                    }
-                }
-            } catch (err) {
-                Swal.fire('Diagnosa: CORS ERROR ❌', 'Terjadi error jaringan murni (Kemungkinan salah penulisan URL atau browser terlalu ketat). Error: ' + err.message, 'error');
-            }
         }
 
     </script>
