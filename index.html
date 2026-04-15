@@ -7,7 +7,9 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>BPJS Control Center Pro - Final Fix</title>
-  <link rel="icon" type="image/png" href="hoplun.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./hoplun.png?v=20260415" />
+  <link rel="shortcut icon" href="./hoplun.png?v=20260415" />
+  <link rel="apple-touch-icon" href="./hoplun.png?v=20260415" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -249,7 +251,7 @@
               <i class="fa-solid fa-circle-notch fa-spin"></i> Sinkronisasi data...
             </div>
             <span id="themeBadge" class="px-4 py-2 rounded-full glass text-sm font-semibold">Tema Default</span>
-            <button onclick="loadAllDataForDashboard()" class="glass rounded-2xl px-4 py-3 font-semibold text-slate-700 hover:opacity-90 transition-opacity">
+            <button onclick="refreshDataFast()" class="glass rounded-2xl px-4 py-3 font-semibold text-slate-700 hover:opacity-90 transition-opacity">
               <i class="fa-solid fa-rotate-right mr-2"></i>Refresh
             </button>
           </div>
@@ -406,7 +408,7 @@
                 </button>
               </div>
             </div>
-            <div class="overflow-auto max-h-[calc(100vh-260px)]">
+            <div class="table-mobile-scroll overflow-auto max-h-[calc(100vh-260px)]">
               <table class="w-full text-sm whitespace-nowrap">
                 <thead id="tableHead" class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 text-xs uppercase tracking-wider"></thead>
                 <tbody id="tableBody" class="divide-y divide-slate-100 bg-white/70"></tbody>
@@ -820,6 +822,9 @@
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxpizb32MDEht_lJVAQ4rjMhQ-rUw2FahLGtvNd_cpilOJxlAqZ11bDpPN-Bof_8qOFxg/exec';
     const SETTINGS_SHEET = 'APP_SETTINGS';
     const LOGS_SHEET = 'APP_LOGS';
+    const SHEET_CACHE_KEY = 'bpjsSheetCacheV3';
+    const SHEET_CACHE_MAX_AGE = 1000 * 60 * 5;
+    const FAVICON_DEFAULT = './hoplun.png?v=20260415';
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -893,6 +898,7 @@
     let selectedCardKey = '';
     let tempLogoData = appSettings.logoData || '';
     let syncState = { settings: 'browser', logs: 'browser' };
+    let settingsRowIndex = 2;
 
     function loadSettings() {
       try {
@@ -917,6 +923,61 @@
 
     function saveSettingsStorage() {
       localStorage.setItem('bpjsUiSettingsV2', JSON.stringify(appSettings));
+    }
+
+    function readSheetCacheStore() {
+      try { return JSON.parse(localStorage.getItem(SHEET_CACHE_KEY) || '{}'); } catch (e) { return {}; }
+    }
+
+    function writeSheetCacheStore(store) {
+      localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(store || {}));
+    }
+
+    function getCachedSheetRows(sheet, maxAgeMs = SHEET_CACHE_MAX_AGE) {
+      const store = readSheetCacheStore();
+      const entry = store[sheet];
+      if (!entry || !Array.isArray(entry.rows) || !entry.savedAt) return null;
+      if (Date.now() - entry.savedAt > maxAgeMs) return null;
+      return entry;
+    }
+
+    function setCachedSheetRows(sheet, rows) {
+      const store = readSheetCacheStore();
+      store[sheet] = { rows: rows || [], savedAt: Date.now() };
+      writeSheetCacheStore(store);
+    }
+
+    function hydrateCachedAppState() {
+      ['STAFF', 'WORKER', 'DATA_UPAH'].forEach(sheet => {
+        const cached = getCachedSheetRows(sheet);
+        if (cached) database[sheet] = cached.rows || [];
+      });
+      filteredData = database[currentSheet] || [];
+      applySettingsToUI();
+      updateDashboardUI();
+      renderTable();
+      renderReport();
+      renderCardPrint();
+    }
+
+    function ensureFavicon(url) {
+      const href = url || FAVICON_DEFAULT;
+      ['icon', 'shortcut icon', 'apple-touch-icon'].forEach(rel => {
+        let link = document.querySelector(`link[rel="${rel}"]`);
+        if (!link) {
+          link = document.createElement('link');
+          link.setAttribute('rel', rel);
+          document.head.appendChild(link);
+        }
+        link.setAttribute('href', href);
+      });
+    }
+
+    function updateFaviconFromSettings() {
+      const source = appSettings.logoData && String(appSettings.logoData).startsWith('data:')
+        ? appSettings.logoData
+        : FAVICON_DEFAULT;
+      ensureFavicon(source);
     }
 
     function pickAny(row, keys = []) {
@@ -990,19 +1051,26 @@
       };
     }
 
-    async function fetchSheetRows(sheet) {
-      const response = await fetch(`${gasApiUrl}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`);
+    async function fetchSheetRows(sheet, options = {}) {
+      const { preferCache = false, maxAgeMs = SHEET_CACHE_MAX_AGE } = options;
+      if (preferCache) {
+        const cached = getCachedSheetRows(sheet, maxAgeMs);
+        if (cached) return cached.rows || [];
+      }
+      const response = await fetch(`${gasApiUrl}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`, { cache: 'no-store' });
       const text = await response.text();
       if (text.trim().startsWith('<')) throw new Error('HTML_RESPONSE');
       const json = JSON.parse(text);
       if (json.status !== 'success') throw new Error(json.message || 'Gagal mengambil data');
+      setCachedSheetRows(sheet, json.data || []);
       return json.data || [];
     }
 
     async function loadSharedSettingsRemote() {
       try {
-        const rows = await fetchSheetRows(SETTINGS_SHEET);
+        const rows = await fetchSheetRows(SETTINGS_SHEET, { preferCache: false });
         if (rows.length) {
+          settingsRowIndex = rows[0]._rowIndex || 2;
           appSettings = {
             ...structuredClone(DEFAULT_SETTINGS),
             ...mapSettingsFromRow(rows[0]),
@@ -1038,13 +1106,18 @@
     async function persistSettingsRemote() {
       const payload = mapSettingsToRow(appSettings);
       try {
-        const rows = await fetchSheetRows(SETTINGS_SHEET).catch(() => []);
-        if (rows.length) {
-          await postAction({ sheetName: SETTINGS_SHEET, action: 'edit', rowIndex: rows[0]._rowIndex, data: payload });
-        } else {
-          await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
+        if (settingsRowIndex) {
+          try {
+            await postAction({ sheetName: SETTINGS_SHEET, action: 'edit', rowIndex: settingsRowIndex, data: payload });
+            syncState.settings = 'cloud';
+            setCachedSheetRows(SETTINGS_SHEET, [{ ...payload, _rowIndex: settingsRowIndex }]);
+            return true;
+          } catch (e) {}
         }
+        await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
+        settingsRowIndex = 2;
         syncState.settings = 'cloud';
+        setCachedSheetRows(SETTINGS_SHEET, [{ ...payload, _rowIndex: settingsRowIndex }]);
         return true;
       } catch (e) {
         syncState.settings = 'browser';
@@ -1089,8 +1162,14 @@
 
     function setLoading(isLoading) {
       const box = document.getElementById('loadingIndicator');
-      if (isLoading) box.classList.remove('hidden');
-      else box.classList.add('hidden');
+      if (!box) return;
+      if (isLoading) {
+        box.classList.remove('hidden');
+        box.classList.add('inline-flex');
+      } else {
+        box.classList.add('hidden');
+        box.classList.remove('inline-flex');
+      }
     }
 
     function fmtDateTime(dateInput = new Date()) {
@@ -1114,6 +1193,7 @@
     async function postAction(payload) {
       const response = await fetch(gasApiUrl, {
         method: 'POST',
+        cache: 'no-store',
         body: JSON.stringify(payload)
       });
       const text = await response.text();
@@ -1123,45 +1203,61 @@
       return json;
     }
 
+    function setTextSafe(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? '';
+    }
+
+    function setValueSafe(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.value = value ?? '';
+    }
+
+    function hasActiveTab(id) {
+      const el = document.getElementById(id);
+      return !!(el && el.classList.contains('active'));
+    }
+
     function applySettingsToUI() {
       document.body.setAttribute('data-theme', appSettings.theme || 'default');
-      document.getElementById('appNameSidebar').textContent = appSettings.appName;
-      document.getElementById('appSubtitleSidebar').textContent = appSettings.appSubtitle;
-      document.getElementById('appNameHeaderSmall').textContent = appSettings.appName;
-      document.getElementById('themeBadge').textContent = `Tema ${(appSettings.theme || 'default').charAt(0).toUpperCase() + (appSettings.theme || 'default').slice(1)}`;
+      setTextSafe('appNameSidebar', appSettings.appName);
+      setTextSafe('appSubtitleSidebar', appSettings.appSubtitle);
+      setTextSafe('appNameHeaderSmall', appSettings.appName);
+      setTextSafe('themeBadge', `Tema ${(appSettings.theme || 'default').charAt(0).toUpperCase() + (appSettings.theme || 'default').slice(1)}`);
 
-      document.getElementById('labelNavStaff').textContent = getSheetLabel('STAFF');
-      document.getElementById('labelNavWorker').textContent = getSheetLabel('WORKER');
-      document.getElementById('labelNavUpah').textContent = getSheetLabel('DATA_UPAH');
-      document.getElementById('metricLabelStaff').textContent = getSheetLabel('STAFF');
-      document.getElementById('metricLabelWorker').textContent = getSheetLabel('WORKER');
-      document.getElementById('metricLabelUpah').textContent = getSheetLabel('DATA_UPAH');
-      document.getElementById('dashboardLabelStaff').textContent = getSheetLabel('STAFF');
-      document.getElementById('dashboardLabelWorker').textContent = getSheetLabel('WORKER');
-      document.getElementById('dashboardLabelUpah').textContent = getSheetLabel('DATA_UPAH');
-      document.getElementById('importLabelStaff').textContent = getSheetLabel('STAFF');
-      document.getElementById('importLabelWorker').textContent = getSheetLabel('WORKER');
-      document.getElementById('importLabelUpah').textContent = getSheetLabel('DATA_UPAH');
+      setTextSafe('labelNavStaff', getSheetLabel('STAFF'));
+      setTextSafe('labelNavWorker', getSheetLabel('WORKER'));
+      setTextSafe('labelNavUpah', getSheetLabel('DATA_UPAH'));
+      setTextSafe('metricLabelStaff', getSheetLabel('STAFF'));
+      setTextSafe('metricLabelWorker', getSheetLabel('WORKER'));
+      setTextSafe('metricLabelUpah', getSheetLabel('DATA_UPAH'));
+      setTextSafe('dashboardLabelStaff', getSheetLabel('STAFF'));
+      setTextSafe('dashboardLabelWorker', getSheetLabel('WORKER'));
+      setTextSafe('dashboardLabelUpah', getSheetLabel('DATA_UPAH'));
+      setTextSafe('importLabelStaff', getSheetLabel('STAFF'));
+      setTextSafe('importLabelWorker', getSheetLabel('WORKER'));
+      setTextSafe('importLabelUpah', getSheetLabel('DATA_UPAH'));
 
-      document.getElementById('settingAppName').value = appSettings.appName;
-      document.getElementById('settingAppSubtitle').value = appSettings.appSubtitle;
-      document.getElementById('settingLabelStaff').value = getSheetLabel('STAFF');
-      document.getElementById('settingLabelWorker').value = getSheetLabel('WORKER');
-      document.getElementById('settingLabelUpah').value = getSheetLabel('DATA_UPAH');
-      document.getElementById('settingTheme').value = appSettings.theme || 'default';
+      setValueSafe('settingAppName', appSettings.appName);
+      setValueSafe('settingAppSubtitle', appSettings.appSubtitle);
+      setValueSafe('settingLabelStaff', getSheetLabel('STAFF'));
+      setValueSafe('settingLabelWorker', getSheetLabel('WORKER'));
+      setValueSafe('settingLabelUpah', getSheetLabel('DATA_UPAH'));
+      setValueSafe('settingTheme', appSettings.theme || 'default');
 
-      document.getElementById('brandPreviewName').textContent = appSettings.appName;
-      document.getElementById('brandPreviewSubtitle').textContent = appSettings.appSubtitle;
-      document.getElementById('brandPreviewStaff').textContent = getSheetLabel('STAFF');
-      document.getElementById('brandPreviewWorker').textContent = getSheetLabel('WORKER');
-      document.getElementById('brandPreviewUpah').textContent = getSheetLabel('DATA_UPAH');
+      setTextSafe('brandPreviewName', appSettings.appName);
+      setTextSafe('brandPreviewSubtitle', appSettings.appSubtitle);
+      setTextSafe('brandPreviewStaff', getSheetLabel('STAFF'));
+      setTextSafe('brandPreviewWorker', getSheetLabel('WORKER'));
+      setTextSafe('brandPreviewUpah', getSheetLabel('DATA_UPAH'));
 
       updateLogoUI(appSettings.logoData || '');
+      updateFaviconFromSettings();
       refreshSelectLabels();
       updateSyncBadges();
-      if (document.getElementById('tab-data').classList.contains('active')) renderTable();
-      if (document.getElementById('tab-report').classList.contains('active')) renderReport();
-      if (document.getElementById('tab-card-print').classList.contains('active')) renderCardPrint();
+      if (hasActiveTab('tab-data')) renderTable();
+      if (hasActiveTab('tab-report')) renderReport();
+      if (hasActiveTab('tab-card-print')) renderCardPrint();
       updatePageTitleForCurrentTab();
     }
 
@@ -1181,6 +1277,9 @@
         logoIcon.classList.add('hidden');
         previewIcon.classList.add('hidden');
       } else {
+        logoImg.removeAttribute('src');
+        previewImg.removeAttribute('src');
+        settingPreview.removeAttribute('src');
         logoImg.classList.add('hidden');
         previewImg.classList.add('hidden');
         settingPreview.classList.add('hidden');
@@ -1215,36 +1314,70 @@
       `;
     }
 
-    function handleLogoUpload(event) {
+    function compressImageFile(file, maxSize = 192) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(img.width * ratio));
+            canvas.height = Math.max(1, Math.round(img.height * ratio));
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/png', 0.9));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleLogoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        tempLogoData = e.target.result;
+      setLoading(true);
+      try {
+        tempLogoData = await compressImageFile(file, 192);
         updateLogoUI(tempLogoData);
-      };
-      reader.readAsDataURL(file);
+        updateFaviconFromSettings();
+      } catch (e) {
+        Swal.fire('Logo gagal diproses', 'File logo tidak bisa dibaca. Coba gunakan PNG/JPG lain.', 'error');
+      } finally {
+        setLoading(false);
+      }
     }
 
     async function saveSettings() {
-      appSettings = {
-        appName: document.getElementById('settingAppName').value.trim() || DEFAULT_SETTINGS.appName,
-        appSubtitle: document.getElementById('settingAppSubtitle').value.trim() || DEFAULT_SETTINGS.appSubtitle,
-        theme: document.getElementById('settingTheme').value,
-        logoData: tempLogoData || '',
-        modules: {
-          STAFF: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.STAFF,
-          WORKER: document.getElementById('settingLabelWorker').value.trim() || DEFAULT_SETTINGS.modules.WORKER,
-          DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
-        }
-      };
-      saveSettingsStorage();
-      applySettingsToUI();
-      const synced = await persistSettingsRemote();
-      updateSyncBadges();
-      Swal.fire('Tersimpan', synced
-        ? 'Pengaturan berhasil disimpan dan tersinkron ke semua perangkat melalui APP_SETTINGS.'
-        : 'Pengaturan berhasil disimpan di browser ini. Untuk sinkron semua perangkat, siapkan sheet APP_SETTINGS di Google Sheet.', 'success');
+      const saveButton = document.querySelector('button[onclick="saveSettings()"]');
+      if (saveButton) { saveButton.disabled = true; saveButton.classList.add('opacity-70', 'pointer-events-none'); }
+      setLoading(true);
+      try {
+        appSettings = {
+          appName: document.getElementById('settingAppName').value.trim() || DEFAULT_SETTINGS.appName,
+          appSubtitle: document.getElementById('settingAppSubtitle').value.trim() || DEFAULT_SETTINGS.appSubtitle,
+          theme: document.getElementById('settingTheme').value,
+          logoData: tempLogoData || '',
+          modules: {
+            STAFF: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.STAFF,
+            WORKER: document.getElementById('settingLabelWorker').value.trim() || DEFAULT_SETTINGS.modules.WORKER,
+            DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
+          }
+        };
+        saveSettingsStorage();
+        applySettingsToUI();
+        const synced = await persistSettingsRemote();
+        updateSyncBadges();
+        Swal.fire('Tersimpan', synced
+          ? 'Pengaturan berhasil disimpan dan tersinkron ke semua perangkat melalui APP_SETTINGS.'
+          : 'Pengaturan berhasil disimpan di browser ini. Untuk sinkron semua perangkat, siapkan sheet APP_SETTINGS di Google Sheet.', 'success');
+      } finally {
+        setLoading(false);
+        if (saveButton) { saveButton.disabled = false; saveButton.classList.remove('opacity-70', 'pointer-events-none'); }
+      }
     }
 
     async function resetSettings() {
@@ -1315,14 +1448,16 @@
       }
     }
 
-    async function loadAllDataForDashboard() {
-      setLoading(true);
+    async function loadAllDataForDashboard(options = {}) {
+      const { silent = false, forceSettings = false } = options;
+      if (!silent) setLoading(true);
       try {
-        await Promise.all([
+        const tasks = [
           Promise.all(['STAFF', 'WORKER', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
-          loadSharedSettingsRemote().catch(() => false),
           loadSharedLogsRemote().catch(() => false)
-        ]);
+        ];
+        if (forceSettings || syncState.settings !== 'cloud') tasks.push(loadSharedSettingsRemote().catch(() => false));
+        await Promise.all(tasks);
         filteredData = database[currentSheet] || [];
         applySettingsToUI();
         updateDashboardUI();
@@ -1330,8 +1465,12 @@
         renderReport();
         renderCardPrint();
       } finally {
-        setLoading(false);
+        if (!silent) setLoading(false);
       }
+    }
+
+    async function refreshDataFast() {
+      await loadAllDataForDashboard({ silent: false, forceSettings: false });
     }
 
     function renderModuleBars() {
@@ -2174,9 +2313,11 @@ Nomor Kartu: ${item.cardNumber}`).join('\n\n');
       document.getElementById('openSidebar').addEventListener('click', openNav);
       document.getElementById('closeSidebar').addEventListener('click', closeNav);
       document.getElementById('overlay').addEventListener('click', closeNav);
+      hydrateCachedAppState();
       applySettingsToUI();
+      updateFaviconFromSettings();
       updateSyncBadges();
-      loadAllDataForDashboard();
+      loadAllDataForDashboard({ silent: false, forceSettings: true });
     });
   </script>
 </body>
