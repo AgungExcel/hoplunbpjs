@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>BPJS Control Center Pro</title>
-  <link rel="icon" type="image/png" href="hoplun.png?v=3" />
+  <link rel="icon" type="image/png" href="hoplun.png?v=4" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -151,12 +151,39 @@
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 999px; }
     ::-webkit-scrollbar-track { background: transparent; }
+    
+    /* Global Table Styling Elements */
+    .table-modern { width: 100%; text-align: left; border-collapse: separate; border-spacing: 0; }
+    .table-modern thead th { 
+      background: rgba(248, 250, 252, 0.85); 
+      backdrop-filter: blur(8px);
+      color: #64748b; 
+      font-size: 0.65rem; 
+      font-weight: 800; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      position: sticky; 
+      top: 0; 
+      z-index: 10;
+    }
+    .table-modern tbody td { 
+      padding: 1rem 1.25rem; 
+      font-size: 0.875rem; 
+      font-weight: 500; 
+      color: #334155; 
+      border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+      transition: background-color 0.2s ease;
+    }
+    .table-modern tbody tr:hover td { background-color: rgba(248, 250, 252, 0.6); }
+    .table-modern tbody tr:last-child td { border-bottom: none; }
   </style>
 </head>
-<body class="min-h-[100dvh]" data-theme="default">
-  <div class="flex h-[100dvh] overflow-hidden">
+<body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
+  <div class="flex h-full w-full overflow-hidden">
     <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-80 max-w-[85vw] sidebar-glass text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
-      <div class="px-6 py-6 border-b border-white/10">
+      <div class="px-6 py-6 border-b border-white/10 shrink-0">
         <div class="flex items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
             <div id="brandLogoWrap" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow-lg shadow-teal-500/20 overflow-hidden shrink-0">
@@ -168,11 +195,11 @@
               <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS KS Staff / Worker + SIPP Worker</p>
             </div>
           </div>
-          <button id="closeSidebar" class="md:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
+          <button id="closeSidebar" class="md:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 shrink-0"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
 
-      <div class="px-5 py-4 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold">Monitor</div>
+      <div class="px-5 py-4 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Monitor</div>
       <nav class="px-4 space-y-2 overflow-y-auto flex-1 pb-5">
         <button class="nav-link active w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="dashboard">
           <i class="fa-solid fa-chart-pie w-5 text-center"></i><span>Dashboard</span>
@@ -190,7 +217,7 @@
           <i class="fa-solid fa-wallet w-5 text-center"></i><span id="labelNavUpah">SIPP Worker</span>
         </button>
 
-        <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold">Operasional</div>
+        <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Operasional</div>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="import">
           <i class="fa-solid fa-file-import w-5 text-center"></i><span>Import Massal</span>
         </button>
@@ -211,7 +238,7 @@
         </button>
       </nav>
 
-      <div class="p-5 border-t border-white/10">
+      <div class="p-5 border-t border-white/10 shrink-0">
         <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
           <div class="flex items-center justify-between gap-3">
             <div>
@@ -228,8 +255,8 @@
 
     <div id="overlay" class="fixed inset-0 bg-slate-950/55 hidden md:hidden z-30"></div>
 
-    <main class="flex-1 flex flex-col min-w-0">
-      <header class="sticky top-0 z-20 px-4 md:px-8 py-3 md:py-5 bg-white/50 backdrop-blur-xl border-b border-white/40">
+    <main class="flex-1 flex flex-col min-w-0 min-h-0 h-full overflow-hidden">
+      <header class="shrink-0 z-20 px-4 md:px-8 py-3 md:py-5 bg-white/50 backdrop-blur-xl border-b border-white/40">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
           <div class="flex items-center gap-4 min-w-0 w-full md:w-auto">
             <button id="openSidebar" class="md:hidden w-11 h-11 shrink-0 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
@@ -246,7 +273,7 @@
         </div>
       </header>
 
-      <div class="flex-1 overflow-auto px-3 md:px-8 py-4 md:py-6 pb-24">
+      <div class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 py-5 md:py-6 pb-20 md:pb-24">
         <section id="tab-dashboard" class="tab-panel active space-y-6">
           
           <!-- TOP METRICS ROW -->
@@ -300,13 +327,13 @@
 
           <!-- CHARTS ROW 1 -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg md:text-xl font-black tracking-tight">Data per Modul</h3>
               </div>
               <div id="chartModuleBars" class="space-y-4"></div>
             </div>
-            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg md:text-xl font-black tracking-tight">Kesehatan Data BPJS</h3>
               </div>
@@ -316,13 +343,13 @@
 
           <!-- CHARTS ROW 2 -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+            <div class="lg:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg md:text-xl font-black tracking-tight">Tren In / Out</h3>
               </div>
               <div id="chartTrend" class="w-full"></div>
             </div>
-            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg md:text-xl font-black tracking-tight">Aktivitas Terakhir</h3>
               </div>
@@ -333,10 +360,13 @@
 
         <!-- SECTION PENCARIAN GLOBAL -->
         <section id="tab-global-search" class="tab-panel">
-          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden flex flex-col">
+          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden flex flex-col shadow-sm">
             <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
               <div>
-                <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Semua Data</h2>
+                <div class="flex items-center gap-3">
+                  <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Semua Data</h2>
+                  <span id="globalSearchBadge" class="hidden px-3 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-bold border border-teal-200">0 Data</span>
+                </div>
                 <p class="text-xs md:text-sm text-slate-500 mt-1">Cari berdasarkan Nama, ID Pegawai, atau NIK di seluruh modul.</p>
               </div>
               <div class="relative min-w-0 w-full md:w-96">
@@ -344,68 +374,68 @@
                 <input id="globalSearchInput" oninput="performGlobalSearch()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Ketik kata kunci pencarian..." />
               </div>
             </div>
-            <div class="overflow-x-auto max-h-[60vh] md:max-h-[calc(100vh-260px)]">
-              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                <thead class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 uppercase tracking-wider z-10 shadow-sm">
+            <div class="overflow-x-auto min-h-[300px] w-full">
+              <table class="table-modern min-w-[900px]">
+                <thead>
                   <tr>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Modul</th>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">ID Pegawai</th>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">NIK</th>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Nama Lengkap</th>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Status</th>
-                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">No Kartu</th>
+                    <th class="whitespace-nowrap">Modul</th>
+                    <th class="whitespace-nowrap">ID Pegawai</th>
+                    <th class="whitespace-nowrap">NIK</th>
+                    <th class="whitespace-nowrap">Nama Lengkap</th>
+                    <th class="whitespace-nowrap">Status</th>
+                    <th class="whitespace-nowrap">No Kartu</th>
                   </tr>
                 </thead>
-                <tbody id="globalSearchBody" class="divide-y divide-slate-100 bg-white/70">
+                <tbody id="globalSearchBody">
                   <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci di kotak pencarian untuk menampilkan data.</td></tr>
                 </tbody>
               </table>
             </div>
-            <div class="p-3 md:p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
+            <div class="p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
               <span id="globalSearchCount">0 hasil ditemukan</span>
             </div>
           </div>
         </section>
 
         <section id="tab-data" class="tab-panel">
-          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden">
+          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden shadow-sm">
             <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
               <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
                 <div class="relative min-w-0 sm:w-64 md:w-80">
                   <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base" style="border-color: var(--border);" placeholder="Cari nama, ID, NIK..." />
+                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari nama, ID, NIK..." />
                 </div>
-                <button onclick="openModal('add')" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold shadow-lg text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
+                <button onclick="openModal('add')" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold shadow-lg text-sm md:text-base hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
                   <i class="fa-solid fa-plus mr-2"></i>Tambah Data
                 </button>
               </div>
             </div>
-            <div class="overflow-x-auto max-h-[60vh] md:max-h-[calc(100vh-260px)]">
-              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                <thead id="tableHead" class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 uppercase tracking-wider z-10 shadow-sm"></thead>
-                <tbody id="tableBody" class="divide-y divide-slate-100 bg-white/70"></tbody>
+            <div class="overflow-x-auto min-h-[300px] w-full">
+              <table class="table-modern min-w-[800px]">
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
               </table>
             </div>
-            <div class="p-3 md:p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
+            <div class="p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
               <span id="recordCount">Menampilkan 0 data</span>
             </div>
           </div>
         </section>
 
         <section id="tab-import" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Import Massal Semua Data</h2>
               <span class="px-3 py-1.5 md:px-3 md:py-2 rounded-full bg-blue-50 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-100 self-start sm:self-auto">Upsert Mode</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="block text-sm font-bold mb-2">Tujuan Import</label>
-                <select id="importTarget" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none focus:ring-2" style="border-color: var(--border)"></select>
+                <label class="block text-sm font-bold mb-2 text-slate-700">Tujuan Import</label>
+                <select id="importTarget" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none focus:ring-2 shadow-sm" style="border-color: var(--border)"></select>
               </div>
               <div>
-                <label class="block text-sm font-bold mb-2">Upload File Excel / CSV</label>
+                <label class="block text-sm font-bold mb-2 text-slate-700">Upload File Excel / CSV</label>
                 <label class="block rounded-[20px] md:rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-5 md:p-6 text-center">
                   <input id="generalFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleGeneralImportFile(event)">
                   <i class="fa-solid fa-cloud-arrow-up text-2xl md:text-3xl" style="color: var(--primary)"></i>
@@ -413,27 +443,27 @@
                 </label>
               </div>
             </div>
-            <div id="generalPreviewWrap" class="hidden mt-6">
+            <div id="generalPreviewWrap" class="hidden mt-8 border-t border-slate-200/60 pt-6">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
                 <h3 class="font-black text-lg">Preview Data</h3>
-                <button onclick="processGeneralImport()" id="btnGeneralImport" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20 text-sm md:text-base">
+                <button onclick="processGeneralImport()" id="btnGeneralImport" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-blue-600 hover:bg-blue-700 transition-colors text-white font-bold shadow-lg shadow-blue-500/20 text-sm md:text-base">
                   <i class="fa-solid fa-database mr-2"></i>Sinkronisasi Database
                 </button>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-4">
                 <div class="rounded-xl md:rounded-2xl bg-slate-100 p-3 md:p-4">
                   <p class="text-[10px] md:text-xs font-bold uppercase text-slate-500">Total Baris</p>
-                  <p id="generalPreviewCount" class="mt-1 md:mt-2 text-xl md:text-2xl font-black">0</p>
+                  <p id="generalPreviewCount" class="mt-1 md:mt-2 text-xl md:text-2xl font-black text-slate-800">0</p>
                 </div>
                 <div class="rounded-xl md:rounded-2xl bg-emerald-50 p-3 md:p-4 border border-emerald-100">
                   <p class="text-[10px] md:text-xs font-bold uppercase text-emerald-700">Target Modul</p>
                   <p id="generalPreviewTarget" class="mt-1 md:mt-2 text-sm md:text-base font-black text-emerald-800 truncate">-</p>
                 </div>
               </div>
-              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
-                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                  <thead id="generalPreviewHead" class="sticky top-0 bg-slate-100 text-slate-600"></thead>
-                  <tbody id="generalPreviewBody" class="divide-y divide-slate-100"></tbody>
+              <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border border-slate-200 bg-white">
+                <table class="table-modern min-w-max">
+                  <thead id="generalPreviewHead"></thead>
+                  <tbody id="generalPreviewBody"></tbody>
                 </table>
               </div>
             </div>
@@ -441,19 +471,19 @@
         </section>
 
         <section id="tab-employee-in" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Baru</h2>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                <select id="employeeInTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto" style="border-color: var(--border)"></select>
-                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
+                <select id="employeeInTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto shadow-sm" style="border-color: var(--border)"></select>
+                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap shadow-lg hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
                   <input type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleEmployeeInFile(event)">
                   <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File Baru
                 </label>
               </div>
             </div>
             <div id="employeeInEmpty" class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 md:p-10 text-center text-sm md:text-base text-slate-500">Upload file karyawan baru untuk mulai preview.</div>
-            <div id="employeeInWrap" class="hidden space-y-4 md:space-y-5">
+            <div id="employeeInWrap" class="hidden space-y-5">
               <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div class="col-span-2 md:col-span-1 rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 p-3 md:p-4">
                   <p class="text-[10px] md:text-xs font-bold uppercase text-emerald-700">Valid (Siap Proses)</p>
@@ -468,142 +498,142 @@
                   <p id="employeeInInvalidCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-rose-800">0</p>
                 </div>
               </div>
-              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
-                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                  <thead class="bg-slate-100 text-slate-600 sticky top-0">
+              <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border border-slate-200 bg-white">
+                <table class="table-modern min-w-max">
+                  <thead>
                     <tr>
-                      <th class="px-4 py-3 text-left">ID</th>
-                      <th class="px-4 py-3 text-left">Nama</th>
-                      <th class="px-4 py-3 text-left">Status</th>
+                      <th class="whitespace-nowrap">ID Pegawai</th>
+                      <th class="whitespace-nowrap">Nama Lengkap</th>
+                      <th class="whitespace-nowrap">Status Preview</th>
                     </tr>
                   </thead>
-                  <tbody id="employeeInBody" class="divide-y divide-slate-100"></tbody>
+                  <tbody id="employeeInBody"></tbody>
                 </table>
               </div>
               <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-                <button onclick="resetEmployeeIn()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Reset</button>
-                <button onclick="processEmployeeIn()" id="btnEmployeeIn" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Proses Database</button>
+                <button onclick="resetEmployeeIn()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border border-slate-300 font-bold text-sm md:text-base text-slate-700 hover:bg-slate-50">Batal / Reset</button>
+                <button onclick="processEmployeeIn()" id="btnEmployeeIn" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base shadow-lg hover:opacity-90" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Proses ke Database</button>
               </div>
             </div>
           </div>
         </section>
 
         <section id="tab-employee-out" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Keluar</h2>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                <select id="employeeOutTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto" style="border-color: var(--border)"></select>
-                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">
+                <select id="employeeOutTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto shadow-sm" style="border-color: var(--border)"></select>
+                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap shadow-lg hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">
                   <input type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleEmployeeOutFile(event)">
                   <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File Keluar
                 </label>
               </div>
             </div>
             <div id="employeeOutEmpty" class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 md:p-10 text-center text-sm md:text-base text-slate-500">Upload file karyawan keluar untuk mulai preview.</div>
-            <div id="employeeOutWrap" class="hidden space-y-4 md:space-y-5">
+            <div id="employeeOutWrap" class="hidden space-y-5">
               <div class="grid grid-cols-2 gap-3 md:gap-4">
                 <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 p-3 md:p-4">
                   <p class="text-[10px] md:text-xs font-bold uppercase text-rose-700">Ditemukan (Siap Dihapus)</p>
                   <p id="employeeOutReadyCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-rose-800">0</p>
                 </div>
                 <div class="rounded-xl md:rounded-2xl bg-slate-100 border border-slate-200 p-3 md:p-4">
-                  <p class="text-[10px] md:text-xs font-bold uppercase text-slate-600">Tidak Ditemukan</p>
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-slate-600">Tidak Ditemukan di Database</p>
                   <p id="employeeOutMissingCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-slate-800">0</p>
                 </div>
               </div>
-              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
-                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                  <thead class="bg-slate-100 text-slate-600 sticky top-0">
+              <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border border-slate-200 bg-white">
+                <table class="table-modern min-w-max">
+                  <thead>
                     <tr>
-                      <th class="px-4 py-3 text-left">ID</th>
-                      <th class="px-4 py-3 text-left">Nama</th>
-                      <th class="px-4 py-3 text-left">Status</th>
+                      <th class="whitespace-nowrap">ID Pegawai</th>
+                      <th class="whitespace-nowrap">Nama Lengkap</th>
+                      <th class="whitespace-nowrap">Status Preview</th>
                     </tr>
                   </thead>
-                  <tbody id="employeeOutBody" class="divide-y divide-slate-100"></tbody>
+                  <tbody id="employeeOutBody"></tbody>
                 </table>
               </div>
               <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-                <button onclick="resetEmployeeOut()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Reset</button>
-                <button onclick="processEmployeeOut()" id="btnEmployeeOut" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">Hapus dari Database</button>
+                <button onclick="resetEmployeeOut()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border border-slate-300 font-bold text-sm md:text-base text-slate-700 hover:bg-slate-50">Batal / Reset</button>
+                <button onclick="processEmployeeOut()" id="btnEmployeeOut" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base shadow-lg hover:opacity-90" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">Hapus dari Database</button>
               </div>
             </div>
           </div>
         </section>
 
         <section id="tab-report" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-5xl mx-auto">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-5xl mx-auto shadow-sm">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan In / Out</h2>
               <div class="flex flex-wrap gap-2 md:gap-3">
-                <button onclick="exportReportExcel()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)"><i class="fa-solid fa-file-excel mr-2"></i>Download Excel</button>
-                <button onclick="clearLogs()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--danger), #7c3aed)"><i class="fa-solid fa-trash mr-2"></i>Bersihkan Log</button>
+                <button onclick="exportReportExcel()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base hover:bg-slate-50 transition-colors" style="border-color: var(--border)"><i class="fa-solid fa-file-excel mr-2 text-emerald-600"></i>Download Excel</button>
+                <button onclick="clearLogs()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--danger), #7c3aed)"><i class="fa-solid fa-trash mr-2"></i>Bersihkan Log</button>
               </div>
             </div>
-            <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
-              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-[700px]">
-                <thead class="bg-slate-100 text-slate-600">
+            <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border border-slate-200 bg-white">
+              <table class="table-modern min-w-[700px]">
+                <thead>
                   <tr>
-                    <th class="px-4 py-3 text-left">Tanggal</th>
-                    <th class="px-4 py-3 text-left">Tipe</th>
-                    <th class="px-4 py-3 text-left">Modul</th>
-                    <th class="px-4 py-3 text-left">Jumlah</th>
-                    <th class="px-4 py-3 text-left">Nama File</th>
+                    <th class="whitespace-nowrap">Tanggal & Waktu</th>
+                    <th class="whitespace-nowrap">Tipe Laporan</th>
+                    <th class="whitespace-nowrap">Modul / Sheet</th>
+                    <th class="whitespace-nowrap text-center">Jumlah Baris</th>
+                    <th class="whitespace-nowrap">Nama File Sumber</th>
                   </tr>
                 </thead>
-                <tbody id="reportBody" class="divide-y divide-slate-100"></tbody>
+                <tbody id="reportBody"></tbody>
               </table>
             </div>
           </div>
         </section>
 
         <section id="tab-card-print" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-7xl mx-auto">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-7xl mx-auto shadow-sm">
             <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Cetak Kartu</h2>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full xl:w-auto">
-                <select id="cardSource" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)"></select>
-                <select id="cardTemplate" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
+                <select id="cardSource" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)"></select>
+                <select id="cardTemplate" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
                   <option value="template-default">Template Default</option>
                   <option value="template-ocean">Template Ocean</option>
                   <option value="template-emerald">Template Emerald</option>
                   <option value="template-sunset">Template Sunset</option>
                 </select>
-                <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
+                <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-5 gap-5 items-start">
-              <div class="xl:col-span-3 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1">
-                <div class="px-4 py-3 md:px-5 md:py-4 border-b bg-white/70" style="border-color: var(--border)">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start flex-col-reverse xl:flex-row">
+              <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1 shadow-sm">
+                <div class="px-4 py-4 md:px-6 md:py-5 border-b bg-white/80" style="border-color: var(--border)">
                   <div class="flex items-center justify-between gap-2">
-                    <h3 class="text-base md:text-lg font-black">Daftar Karyawan</h3>
-                    <div class="flex gap-2">
-                      <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs" style="border-color: var(--border)"><i class="fa-solid fa-file-excel"></i></button>
+                    <h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3>
+                    <div class="flex gap-2 items-center">
+                       <span class="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg"><span id="cardCount">0</span> Data</span>
+                      <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs text-slate-600 hover:bg-slate-50 hover:text-emerald-700 transition-colors" style="border-color: var(--border)" title="Export Excel"><i class="fa-solid fa-file-excel text-emerald-600"></i></button>
                     </div>
                   </div>
                 </div>
-                <div class="overflow-x-auto max-h-[400px] md:max-h-[620px] bg-white relative">
-                  <!-- MENCABUT PEMBATAS LEBAR MAKSIMAL (TRUNCATE). KINI TABEL BISA DIGULIR KEKANAN -->
-                  <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
-                    <thead class="bg-slate-100 text-slate-600 sticky top-0 z-10">
+                <div class="overflow-x-auto min-h-[300px] max-h-[620px] bg-white relative w-full">
+                  <table class="table-modern min-w-[800px]">
+                    <thead>
                       <tr>
-                        <th class="px-4 py-3 text-left">ID</th>
-                        <th class="px-4 py-3 text-left">NIK</th>
-                        <th class="px-4 py-3 text-left">Nama Lengkap</th>
-                        <th class="px-4 py-3 text-left">No Kartu</th>
-                        <th class="px-4 py-3 text-left">Aksi</th>
+                        <th class="whitespace-nowrap">ID Pegawai</th>
+                        <th class="whitespace-nowrap">NIK</th>
+                        <th class="whitespace-nowrap">Nama Lengkap</th>
+                        <th class="whitespace-nowrap">No Kartu</th>
+                        <th class="whitespace-nowrap text-right">Aksi</th>
                       </tr>
                     </thead>
-                    <tbody id="cardTableBody" class="divide-y divide-slate-100"></tbody>
+                    <tbody id="cardTableBody"></tbody>
                   </table>
                 </div>
               </div>
 
-              <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] p-4 md:p-5 sticky top-20 md:top-24 order-1 xl:order-2">
-                <div class="flex items-center justify-between gap-3 mb-3 md:mb-4">
-                  <h3 class="text-base md:text-lg font-black">Preview Visual</h3>
+              <div class="xl:col-span-1 glass-strong rounded-[20px] md:rounded-[26px] p-4 md:p-6 sticky top-20 md:top-24 order-1 xl:order-2 shadow-sm">
+                <div class="flex items-center justify-between gap-3 mb-4 md:mb-5">
+                  <h3 class="text-base md:text-lg font-black text-slate-800">Preview Visual</h3>
                   <span id="selectedCardBadge" class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-slate-100 text-slate-600 text-[10px] md:text-xs font-bold truncate max-w-[100px]">Belum dipilih</span>
                 </div>
                 <div id="cardPreviewPanel"></div>
@@ -613,82 +643,81 @@
         </section>
 
         <section id="tab-settings" class="tab-panel space-y-6">
-          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="xl:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 space-y-5 md:space-y-6">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm space-y-6">
+            <div>
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Pengaturan Aplikasi</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 md:gap-5">
               <div>
-                <h2 class="text-xl md:text-2xl font-black tracking-tight">Pengaturan Aplikasi</h2>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Aplikasi</label>
+                <input id="settingAppName" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
-              <div class="grid md:grid-cols-2 gap-4 md:gap-5">
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Aplikasi</label>
-                  <input id="settingAppName" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                </div>
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Subtitle Aplikasi</label>
-                  <input id="settingAppSubtitle" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                </div>
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul Staff</label>
-                  <input id="settingLabelStaff" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                </div>
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul Worker</label>
-                  <input id="settingLabelWorker" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                </div>
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul SIPP</label>
-                  <input id="settingLabelUpah" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                </div>
-                <div>
-                  <label class="block text-xs md:text-sm font-bold mb-2">Tema Aplikasi</label>
-                  <select id="settingTheme" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
-                    <option value="default">Default</option>
-                    <option value="ocean">Ocean</option>
-                    <option value="sunset">Sunset</option>
-                    <option value="midnight">Midnight</option>
-                  </select>
-                </div>
-                <div class="md:col-span-2">
-                  <label class="block text-xs md:text-sm font-bold mb-2">Upload Logo (PNG/JPG)</label>
-                  <label class="block rounded-[20px] md:rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-4 md:p-5 text-center">
-                    <input id="settingLogoInput" type="file" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
-                    <i class="fa-solid fa-image mr-2"></i><span class="text-sm md:text-base">Pilih File Logo</span>
-                  </label>
-                  <div class="mt-3 flex items-center gap-3">
-                    <img id="settingLogoPreview" class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover border hidden" style="border-color: var(--border)">
-                    <div class="text-[10px] md:text-xs text-slate-500">Aplikasi akan memakai icon default bila dikosongkan.</div>
-                  </div>
-                </div>
+              <div>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Subtitle Aplikasi</label>
+                <input id="settingAppSubtitle" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
-              <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-                <button onclick="resetSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Kembalikan Default</button>
-                <button onclick="saveSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
+              <div>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul Staff</label>
+                <input id="settingLabelStaff" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
+              </div>
+              <div>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul Worker</label>
+                <input id="settingLabelWorker" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
+              </div>
+              <div>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul SIPP</label>
+                <input id="settingLabelUpah" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
+              </div>
+              <div>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Tema Aplikasi</label>
+                <select id="settingTheme" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
+                  <option value="default">Default</option>
+                  <option value="ocean">Ocean</option>
+                  <option value="sunset">Sunset</option>
+                  <option value="midnight">Midnight</option>
+                </select>
+              </div>
+              <div class="md:col-span-2 mt-2">
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Upload Logo (PNG/JPG)</label>
+                <label class="block rounded-[20px] md:rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-4 md:p-5 text-center">
+                  <input id="settingLogoInput" type="file" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                  <i class="fa-solid fa-image mr-2 text-slate-400 text-xl"></i><span class="text-sm md:text-base font-semibold text-slate-700">Pilih File Logo Baru</span>
+                </label>
+                <div class="mt-4 flex items-center gap-3">
+                  <img id="settingLogoPreview" class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover border hidden bg-white shadow-sm" style="border-color: var(--border)">
+                  <div class="text-[10px] md:text-xs text-slate-500 font-medium">Aplikasi akan memakai icon default bila dikosongkan.</div>
+                </div>
               </div>
             </div>
-            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7">
-              <h3 class="text-lg md:text-xl font-black tracking-tight">Preview Tampilan</h3>
-              <div class="mt-4 md:mt-5 rounded-[24px] md:rounded-[28px] p-4 md:p-5 text-white relative overflow-hidden" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
-                <div class="absolute inset-0 soft-grid opacity-10"></div>
-                <div class="relative flex items-center gap-3 md:gap-4">
-                  <div class="w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-[18px] md:rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden">
-                    <img id="brandPreviewImg" class="hidden w-full h-full object-cover" alt="Preview logo">
-                    <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-xl md:text-2xl"></i>
-                  </div>
-                  <div class="min-w-0">
-                    <p id="brandPreviewName" class="font-black text-base md:text-xl truncate">BPJS Control Center</p>
-                    <p id="brandPreviewSubtitle" class="text-white/70 text-[10px] md:text-sm truncate">BPJS KS Staff / Worker + SIPP Worker</p>
-                  </div>
+            <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-200/60">
+              <button onclick="resetSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)">Kembalikan Default</button>
+              <button onclick="saveSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base hover:opacity-90 transition-opacity shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
+            </div>
+          </div>
+          
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
+            <h3 class="text-lg md:text-xl font-black tracking-tight">Preview Tampilan</h3>
+            <div class="mt-4 md:mt-5 rounded-[24px] md:rounded-[28px] p-4 md:p-6 text-white relative overflow-hidden shadow-inner" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
+              <div class="absolute inset-0 soft-grid opacity-10"></div>
+              <div class="relative flex items-center gap-3 md:gap-4">
+                <div class="w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-[18px] md:rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/5 shadow-sm">
+                  <img id="brandPreviewImg" class="hidden w-full h-full object-cover" alt="Preview logo">
+                  <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-xl md:text-2xl text-white/90"></i>
                 </div>
-                <div class="mt-5 space-y-2.5 text-xs md:text-sm">
-                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
-                    <p class="font-bold">1: <span id="brandPreviewStaff">BPJS KS Staff</span></p>
-                  </div>
-                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
-                    <p class="font-bold">2: <span id="brandPreviewWorker">BPJS KS Worker</span></p>
-                  </div>
-                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
-                    <p class="font-bold">3: <span id="brandPreviewUpah">SIPP Worker</span></p>
-                  </div>
+                <div class="min-w-0">
+                  <p id="brandPreviewName" class="font-black text-base md:text-xl truncate tracking-tight">BPJS Control Center</p>
+                  <p id="brandPreviewSubtitle" class="text-white/60 text-[10px] md:text-sm truncate font-medium mt-0.5">BPJS KS Staff / Worker + SIPP Worker</p>
+                </div>
+              </div>
+              <div class="mt-6 space-y-2.5 text-xs md:text-sm">
+                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
+                  <p class="font-bold text-white/90">Menu 1: <span id="brandPreviewStaff" class="ml-1 text-white">BPJS KS Staff</span></p>
+                </div>
+                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
+                  <p class="font-bold text-white/90">Menu 2: <span id="brandPreviewWorker" class="ml-1 text-white">BPJS KS Worker</span></p>
+                </div>
+                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
+                  <p class="font-bold text-white/90">Menu 3: <span id="brandPreviewUpah" class="ml-1 text-white">SIPP Worker</span></p>
                 </div>
               </div>
             </div>
@@ -708,8 +737,8 @@
         <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-4"></form>
       </div>
       <div class="px-5 py-4 md:px-6 md:py-5 border-t flex flex-col sm:flex-row justify-end gap-3 surface-border bg-white/50">
-        <button onclick="closeModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Batal</button>
-        <button onclick="submitDataForm()" type="button" id="btnSaveModal" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan</button>
+        <button onclick="closeModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)">Batal</button>
+        <button onclick="submitDataForm()" type="button" id="btnSaveModal" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base shadow-lg hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan</button>
       </div>
     </div>
   </div>
@@ -798,7 +827,6 @@
     let visibleCardRows = [];
     let selectedCardKey = '';
     let tempLogoData = appSettings.logoData || '';
-    let syncState = { settings: 'browser', logs: 'browser' };
 
     function loadSettings() {
       try {
@@ -908,11 +936,9 @@
           };
           tempLogoData = appSettings.logoData || '';
           saveSettingsStorage();
-          syncState.settings = 'cloud';
           return true;
         }
       } catch (e) {}
-      syncState.settings = 'browser';
       return false;
     }
 
@@ -925,11 +951,9 @@
             .filter(log => log.type && log.sheet && log.createdAt)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           saveLogs();
-          syncState.logs = 'cloud';
           return true;
         }
       } catch (e) {}
-      syncState.logs = 'browser';
       return false;
     }
 
@@ -942,10 +966,8 @@
         } else {
           await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
         }
-        syncState.settings = 'cloud';
         return true;
       } catch (e) {
-        syncState.settings = 'browser';
         return false;
       }
     }
@@ -955,10 +977,7 @@
       saveLogs();
       try {
         await postAction({ sheetName: LOGS_SHEET, action: 'add', data: mapLogToRow(log) });
-        syncState.logs = 'cloud';
-      } catch (e) {
-        syncState.logs = 'browser';
-      }
+      } catch (e) {}
     }
 
     function getSheetLabel(sheet) {
@@ -1240,10 +1259,12 @@
       const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
       const tbody = document.getElementById('globalSearchBody');
       const countEl = document.getElementById('globalSearchCount');
+      const badgeEl = document.getElementById('globalSearchBadge');
 
       if (!q) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci pencarian (ID/NIK/Nama) untuk menampilkan data.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 font-medium">Ketik kata kunci pencarian (ID/NIK/Nama) untuk menampilkan data.</td></tr>';
         countEl.textContent = '0 hasil ditemukan';
+        if(badgeEl) badgeEl.classList.add('hidden');
         return;
       }
 
@@ -1269,33 +1290,44 @@
       });
 
       if (!results.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-rose-500 text-sm">Tidak ada data yang cocok ditemukan di seluruh modul.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-rose-500 font-medium">Tidak ada data yang cocok ditemukan di seluruh modul.</td></tr>';
         countEl.textContent = '0 hasil ditemukan';
+        if(badgeEl) badgeEl.classList.add('hidden');
         return;
+      }
+      
+      if(badgeEl) {
+        badgeEl.textContent = `${results.length} Data`;
+        badgeEl.classList.remove('hidden');
       }
 
       tbody.innerHTML = results.map(item => {
         let statusBadge = '';
         const upperStatus = item.status.toUpperCase();
         if (upperStatus === 'OK' || upperStatus === 'AKTIF') {
-          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] md:text-xs font-bold">Aktif / OK</span>`;
+          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif / OK</span>`;
         } else if (item.status === '-' || item.status === '') {
-          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-[10px] md:text-xs font-bold">Belum lengkap</span>`;
+          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span>`;
         } else {
-          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-bold">${escapeHtml(item.status)}</span>`;
+          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(item.status)}</span>`;
         }
 
         return `
-          <tr class="hover:bg-slate-50 transition-colors">
-            <td class="px-4 py-3 md:px-5 md:py-4 font-semibold text-slate-700 whitespace-nowrap">${escapeHtml(getSheetLabel(item.sheet))}</td>
-            <td class="px-4 py-3 md:px-5 md:py-4 font-bold whitespace-nowrap">${escapeHtml(item.id)}</td>
-            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">${escapeHtml(item.nik)}</td>
-            <td class="px-4 py-3 md:px-5 md:py-4 max-w-none whitespace-normal min-w-[200px] leading-relaxed">${escapeHtml(item.name)}</td>
-            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">${statusBadge}</td>
-            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">
-               <div class="flex items-center gap-2">
-                 <span>${escapeHtml(item.cardNo)}</span>
-                 <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNo))}, 'Nomor kartu berhasil dicopy')" class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-slate-100 hover:bg-slate-200 shrink-0" title="Copy Nomor Kartu"><i class="fa-regular fa-copy text-xs md:text-sm"></i></button>
+          <tr>
+            <td class="whitespace-nowrap"><span class="font-semibold text-slate-500">${escapeHtml(getSheetLabel(item.sheet))}</span></td>
+            <td class="whitespace-nowrap font-bold text-slate-800">${escapeHtml(item.id)}</td>
+            <td class="whitespace-nowrap">
+              <div class="flex items-center gap-2 group cursor-pointer" onclick="copyText(${escapeHtml(JSON.stringify(item.nik))}, 'NIK berhasil dicopy')">
+                <span class="font-semibold">${escapeHtml(item.nik)}</span>
+                <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy NIK"><i class="fa-regular fa-copy text-[10px]"></i></button>
+              </div>
+            </td>
+            <td class="min-w-[200px] max-w-[300px] whitespace-normal leading-snug">${escapeHtml(item.name)}</td>
+            <td class="whitespace-nowrap">${statusBadge}</td>
+            <td class="whitespace-nowrap">
+               <div class="flex items-center gap-2 group cursor-pointer" onclick="copyText(${escapeHtml(JSON.stringify(item.cardNo))}, 'Nomor kartu berhasil dicopy')">
+                 <span class="font-semibold">${escapeHtml(item.cardNo)}</span>
+                 <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy Nomor Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
                </div>
             </td>
           </tr>
@@ -1343,7 +1375,7 @@
         if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
         
       } catch (err) {
-        // Silently fail or log if needed, let user retry
+        // Fail gracefully
       } finally {
         setLoading(false);
       }
@@ -1476,7 +1508,7 @@
           <span class="inline-flex items-center gap-1 md:gap-2"><span class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full" style="background: var(--primary)"></span> In (Baru)</span>
           <span class="inline-flex items-center gap-1 md:gap-2"><span class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full" style="background: var(--danger)"></span> Out (Keluar)</span>
         </div>
-        <div class="rounded-[20px] md:rounded-[24px] bg-slate-50 border p-2 md:p-3 w-full min-w-[320px]" style="border-color: var(--border)">
+        <div class="rounded-[20px] md:rounded-[24px] bg-slate-50 border p-2 md:p-3 w-full min-w-full" style="border-color: var(--border)">
           <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto">
             ${grid}
             <polygon points="${areaIn}" fill="color-mix(in srgb, var(--primary) 18%, transparent)"></polygon>
@@ -1523,7 +1555,7 @@
       const feed = document.getElementById('activityFeed');
       const logs = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
       if (!logs.length) {
-        feed.innerHTML = '<div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-xs md:text-sm text-slate-500">Belum ada aktivitas.</div>';
+        feed.innerHTML = '<div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-xs md:text-sm text-slate-500 font-medium">Belum ada aktivitas tercatat.</div>';
         return;
       }
       feed.innerHTML = logs.map(log => {
@@ -1532,10 +1564,10 @@
           <div class="rounded-xl md:rounded-2xl border p-3 md:p-4 ${isIn ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-rose-50 border-rose-100 text-rose-700'}">
             <div class="flex items-start justify-between gap-3">
               <div class="flex gap-2 md:gap-3 min-w-0">
-                <div class="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-xl md:rounded-2xl bg-white flex items-center justify-center"><i class="fa-solid ${isIn ? 'fa-user-plus' : 'fa-user-minus'}"></i></div>
+                <div class="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-xl md:rounded-2xl bg-white flex items-center justify-center shadow-sm"><i class="fa-solid ${isIn ? 'fa-user-plus' : 'fa-user-minus'}"></i></div>
                 <div class="min-w-0">
                   <p class="font-bold text-xs md:text-sm truncate">${isIn ? 'Karyawan Baru' : 'Karyawan Keluar'} • ${getSheetLabel(log.sheet)}</p>
-                  <p class="text-[10px] md:text-xs opacity-80 mt-1 truncate">${log.fileName || 'Manual'} • ${fmtDateTime(log.createdAt)}</p>
+                  <p class="text-[10px] md:text-xs opacity-80 mt-1 truncate font-medium">${log.fileName || 'Manual'} • ${fmtDateTime(log.createdAt)}</p>
                 </div>
               </div>
               <span class="text-base md:text-lg font-black shrink-0">${log.count}</span>
@@ -1549,10 +1581,11 @@
       const tHead = document.getElementById('tableHead');
       const tBody = document.getElementById('tableBody');
       document.getElementById('tableTitle').textContent = getSheetLabel(currentSheet);
-      tHead.innerHTML = `<tr>${cols.map(col => `<th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">${col.label}</th>`).join('')}<th class="px-4 py-3 md:px-5 md:py-4 text-right font-bold">Aksi</th></tr>`;
+      
+      tHead.innerHTML = `<tr>${cols.map(col => `<th class="whitespace-nowrap">${col.label}</th>`).join('')}<th class="whitespace-nowrap text-right pr-6">Aksi</th></tr>`;
 
       if (!filteredData.length) {
-        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm">Tidak ada data ditemukan.</td></tr>`;
+        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan.</td></tr>`;
         document.getElementById('recordCount').textContent = 'Menampilkan 0 data';
         return;
       }
@@ -1563,20 +1596,20 @@
           const val = getColValue(row, col.keys) || '-';
           if (col.label === 'Status') {
             const upper = String(val).toUpperCase();
-            if (upper === 'OK' || upper === 'AKTIF') return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] md:text-xs font-bold whitespace-nowrap">Aktif / OK</span></td>`;
-            if (upper === '-' || upper === '') return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-[10px] md:text-xs font-bold whitespace-nowrap">Belum lengkap</span></td>`;
-            return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-bold whitespace-nowrap">${escapeHtml(val)}</span></td>`;
+            if (upper === 'OK' || upper === 'AKTIF') return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif / OK</span></td>`;
+            if (upper === '-' || upper === '') return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span></td>`;
+            return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(val)}</span></td>`;
           }
-          return `<td class="px-4 py-3 md:px-5 md:py-4 max-w-[150px] md:max-w-[220px] truncate" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
+          return `<td class="max-w-[200px] whitespace-normal leading-snug" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
         }).join('');
 
         return `
-          <tr class="hover:bg-slate-50/80 transition-colors">
+          <tr>
             ${cells}
-            <td class="px-4 py-3 md:px-5 md:py-4 text-right">
-              <div class="inline-flex gap-2">
-                <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-2xl bg-blue-50 text-blue-600 border border-blue-100"><i class="fa-solid fa-pen text-xs md:text-sm"></i></button>
-                <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-2xl bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-trash text-xs md:text-sm"></i></button>
+            <td class="whitespace-nowrap text-right pr-5">
+              <div class="inline-flex gap-2 justify-end">
+                <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors shadow-sm" title="Edit Data"><i class="fa-solid fa-pen text-xs"></i></button>
+                <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-rose-600 hover:bg-rose-50 transition-colors shadow-sm" title="Hapus Data"><i class="fa-solid fa-trash text-xs"></i></button>
               </div>
             </td>
           </tr>`;
@@ -1613,7 +1646,7 @@
         form.insertAdjacentHTML('beforeend', `
           <div class="${span2}">
             <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${key}</label>
-            <input data-key="${key}" type="${numberField ? 'number' : 'text'}" value="${escapeHtml(value)}" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base ${readOnly ? 'bg-slate-100 text-slate-500' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
+            <input data-key="${key}" type="${numberField ? 'number' : 'text'}" value="${escapeHtml(value)}" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm focus:border-teal-400 focus:ring-2 focus:ring-teal-100 transition-all ${readOnly ? 'bg-slate-50 text-slate-400 border-slate-200' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
           </div>
         `);
       });
@@ -1705,13 +1738,13 @@
       const body = document.getElementById(bodyId);
       if (!rows.length) {
         head.innerHTML = '';
-        body.innerHTML = '<tr><td class="px-4 py-6 text-slate-500 text-center">Tidak ada data.</td></tr>';
+        body.innerHTML = '<tr><td class="px-4 py-6 text-slate-500 text-center font-medium">Tidak ada data.</td></tr>';
         if (countId) document.getElementById(countId).textContent = 0;
         return;
       }
       const headers = Object.keys(rows[0]);
-      head.innerHTML = `<tr>${headers.map(h => `<th class="px-4 py-3 text-left">${h}</th>`).join('')}</tr>`;
-      body.innerHTML = rows.slice(0, 8).map(row => `<tr>${headers.map(h => `<td class="px-4 py-3">${row[h] ?? ''}</td>`).join('')}</tr>`).join('');
+      head.innerHTML = `<tr>${headers.map(h => `<th class="whitespace-nowrap">${h}</th>`).join('')}</tr>`;
+      body.innerHTML = rows.slice(0, 8).map(row => `<tr>${headers.map(h => `<td class="whitespace-nowrap">${row[h] ?? ''}</td>`).join('')}</tr>`).join('');
       if (countId) document.getElementById(countId).textContent = rows.length;
     }
 
@@ -1797,9 +1830,9 @@
         ];
         document.getElementById('employeeInBody').innerHTML = previewRows.slice(0, 50).map(item => `
           <tr>
-            <td class="px-4 py-3">${getEmployeeId(item.row) || '-'}</td>
-            <td class="px-4 py-3">${getEmployeeName(item.row)}</td>
-            <td class="px-4 py-3">${item.status}</td>
+            <td class="whitespace-nowrap font-bold">${getEmployeeId(item.row) || '-'}</td>
+            <td class="whitespace-normal min-w-[200px] leading-snug">${getEmployeeName(item.row)}</td>
+            <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-xs font-bold">${item.status}</span></td>
           </tr>`).join('');
       } catch (e) {
         resetEmployeeIn();
@@ -1883,9 +1916,9 @@
         ];
         document.getElementById('employeeOutBody').innerHTML = preview.slice(0, 50).map(item => `
           <tr>
-            <td class="px-4 py-3">${getEmployeeId(item.row) || '-'}</td>
-            <td class="px-4 py-3">${getEmployeeName(item.row)}</td>
-            <td class="px-4 py-3">${item.status}</td>
+            <td class="whitespace-nowrap font-bold">${getEmployeeId(item.row) || '-'}</td>
+            <td class="whitespace-normal min-w-[200px] leading-snug">${getEmployeeName(item.row)}</td>
+            <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-xs font-bold">${item.status}</span></td>
           </tr>`).join('');
       } catch (e) {
         resetEmployeeOut();
@@ -1947,16 +1980,16 @@
     function renderReport() {
       const body = document.getElementById('reportBody');
       if (!inOutLogs.length) {
-        body.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">Belum ada laporan.</td></tr>';
+        body.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500 font-medium">Belum ada laporan.</td></tr>';
         return;
       }
       body.innerHTML = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => `
         <tr>
-          <td class="px-4 py-3">${fmtDateTime(log.createdAt)}</td>
-          <td class="px-4 py-3">${log.type === 'IN' ? 'Karyawan Baru' : 'Karyawan Keluar'}</td>
-          <td class="px-4 py-3">${getSheetLabel(log.sheet)}</td>
-          <td class="px-4 py-3">${log.count}</td>
-          <td class="px-4 py-3 max-w-[150px] truncate" title="${escapeHtml(log.fileName || '-')}">${escapeHtml(log.fileName || '-')}</td>
+          <td class="whitespace-nowrap font-medium">${fmtDateTime(log.createdAt)}</td>
+          <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md ${log.type === 'IN' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'} text-[10px] font-bold shadow-sm">${log.type === 'IN' ? 'Karyawan Baru' : 'Karyawan Keluar'}</span></td>
+          <td class="whitespace-nowrap font-bold text-slate-600">${getSheetLabel(log.sheet)}</td>
+          <td class="whitespace-nowrap text-center font-black text-lg text-slate-800">${log.count}</td>
+          <td class="whitespace-nowrap max-w-[200px] truncate" title="${escapeHtml(log.fileName || '-')}">${escapeHtml(log.fileName || '-')}</td>
         </tr>`).join('');
     }
 
@@ -2034,57 +2067,57 @@
       const badge = document.getElementById('selectedCardBadge');
       if (!item) {
         badge.textContent = 'Belum dipilih';
-        panel.innerHTML = '<div class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-6 md:p-8 text-center text-sm md:text-base text-slate-500">Pilih baris pada tabel untuk melihat template kartu di sini.</div>';
+        panel.innerHTML = '<div class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-6 md:p-8 text-center text-sm md:text-base text-slate-500 font-medium">Pilih baris pada tabel untuk melihat template kartu di sini.</div>';
         return;
       }
       badge.textContent = item.id || 'Terpilih';
       const cardDataText = `ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`;
       const domId = 'selected-card-template';
       panel.innerHTML = `
-        <div id="${domId}" class="card-template ${template} rounded-[20px] md:rounded-[26px] p-4 md:p-5 flex flex-col justify-between">
+        <div id="${domId}" class="card-template ${template} rounded-[20px] md:rounded-[26px] p-4 md:p-5 flex flex-col justify-between shadow-inner">
           <div class="relative z-10 flex items-start justify-between gap-3 md:gap-4">
             <div class="flex items-center gap-2 md:gap-3 min-w-0">
-              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden shrink-0">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden shrink-0 border border-white/10 shadow-sm">
                 ${appSettings.logoData ? `<img src="${appSettings.logoData}" class="w-full h-full object-cover">` : '<i class="fa-solid fa-shield-heart text-lg md:text-xl"></i>'}
               </div>
               <div class="min-w-0">
                 <p class="text-[9px] md:text-[11px] uppercase tracking-[0.28em] text-white/75 font-bold truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
-                <p class="text-base md:text-lg font-black truncate">${escapeHtml(appSettings.appName)}</p>
+                <p class="text-base md:text-lg font-black truncate tracking-tight">${escapeHtml(appSettings.appName)}</p>
               </div>
             </div>
           </div>
           <div class="relative z-10 mt-4 md:mt-5 space-y-2 md:space-y-3 text-xs md:text-sm">
-            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3 shadow-sm backdrop-blur-sm">
               <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">ID Pegawai / No ID</div>
               <div class="mt-1 font-black text-sm md:text-base break-words">${escapeHtml(item.id)}</div>
             </div>
             <div class="grid grid-cols-2 gap-2 md:gap-3">
-              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3 shadow-sm backdrop-blur-sm">
                 <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">NIK</div>
                 <div class="mt-1 font-bold break-words">${escapeHtml(item.nik)}</div>
               </div>
-              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3 shadow-sm backdrop-blur-sm">
                 <div class="flex items-center justify-between gap-2 text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">
                   <span>No Kartu</span>
-                  <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="text-white hover:opacity-75"><i class="fa-regular fa-copy"></i></button>
+                  <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="text-white hover:opacity-75 transition-opacity"><i class="fa-regular fa-copy"></i></button>
                 </div>
                 <div class="mt-1 font-bold break-words">${escapeHtml(item.cardNumber)}</div>
               </div>
             </div>
-            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3 shadow-sm backdrop-blur-sm">
               <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">Nama Lengkap</div>
-              <div class="mt-1 font-black text-base md:text-lg leading-tight break-words">${escapeHtml(item.name)}</div>
+              <div class="mt-1 font-black text-base md:text-lg leading-tight break-words uppercase">${escapeHtml(item.name)}</div>
             </div>
           </div>
-          <div class="relative z-10 mt-4 md:mt-5 flex items-center justify-between text-[10px] md:text-xs text-white/75">
+          <div class="relative z-10 mt-4 md:mt-5 flex items-center justify-between text-[10px] md:text-xs text-white/75 font-medium">
             <span class="truncate pr-2">${escapeHtml(appSettings.appSubtitle)}</span>
-            <span class="shrink-0 font-bold">${item.cardNumber !== '-' ? 'READY' : 'NO CARD'}</span>
+            <span class="shrink-0 font-bold tracking-wider">${item.cardNumber !== '-' ? 'READY' : 'NO CARD'}</span>
           </div>
         </div>
         <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <button onclick="copyText(${escapeHtml(JSON.stringify(cardDataText))}, 'Data kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm" style="border-color: var(--border)"><i class="fa-solid fa-copy mr-2"></i>Copy Data</button>
-          <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm" style="border-color: var(--border)"><i class="fa-regular fa-copy mr-2"></i>No Kartu</button>
-          <button onclick="downloadCardImage('${domId}', ${escapeHtml(JSON.stringify(item.id || 'kartu'))})" class="px-3 py-2 md:py-2.5 rounded-xl text-white font-bold text-xs md:text-sm" style="background: linear-gradient(90deg, var(--primary), var(--secondary));"><i class="fa-solid fa-image mr-2"></i>Download PNG</button>
+          <button onclick="copyText(${escapeHtml(JSON.stringify(cardDataText))}, 'Data kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)"><i class="fa-solid fa-copy mr-2"></i>Copy Data</button>
+          <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)"><i class="fa-regular fa-copy mr-2"></i>No Kartu</button>
+          <button onclick="downloadCardImage('${domId}', ${escapeHtml(JSON.stringify(item.id || 'kartu'))})" class="px-3 py-2 md:py-2.5 rounded-xl text-white font-bold text-xs md:text-sm shadow-md hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));"><i class="fa-solid fa-image mr-2"></i>Download PNG</button>
         </div>`;
     }
 
@@ -2109,7 +2142,7 @@
       const tableBody = document.getElementById('cardTableBody');
       if (!rows.length) {
         selectedCardKey = '';
-        tableBody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500 text-sm md:text-base">Tidak ada data kartu ditemukan.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500 font-medium">Tidak ada data kartu ditemukan.</td></tr>';
         renderCardPreview(null, template);
         return;
       }
@@ -2120,20 +2153,19 @@
         const isActive = item.key === selectedCardKey;
         return `
           <tr onclick="selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="cursor-pointer transition-colors ${isActive ? 'bg-teal-50' : 'hover:bg-slate-50'}">
-            <td class="px-4 py-3 font-semibold whitespace-nowrap">${escapeHtml(item.id)}</td>
-            <td class="px-4 py-3 whitespace-nowrap">${escapeHtml(item.nik)}</td>
-            <td class="px-4 py-3 whitespace-nowrap">${escapeHtml(item.name)}</td>
-            <td class="px-4 py-3 whitespace-nowrap">
-              <div class="flex items-center gap-2">
+            <td class="whitespace-nowrap font-bold text-slate-800">${escapeHtml(item.id)}</td>
+            <td class="whitespace-nowrap font-medium text-slate-600">${escapeHtml(item.nik)}</td>
+            <td class="min-w-[200px] whitespace-normal leading-snug font-medium text-slate-700">${escapeHtml(item.name)}</td>
+            <td class="whitespace-nowrap font-bold text-slate-800">
+              <div class="flex items-center gap-2 group" onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')">
                 <span>${escapeHtml(item.cardNumber)}</span>
-                <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-slate-100 hover:bg-slate-200 shrink-0"><i class="fa-regular fa-copy text-xs md:text-sm"></i></button>
+                <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
               </div>
             </td>
-            <td class="px-4 py-3 whitespace-nowrap">
-              <div class="flex flex-wrap gap-1 md:gap-2">
-                <button onclick="event.stopPropagation(); selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-white border font-semibold text-[10px] md:text-xs" style="border-color: var(--border)">Preview</button>
-                <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-white border font-semibold text-[10px] md:text-xs" style="border-color: var(--border)">Copy</button>
-              </div>
+            <td class="whitespace-nowrap text-right pr-6">
+              <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-[11px] md:text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
+                <i class="fa-regular fa-copy mr-1.5"></i>Copy Data
+              </button>
             </td>
           </tr>`;
       }).join('');
