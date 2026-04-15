@@ -178,6 +178,22 @@
     }
     .table-modern tbody tr:hover td { background-color: rgba(248, 250, 252, 0.6); }
     .table-modern tbody tr:last-child td { border-bottom: none; }
+    .sticky-action-header {
+      position: sticky;
+      right: 0;
+      z-index: 20;
+      background: rgba(248, 250, 252, 0.96) !important;
+      box-shadow: -1px 0 0 rgba(226,232,240,1);
+    }
+    .sticky-action-cell {
+      position: sticky;
+      right: 0;
+      z-index: 5;
+      box-shadow: -1px 0 0 rgba(241,245,249,1);
+    }
+    .sticky-action-cell.row-active { background: rgb(240 253 250) !important; }
+    .sticky-action-cell.row-normal { background: rgba(255,255,255,0.98) !important; }
+    .table-modern tbody tr:hover .sticky-action-cell { background: rgba(248, 250, 252, 0.98) !important; }
   </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
@@ -433,6 +449,20 @@
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Import Massal Semua Data</h2>
               <span class="px-3 py-1.5 md:px-3 md:py-2 rounded-full bg-blue-50 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-100 self-start sm:self-auto">Upsert Mode</span>
             </div>
+            <div class="rounded-[20px] md:rounded-[24px] border border-blue-100 bg-blue-50 p-4 md:p-5 mb-5">
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Download Template</p>
+                  <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk Import Massal sesuai modul tujuan.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <a href="template-import-massal-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
+                  <a href="template-import-massal-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
+                  <a href="template-import-massal-data-upah.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>SIPP</a>
+                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                </div>
+              </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label class="block text-sm font-bold mb-2 text-slate-700">Tujuan Import</label>
@@ -476,6 +506,19 @@
 
         <section id="tab-employee-in" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
+            <div class="rounded-[20px] md:rounded-[24px] border border-emerald-100 bg-emerald-50 p-4 md:p-5 mb-5">
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Download Template</p>
+                  <p class="text-sm text-emerald-900 mt-1">Gunakan template sesuai target menu Karyawan Baru.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <a href="template-karyawan-baru-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
+                  <a href="template-karyawan-baru-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
+                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-emerald-600 border border-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                </div>
+              </div>
+            </div>
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Baru</h2>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
@@ -524,6 +567,19 @@
 
         <section id="tab-employee-out" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
+            <div class="rounded-[20px] md:rounded-[24px] border border-rose-100 bg-rose-50 p-4 md:p-5 mb-5">
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-rose-700">Download Template</p>
+                  <p class="text-sm text-rose-900 mt-1">Gunakan template sesuai target menu Karyawan Keluar. Minimal isi kolom ID.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <a href="template-karyawan-keluar-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
+                  <a href="template-karyawan-keluar-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
+                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-rose-600 border border-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                </div>
+              </div>
+            </div>
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
               <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Keluar</h2>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
@@ -607,12 +663,16 @@
                 <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
             </div>
+            <div class="rounded-[18px] border border-teal-100 bg-teal-50 p-3 md:p-4 mb-5">
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Perbaikan Tampilan</p>
+              <p class="text-sm text-teal-900 mt-1">Tabel cetak kartu sudah dibuat full sampai kolom Aksi, dan kolom Aksi akan tetap terlihat di sisi kanan saat digeser.</p>
+            </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start flex-col-reverse xl:flex-row">
               <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1 shadow-sm">
                 <div class="px-4 py-4 md:px-6 md:py-5 border-b bg-white/80" style="border-color: var(--border)">
                   <div class="flex items-center justify-between gap-2">
-                    <h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3>
+                    <div><h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3><p class="text-xs text-slate-500 mt-1">Kolom sampai Aksi tetap tampil. Header dan isi kolom Aksi dikunci di kanan saat tabel digeser.</p></div>
                     <div class="flex gap-2 items-center">
                        <span class="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg"><span id="cardCount">0</span> Data</span>
                       <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs text-slate-600 hover:bg-slate-50 hover:text-emerald-700 transition-colors" style="border-color: var(--border)" title="Export Excel"><i class="fa-solid fa-file-excel text-emerald-600"></i></button>
@@ -620,14 +680,14 @@
                   </div>
                 </div>
                 <div class="overflow-x-auto min-h-[300px] max-h-[620px] bg-white relative w-full">
-                  <table class="table-modern w-full">
+                  <table class="table-modern min-w-[980px] w-full">
                     <thead class="bg-slate-100 text-slate-600 sticky top-0 z-10">
                       <tr>
                         <th class="whitespace-nowrap">ID Pegawai</th>
                         <th class="whitespace-nowrap">NIK</th>
                         <th class="whitespace-nowrap">Nama Lengkap</th>
                         <th class="whitespace-nowrap">No Kartu</th>
-                        <th class="whitespace-nowrap text-right">Aksi</th>
+                        <th class="whitespace-nowrap text-right sticky-action-header">Aksi</th>
                       </tr>
                     </thead>
                     <tbody id="cardTableBody"></tbody>
@@ -2208,7 +2268,7 @@
                 <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
               </div>
             </td>
-            <td class="whitespace-nowrap text-right pr-4 md:pr-6 align-middle w-[100px] md:w-auto">
+            <td class="whitespace-nowrap text-right pr-4 md:pr-6 align-middle w-[100px] md:w-auto sticky-action-cell ${isActive ? 'row-active' : 'row-normal'}">
               <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-[10px] md:text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm w-full flex justify-center items-center">
                 <i class="fa-regular fa-copy md:mr-1.5"></i><span class="hidden md:inline">Copy Data</span><span class="md:hidden ml-1">Copy</span>
               </button>
