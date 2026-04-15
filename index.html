@@ -2,14 +2,12 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>BPJS Control Center Pro - Final Fix</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="./hoplun.png?v=20260415" />
-  <link rel="shortcut icon" href="./hoplun.png?v=20260415" />
-  <link rel="apple-touch-icon" href="./hoplun.png?v=20260415" />
+  <title>BPJS Control Center Pro</title>
+  <link rel="icon" type="image/png" href="hoplun.png?v=3" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -105,12 +103,6 @@
       height: 4px;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
-    .soft-grid {
-      background-image:
-        linear-gradient(rgba(148,163,184,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px);
-      background-size: 22px 22px;
-    }
     .card-template {
       position: relative;
       overflow: hidden;
@@ -155,17 +147,15 @@
     }
     .modal { display: none; }
     .modal.show { display: flex; }
-    .muted { color: var(--muted); }
-    .text-main { color: var(--text); }
     .surface-border { border-color: var(--border); }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 999px; }
     ::-webkit-scrollbar-track { background: transparent; }
   </style>
 </head>
-<body class="min-h-screen" data-theme="default">
-  <div class="flex h-screen overflow-hidden">
-    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-80 max-w-[88vw] sidebar-glass text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+<body class="min-h-[100dvh]" data-theme="default">
+  <div class="flex h-[100dvh] overflow-hidden">
+    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-80 max-w-[85vw] sidebar-glass text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
       <div class="px-6 py-6 border-b border-white/10">
         <div class="flex items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
@@ -186,6 +176,9 @@
       <nav class="px-4 space-y-2 overflow-y-auto flex-1 pb-5">
         <button class="nav-link active w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="dashboard">
           <i class="fa-solid fa-chart-pie w-5 text-center"></i><span>Dashboard</span>
+        </button>
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="global-search">
+          <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Semua Data</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="STAFF">
           <i class="fa-solid fa-user-tie w-5 text-center"></i><span id="labelNavStaff">BPJS KS Staff</span>
@@ -222,14 +215,13 @@
         <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
           <div class="flex items-center justify-between gap-3">
             <div>
-              <p class="text-xs text-slate-400">Koneksi Data</p>
-              <p class="font-semibold text-white mt-1">Google Apps Script API</p>
+              <p class="text-[10px] md:text-xs text-slate-400 uppercase tracking-wider font-bold">Koneksi Data</p>
+              <p class="font-semibold text-white mt-1">Status Database</p>
             </div>
             <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-400 text-xs border border-emerald-500/20">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Online
             </span>
           </div>
-          <p class="text-xs text-slate-500 mt-3 leading-relaxed">Nama aplikasi, logo, label modul, tema, serta template kartu sekarang bisa diubah langsung dari menu Pengaturan.</p>
         </div>
       </div>
     </aside>
@@ -237,379 +229,320 @@
     <div id="overlay" class="fixed inset-0 bg-slate-950/55 hidden md:hidden z-30"></div>
 
     <main class="flex-1 flex flex-col min-w-0">
-      <header class="sticky top-0 z-20 px-4 md:px-8 py-4 md:py-5 bg-white/50 backdrop-blur-xl border-b border-white/40">
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex items-center gap-4 min-w-0">
-            <button id="openSidebar" class="md:hidden w-11 h-11 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
-            <div class="min-w-0">
-              <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500">BPJS Control Center</p>
-              <h1 id="pageTitle" class="text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1>
+      <header class="sticky top-0 z-20 px-4 md:px-8 py-3 md:py-5 bg-white/50 backdrop-blur-xl border-b border-white/40">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
+          <div class="flex items-center gap-4 min-w-0 w-full md:w-auto">
+            <button id="openSidebar" class="md:hidden w-11 h-11 shrink-0 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
+            <div class="min-w-0 flex-1">
+              <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500 truncate">BPJS Control Center</p>
+              <h1 id="pageTitle" class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1>
             </div>
           </div>
-          <div class="flex items-center gap-3 flex-wrap justify-end">
-            <div id="loadingIndicator" class="hidden items-center gap-2 px-4 py-2 rounded-full bg-teal-50 text-teal-700 text-sm font-semibold border border-teal-100">
-              <i class="fa-solid fa-circle-notch fa-spin"></i> Sinkronisasi data...
+          <div class="flex items-center gap-2 md:gap-3 flex-wrap justify-start md:justify-end">
+            <div id="loadingIndicator" class="hidden items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-teal-50 text-teal-700 text-xs md:text-sm font-semibold border border-teal-100">
+              <i class="fa-solid fa-circle-notch fa-spin"></i> <span class="hidden sm:inline">Sinkronisasi data...</span><span class="sm:hidden">Sinkron...</span>
             </div>
-            <span id="themeBadge" class="px-4 py-2 rounded-full glass text-sm font-semibold">Tema Default</span>
-            <button onclick="refreshDataFast()" class="glass rounded-2xl px-4 py-3 font-semibold text-slate-700 hover:opacity-90 transition-opacity">
-              <i class="fa-solid fa-rotate-right mr-2"></i>Refresh
-            </button>
           </div>
         </div>
       </header>
 
-      <div class="flex-1 overflow-auto px-4 md:px-8 py-6">
+      <div class="flex-1 overflow-auto px-3 md:px-8 py-4 md:py-6 pb-24">
         <section id="tab-dashboard" class="tab-panel active space-y-6">
-          <div class="relative overflow-hidden rounded-[28px] p-6 md:p-8 text-white bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 shadow-2xl shadow-slate-900/10">
-            <div class="absolute inset-0 soft-grid opacity-20"></div>
-            <div class="absolute -top-16 -right-10 w-72 h-72 rounded-full bg-teal-400/20 blur-3xl"></div>
-            <div class="absolute -bottom-20 left-10 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl"></div>
-            <div class="relative grid grid-cols-1 xl:grid-cols-3 gap-6 items-center">
-              <div class="xl:col-span-2">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-sm font-semibold">
-                  <i class="fa-solid fa-sparkles" style="color: #a7f3d0"></i>
-                  Dashboard operasional dengan branding, log, dan modul yang bisa disinkronkan
+          
+          <!-- TOP METRICS ROW -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+            <div class="metric-card glass rounded-[20px] md:rounded-[24px] p-4 md:p-5">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0">
+                  <p id="metricLabelStaff" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">BPJS KS Staff</p>
+                  <p id="metricStaff" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
-                <h2 class="mt-5 text-3xl md:text-4xl font-black leading-tight max-w-3xl">Dashboard operasional BPJS dengan rekap data, grafik profesional, log in/out, dan cetak kartu per karyawan.</h2>
-                <p class="mt-4 text-slate-300 max-w-2xl leading-relaxed">Pengaturan nama aplikasi, logo, label modul, dan tema dapat dibuat sama di semua laptop melalui sheet <b>APP_SETTINGS</b>. Log aktivitas juga dapat dibuat terpusat melalui <b>APP_LOGS</b> agar dashboard menampilkan data yang konsisten di mana pun dibuka.</p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                  <button onclick="switchTab('import')" class="px-5 py-3 rounded-2xl font-bold shadow-lg text-slate-950" style="background: color-mix(in srgb, var(--primary) 85%, white)">Refresh & Import</button>
-                  <button onclick="switchTab('settings')" class="px-5 py-3 rounded-2xl bg-white/10 border border-white/10 font-bold hover:bg-white/15 transition-colors">Buka Sinkronisasi</button>
-                </div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-tie"></i></div>
               </div>
-              <div class="glass rounded-[28px] p-5 text-slate-800">
-                <p class="text-sm font-bold text-slate-500 uppercase tracking-[0.18em]">Rekap Kesehatan Data</p>
-                <div class="mt-5 space-y-4">
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm text-slate-500">Kelengkapan data BPJS</span>
-                    <span id="healthPercent" class="text-3xl font-black">0%</span>
-                  </div>
-                  <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
-                    <div id="healthBar" class="h-full rounded-full" style="width:0%; background: linear-gradient(90deg, var(--primary), var(--secondary));"></div>
-                  </div>
-                  <div class="grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4">
-                      <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider">Status OK</p>
-                      <p id="statusOk" class="mt-2 text-2xl font-black text-emerald-700">0</p>
-                    </div>
-                    <div class="rounded-2xl bg-rose-50 border border-rose-100 p-4">
-                      <p class="text-xs text-rose-600 font-bold uppercase tracking-wider">Perlu cek</p>
-                      <p id="statusNotOk" class="mt-2 text-2xl font-black text-rose-700">0</p>
-                    </div>
-                  </div>
+            </div>
+            <div class="metric-card glass rounded-[20px] md:rounded-[24px] p-4 md:p-5">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0">
+                  <p id="metricLabelWorker" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">BPJS KS Worker</p>
+                  <p id="metricWorker" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-users"></i></div>
+              </div>
+            </div>
+            <div class="metric-card glass rounded-[20px] md:rounded-[24px] p-4 md:p-5">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0">
+                  <p id="metricLabelUpah" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">SIPP Worker</p>
+                  <p id="metricUpah" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
+                </div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+              </div>
+            </div>
+            <div class="metric-card glass rounded-[20px] md:rounded-[24px] p-4 md:p-5">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0">
+                  <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">In Bulan Ini</p>
+                  <p id="metricInMonth" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
+                </div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-plus"></i></div>
+              </div>
+            </div>
+            <div class="metric-card glass rounded-[20px] md:rounded-[24px] p-4 md:p-5">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0">
+                  <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">Out Bulan Ini</p>
+                  <p id="metricOutMonth" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
+                </div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-minus"></i></div>
               </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
-            <div class="metric-card glass rounded-[24px] p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p id="metricLabelStaff" class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">BPJS KS Staff</p>
-                  <p id="metricStaff" class="mt-3 text-3xl font-black">0</p>
-                </div>
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></div>
+          <!-- CHARTS ROW 1 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Data per Modul</h3>
               </div>
+              <div id="chartModuleBars" class="space-y-4"></div>
             </div>
-            <div class="metric-card glass rounded-[24px] p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p id="metricLabelWorker" class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">BPJS KS Worker</p>
-                  <p id="metricWorker" class="mt-3 text-3xl font-black">0</p>
-                </div>
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></div>
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Kesehatan Data BPJS</h3>
               </div>
-            </div>
-            <div class="metric-card glass rounded-[24px] p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p id="metricLabelUpah" class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">SIPP Worker</p>
-                  <p id="metricUpah" class="mt-3 text-3xl font-black">0</p>
-                </div>
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-              </div>
-            </div>
-            <div class="metric-card glass rounded-[24px] p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">In Bulan Ini</p>
-                  <p id="metricInMonth" class="mt-3 text-3xl font-black">0</p>
-                </div>
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-user-plus"></i></div>
-              </div>
-            </div>
-            <div class="metric-card glass rounded-[24px] p-5">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Out Bulan Ini</p>
-                  <p id="metricOutMonth" class="mt-3 text-3xl font-black">0</p>
-                </div>
-                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center"><i class="fa-solid fa-user-minus"></i></div>
-              </div>
+              <div id="chartStatusSummary"></div>
             </div>
           </div>
-          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="xl:col-span-2 space-y-6">
-              <div class="glass rounded-[28px] p-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
-                  <div>
-                    <h3 class="text-xl font-black tracking-tight">Rekap Data per Modul</h3>
-                    <p class="text-sm text-slate-500">Perbandingan jumlah data aktif di setiap modul utama.</p>
-                  </div>
-                  <div class="inline-flex gap-2 flex-wrap">
-                    <span class="px-3 py-2 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Live Google Sheet</span>
-                    <span class="px-3 py-2 rounded-full text-xs font-bold" style="background: color-mix(in srgb, var(--primary) 16%, white); color: color-mix(in srgb, var(--primary) 78%, black);">Profesional & Ringkas</span>
-                  </div>
-                </div>
-                <div id="chartModuleBars" class="space-y-4"></div>
-              </div>
 
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass rounded-[28px] p-6">
-                  <h3 class="text-xl font-black tracking-tight">Status Kepesertaan BPJS</h3>
-                  <p class="text-sm text-slate-500 mt-1">Rekap status OK vs perlu pengecekan untuk dua modul BPJS KS.</p>
-                  <div id="chartStatusSummary" class="mt-5"></div>
-                </div>
-                <div class="glass rounded-[28px] p-6">
-                  <h3 class="text-xl font-black tracking-tight">Tren In / Out 6 Bulan</h3>
-                  <p class="text-sm text-slate-500 mt-1">Pergerakan karyawan baru dan keluar berdasarkan log operasional.</p>
-                  <div id="chartTrend" class="mt-5"></div>
-                </div>
+          <!-- CHARTS ROW 2 -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Tren In / Out</h3>
               </div>
+              <div id="chartTrend" class="w-full"></div>
             </div>
-
-            <div class="glass rounded-[28px] p-6">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <h3 class="text-xl font-black tracking-tight">Aktivitas Terakhir</h3>
-                  <p class="text-sm text-slate-500">Log karyawan baru dan keluar.</p>
-                </div>
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 overflow-hidden">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Aktivitas Terakhir</h3>
               </div>
               <div id="activityFeed" class="space-y-3"></div>
             </div>
           </div>
         </section>
 
-        <section id="tab-data" class="tab-panel">
-          <div class="glass rounded-[28px] overflow-hidden">
-            <div class="p-5 md:p-6 border-b flex flex-col xl:flex-row xl:items-center justify-between gap-4 surface-border">
+        <!-- SECTION PENCARIAN GLOBAL -->
+        <section id="tab-global-search" class="tab-panel">
+          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden flex flex-col">
+            <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
               <div>
-                <h2 id="tableTitle" class="text-2xl font-black tracking-tight">Data</h2>
-                <p id="tableSubtitle" class="text-sm text-slate-500 mt-1">Pantau data utama dan edit manual jika diperlukan.</p>
+                <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Semua Data</h2>
+                <p class="text-xs md:text-sm text-slate-500 mt-1">Cari berdasarkan Nama, ID Pegawai, atau NIK di seluruh modul.</p>
               </div>
-              <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full xl:w-auto">
-                <div class="relative min-w-0 md:w-80">
+              <div class="relative min-w-0 w-full md:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input id="globalSearchInput" oninput="performGlobalSearch()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Ketik kata kunci pencarian..." />
+              </div>
+            </div>
+            <div class="overflow-x-auto max-h-[60vh] md:max-h-[calc(100vh-260px)]">
+              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
+                <thead class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 uppercase tracking-wider z-10 shadow-sm">
+                  <tr>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Modul</th>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">ID Pegawai</th>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">NIK</th>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Nama Lengkap</th>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">Status</th>
+                    <th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">No Kartu</th>
+                  </tr>
+                </thead>
+                <tbody id="globalSearchBody" class="divide-y divide-slate-100 bg-white/70">
+                  <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci di kotak pencarian untuk menampilkan data.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="p-3 md:p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
+              <span id="globalSearchCount">0 hasil ditemukan</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-data" class="tab-panel">
+          <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden">
+            <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
+              <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                <div class="relative min-w-0 sm:w-64 md:w-80">
                   <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-2xl pl-11 pr-4 py-3 outline-none focus:ring-2" style="border-color: var(--border);" placeholder="Cari nama, ID, NIK, status..." />
+                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base" style="border-color: var(--border);" placeholder="Cari nama, ID, NIK..." />
                 </div>
-                <button onclick="openModal('add')" class="px-5 py-3 rounded-2xl text-white font-bold shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
-                  <i class="fa-solid fa-plus mr-2"></i>Tambah Manual
+                <button onclick="openModal('add')" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold shadow-lg text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
+                  <i class="fa-solid fa-plus mr-2"></i>Tambah Data
                 </button>
               </div>
             </div>
-            <div class="table-mobile-scroll overflow-auto max-h-[calc(100vh-260px)]">
-              <table class="w-full text-sm whitespace-nowrap">
-                <thead id="tableHead" class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 text-xs uppercase tracking-wider"></thead>
+            <div class="overflow-x-auto max-h-[60vh] md:max-h-[calc(100vh-260px)]">
+              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
+                <thead id="tableHead" class="sticky top-0 bg-slate-100/95 backdrop-blur text-slate-600 uppercase tracking-wider z-10 shadow-sm"></thead>
                 <tbody id="tableBody" class="divide-y divide-slate-100 bg-white/70"></tbody>
               </table>
             </div>
-            <div class="p-4 md:px-6 border-t flex items-center justify-between text-sm text-slate-500 bg-white/60 surface-border">
+            <div class="p-3 md:p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
               <span id="recordCount">Menampilkan 0 data</span>
-              <span class="font-semibold">Mode: Data Utama</span>
             </div>
           </div>
         </section>
 
         <section id="tab-import" class="tab-panel space-y-6">
-          <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="xl:col-span-2 glass rounded-[28px] p-6 md:p-7">
-              <div class="flex items-start justify-between gap-4 mb-6">
-                <div>
-                  <h2 class="text-2xl font-black tracking-tight">Import Massal Semua Data</h2>
-                  <p class="text-sm text-slate-500 mt-1">Bisa dipakai untuk import <span id="importLabelStaff">BPJS KS Staff</span>, <span id="importLabelWorker">BPJS KS Worker</span>, maupun <span id="importLabelUpah">SIPP Worker</span>.</p>
-                </div>
-                <span class="px-3 py-2 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">Upsert Mode</span>
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6">
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Import Massal Semua Data</h2>
+              <span class="px-3 py-1.5 md:px-3 md:py-2 rounded-full bg-blue-50 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-100 self-start sm:self-auto">Upsert Mode</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold mb-2">Tujuan Import</label>
+                <select id="importTarget" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none focus:ring-2" style="border-color: var(--border)"></select>
               </div>
-              <div class="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label class="block text-sm font-bold mb-2">Tujuan Import</label>
-                  <select id="importTarget" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none focus:ring-2" style="border-color: var(--border)"></select>
-                </div>
-                <div>
-                  <label class="block text-sm font-bold mb-2">Upload File Excel / CSV</label>
-                  <label class="block rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-6 text-center">
-                    <input id="generalFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleGeneralImportFile(event)">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl" style="color: var(--primary)"></i>
-                    <p id="generalFileName" class="mt-3 font-semibold text-slate-700">Klik untuk pilih file</p>
-                    <p class="text-xs text-slate-500 mt-1">Format: xlsx / xls / csv</p>
-                  </label>
-                </div>
-              </div>
-              <div id="generalPreviewWrap" class="hidden mt-6">
-                <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
-                  <div>
-                    <h3 class="font-black text-lg">Preview Import</h3>
-                    <p class="text-sm text-slate-500">Baris yang terbaca dari file sebelum sinkronisasi.</p>
-                  </div>
-                  <button onclick="processGeneralImport()" id="btnGeneralImport" class="px-5 py-3 rounded-2xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20">
-                    <i class="fa-solid fa-database mr-2"></i>Sinkronisasi Database
-                  </button>
-                </div>
-                <div class="grid sm:grid-cols-3 gap-4 mb-4">
-                  <div class="rounded-2xl bg-slate-100 p-4">
-                    <p class="text-xs font-bold uppercase text-slate-500">Total terbaca</p>
-                    <p id="generalPreviewCount" class="mt-2 text-2xl font-black">0</p>
-                  </div>
-                  <div class="rounded-2xl bg-emerald-50 p-4 border border-emerald-100">
-                    <p class="text-xs font-bold uppercase text-emerald-700">Target</p>
-                    <p id="generalPreviewTarget" class="mt-2 text-base font-black text-emerald-800">-</p>
-                  </div>
-                  <div class="rounded-2xl bg-amber-50 p-4 border border-amber-100">
-                    <p class="text-xs font-bold uppercase text-amber-700">Tips</p>
-                    <p class="mt-2 text-sm font-semibold text-amber-800">Header fleksibel akan tetap dimapping otomatis.</p>
-                  </div>
-                </div>
-                <div class="overflow-auto max-h-80 rounded-[24px] border bg-white" style="border-color: var(--border)">
-                  <table class="w-full text-sm whitespace-nowrap">
-                    <thead id="generalPreviewHead" class="sticky top-0 bg-slate-100 text-slate-600"></thead>
-                    <tbody id="generalPreviewBody" class="divide-y divide-slate-100"></tbody>
-                  </table>
-                </div>
+              <div>
+                <label class="block text-sm font-bold mb-2">Upload File Excel / CSV</label>
+                <label class="block rounded-[20px] md:rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-5 md:p-6 text-center">
+                  <input id="generalFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleGeneralImportFile(event)">
+                  <i class="fa-solid fa-cloud-arrow-up text-2xl md:text-3xl" style="color: var(--primary)"></i>
+                  <p id="generalFileName" class="mt-2 md:mt-3 text-sm md:text-base font-semibold text-slate-700">Klik untuk pilih file</p>
+                </label>
               </div>
             </div>
-            <div class="glass rounded-[28px] p-6">
-              <h3 class="text-xl font-black tracking-tight">Catatan Operasional</h3>
-              <div class="mt-4 space-y-4 text-sm text-slate-600">
-                <div class="rounded-2xl bg-white/80 border p-4 surface-border">
-                  <p class="font-bold text-slate-900">Import Massal</p>
-                  <p class="mt-1">Untuk update / replace data modul apa pun dari file Excel terbaru.</p>
+            <div id="generalPreviewWrap" class="hidden mt-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+                <h3 class="font-black text-lg">Preview Data</h3>
+                <button onclick="processGeneralImport()" id="btnGeneralImport" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/20 text-sm md:text-base">
+                  <i class="fa-solid fa-database mr-2"></i>Sinkronisasi Database
+                </button>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 mb-4">
+                <div class="rounded-xl md:rounded-2xl bg-slate-100 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-slate-500">Total Baris</p>
+                  <p id="generalPreviewCount" class="mt-1 md:mt-2 text-xl md:text-2xl font-black">0</p>
                 </div>
-                <div class="rounded-2xl bg-white/80 border p-4 surface-border">
-                  <p class="font-bold text-slate-900">Karyawan Baru</p>
-                  <p class="mt-1">Tetap khusus dua modul BPJS KS agar alur harian lebih aman.</p>
+                <div class="rounded-xl md:rounded-2xl bg-emerald-50 p-3 md:p-4 border border-emerald-100">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-emerald-700">Target Modul</p>
+                  <p id="generalPreviewTarget" class="mt-1 md:mt-2 text-sm md:text-base font-black text-emerald-800 truncate">-</p>
                 </div>
-                <div class="rounded-2xl bg-white/80 border p-4 surface-border">
-                  <p class="font-bold text-slate-900">Cetak Kartu</p>
-                  <p class="mt-1">Bisa copy data lengkap, copy nomor kartu saja, dan download kartu sebagai gambar PNG.</p>
-                </div>
+              </div>
+              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
+                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
+                  <thead id="generalPreviewHead" class="sticky top-0 bg-slate-100 text-slate-600"></thead>
+                  <tbody id="generalPreviewBody" class="divide-y divide-slate-100"></tbody>
+                </table>
               </div>
             </div>
           </div>
         </section>
 
         <section id="tab-employee-in" class="tab-panel space-y-6">
-          <div class="glass rounded-[28px] p-6 md:p-7">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-              <div>
-                <h2 class="text-2xl font-black tracking-tight">Karyawan Baru</h2>
-                <p class="text-sm text-slate-500 mt-1">Khusus untuk modul BPJS KS. Sistem memisahkan data baru, duplikat, dan data tanpa ID.</p>
-              </div>
-              <div class="flex flex-col sm:flex-row gap-3">
-                <select id="employeeInTarget" class="px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)"></select>
-                <label class="px-5 py-3 rounded-2xl text-white font-bold cursor-pointer text-center" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Baru</h2>
+              <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                <select id="employeeInTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto" style="border-color: var(--border)"></select>
+                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
                   <input type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleEmployeeInFile(event)">
-                  <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File In
+                  <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File Baru
                 </label>
               </div>
             </div>
-            <div id="employeeInEmpty" class="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">Upload file karyawan baru untuk mulai preview.</div>
-            <div id="employeeInWrap" class="hidden space-y-5">
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4">
-                  <p class="text-xs font-bold uppercase text-emerald-700">Siap diproses</p>
-                  <p id="employeeInReadyCount" class="mt-2 text-3xl font-black text-emerald-800">0</p>
+            <div id="employeeInEmpty" class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 md:p-10 text-center text-sm md:text-base text-slate-500">Upload file karyawan baru untuk mulai preview.</div>
+            <div id="employeeInWrap" class="hidden space-y-4 md:space-y-5">
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                <div class="col-span-2 md:col-span-1 rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-emerald-700">Valid (Siap Proses)</p>
+                  <p id="employeeInReadyCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-emerald-800">0</p>
                 </div>
-                <div class="rounded-2xl bg-amber-50 border border-amber-100 p-4">
-                  <p class="text-xs font-bold uppercase text-amber-700">Duplikat</p>
-                  <p id="employeeInDuplicateCount" class="mt-2 text-3xl font-black text-amber-800">0</p>
+                <div class="rounded-xl md:rounded-2xl bg-amber-50 border border-amber-100 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-amber-700">Duplikat Ditemukan</p>
+                  <p id="employeeInDuplicateCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-amber-800">0</p>
                 </div>
-                <div class="rounded-2xl bg-rose-50 border border-rose-100 p-4">
-                  <p class="text-xs font-bold uppercase text-rose-700">Tanpa ID / invalid</p>
-                  <p id="employeeInInvalidCount" class="mt-2 text-3xl font-black text-rose-800">0</p>
+                <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-rose-700">Invalid / Tanpa ID</p>
+                  <p id="employeeInInvalidCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-rose-800">0</p>
                 </div>
               </div>
-              <div class="overflow-auto rounded-[24px] border bg-white" style="border-color: var(--border)">
-                <table class="w-full text-sm whitespace-nowrap">
-                  <thead class="bg-slate-100 text-slate-600">
+              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
+                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
+                  <thead class="bg-slate-100 text-slate-600 sticky top-0">
                     <tr>
                       <th class="px-4 py-3 text-left">ID</th>
                       <th class="px-4 py-3 text-left">Nama</th>
-                      <th class="px-4 py-3 text-left">Status Preview</th>
+                      <th class="px-4 py-3 text-left">Status</th>
                     </tr>
                   </thead>
                   <tbody id="employeeInBody" class="divide-y divide-slate-100"></tbody>
                 </table>
               </div>
-              <div class="flex flex-wrap justify-end gap-3">
-                <button onclick="resetEmployeeIn()" class="px-5 py-3 rounded-2xl bg-white border font-bold" style="border-color: var(--border)">Reset</button>
-                <button onclick="processEmployeeIn()" id="btnEmployeeIn" class="px-5 py-3 rounded-2xl text-white font-bold" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Proses Karyawan Baru</button>
+              <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+                <button onclick="resetEmployeeIn()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Reset</button>
+                <button onclick="processEmployeeIn()" id="btnEmployeeIn" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Proses Database</button>
               </div>
             </div>
           </div>
         </section>
 
         <section id="tab-employee-out" class="tab-panel space-y-6">
-          <div class="glass rounded-[28px] p-6 md:p-7">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-              <div>
-                <h2 class="text-2xl font-black tracking-tight">Karyawan Keluar</h2>
-                <p class="text-sm text-slate-500 mt-1">Khusus untuk modul BPJS KS. File akan dicocokkan berdasarkan ID lalu data terhapus dari sheet aktif.</p>
-              </div>
-              <div class="flex flex-col sm:flex-row gap-3">
-                <select id="employeeOutTarget" class="px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)"></select>
-                <label class="px-5 py-3 rounded-2xl text-white font-bold cursor-pointer text-center" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Keluar</h2>
+              <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                <select id="employeeOutTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto" style="border-color: var(--border)"></select>
+                <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">
                   <input type="file" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleEmployeeOutFile(event)">
-                  <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File Out
+                  <i class="fa-solid fa-file-arrow-up mr-2"></i>Pilih File Keluar
                 </label>
               </div>
             </div>
-            <div id="employeeOutEmpty" class="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">Upload file karyawan keluar untuk mulai preview.</div>
-            <div id="employeeOutWrap" class="hidden space-y-5">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="rounded-2xl bg-rose-50 border border-rose-100 p-4">
-                  <p class="text-xs font-bold uppercase text-rose-700">Siap dihapus</p>
-                  <p id="employeeOutReadyCount" class="mt-2 text-3xl font-black text-rose-800">0</p>
+            <div id="employeeOutEmpty" class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 md:p-10 text-center text-sm md:text-base text-slate-500">Upload file karyawan keluar untuk mulai preview.</div>
+            <div id="employeeOutWrap" class="hidden space-y-4 md:space-y-5">
+              <div class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-rose-700">Ditemukan (Siap Dihapus)</p>
+                  <p id="employeeOutReadyCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-rose-800">0</p>
                 </div>
-                <div class="rounded-2xl bg-slate-100 border border-slate-200 p-4">
-                  <p class="text-xs font-bold uppercase text-slate-600">Tidak ditemukan</p>
-                  <p id="employeeOutMissingCount" class="mt-2 text-3xl font-black text-slate-800">0</p>
+                <div class="rounded-xl md:rounded-2xl bg-slate-100 border border-slate-200 p-3 md:p-4">
+                  <p class="text-[10px] md:text-xs font-bold uppercase text-slate-600">Tidak Ditemukan</p>
+                  <p id="employeeOutMissingCount" class="mt-1 md:mt-2 text-2xl md:text-3xl font-black text-slate-800">0</p>
                 </div>
               </div>
-              <div class="overflow-auto rounded-[24px] border bg-white" style="border-color: var(--border)">
-                <table class="w-full text-sm whitespace-nowrap">
-                  <thead class="bg-slate-100 text-slate-600">
+              <div class="overflow-x-auto max-h-60 md:max-h-80 rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
+                <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
+                  <thead class="bg-slate-100 text-slate-600 sticky top-0">
                     <tr>
                       <th class="px-4 py-3 text-left">ID</th>
                       <th class="px-4 py-3 text-left">Nama</th>
-                      <th class="px-4 py-3 text-left">Status Preview</th>
+                      <th class="px-4 py-3 text-left">Status</th>
                     </tr>
                   </thead>
                   <tbody id="employeeOutBody" class="divide-y divide-slate-100"></tbody>
                 </table>
               </div>
-              <div class="flex flex-wrap justify-end gap-3">
-                <button onclick="resetEmployeeOut()" class="px-5 py-3 rounded-2xl bg-white border font-bold" style="border-color: var(--border)">Reset</button>
-                <button onclick="processEmployeeOut()" id="btnEmployeeOut" class="px-5 py-3 rounded-2xl text-white font-bold" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">Proses Karyawan Keluar</button>
+              <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+                <button onclick="resetEmployeeOut()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Reset</button>
+                <button onclick="processEmployeeOut()" id="btnEmployeeOut" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">Hapus dari Database</button>
               </div>
             </div>
           </div>
         </section>
 
         <section id="tab-report" class="tab-panel space-y-6">
-          <div class="glass rounded-[28px] p-6">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-5xl mx-auto">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
-              <div>
-                <h2 class="text-2xl font-black tracking-tight">Laporan In / Out</h2>
-                <p class="text-sm text-slate-500 mt-1">Laporan operasional karyawan baru dan keluar untuk dua modul BPJS KS.</p>
-              </div>
-              <div class="flex flex-wrap gap-3">
-                <button onclick="exportReportExcel()" class="px-4 py-3 rounded-2xl bg-white border font-bold" style="border-color: var(--border)"><i class="fa-solid fa-file-excel mr-2"></i>Download Excel</button>
-                <button onclick="clearLogs()" class="px-4 py-3 rounded-2xl text-white font-bold" style="background: linear-gradient(90deg, var(--danger), #7c3aed)"><i class="fa-solid fa-trash mr-2"></i>Hapus Log</button>
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan In / Out</h2>
+              <div class="flex flex-wrap gap-2 md:gap-3">
+                <button onclick="exportReportExcel()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)"><i class="fa-solid fa-file-excel mr-2"></i>Download Excel</button>
+                <button onclick="clearLogs()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--danger), #7c3aed)"><i class="fa-solid fa-trash mr-2"></i>Bersihkan Log</button>
               </div>
             </div>
-            <div class="overflow-auto rounded-[24px] border bg-white" style="border-color: var(--border)">
-              <table class="w-full text-sm whitespace-nowrap">
+            <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border bg-white" style="border-color: var(--border)">
+              <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-[700px]">
                 <thead class="bg-slate-100 text-slate-600">
                   <tr>
                     <th class="px-4 py-3 text-left">Tanggal</th>
@@ -626,61 +559,40 @@
         </section>
 
         <section id="tab-card-print" class="tab-panel space-y-6">
-          <div class="glass rounded-[28px] p-6 md:p-7">
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-7xl mx-auto">
             <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
-              <div>
-                <h2 class="text-2xl font-black tracking-tight">Cetak Kartu</h2>
-                <p class="text-sm text-slate-500 mt-1">Tetap pakai tampilan tabel. Klik salah satu baris untuk menampilkan preview 1 kartu di panel samping lalu download PNG kartu tersebut.</p>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full xl:w-auto">
-                <select id="cardSource" onchange="renderCardPrint()" class="px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)"></select>
-                <select id="cardTemplate" onchange="renderCardPrint()" class="px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+              <h2 class="text-xl md:text-2xl font-black tracking-tight">Cetak Kartu</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full xl:w-auto">
+                <select id="cardSource" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)"></select>
+                <select id="cardTemplate" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                   <option value="template-default">Template Default</option>
                   <option value="template-ocean">Template Ocean</option>
                   <option value="template-emerald">Template Emerald</option>
                   <option value="template-sunset">Template Sunset</option>
                 </select>
-                <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK / Nama" class="px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-              <div class="rounded-2xl bg-slate-100 p-4">
-                <p class="text-xs uppercase font-bold text-slate-500">Total Kartu</p>
-                <p id="cardCount" class="mt-2 text-3xl font-black text-slate-900">0</p>
-              </div>
-              <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-4">
-                <p class="text-xs uppercase font-bold text-emerald-700">Aksi</p>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <button onclick="copyAllCardRows()" class="px-3 py-2 rounded-xl bg-white text-emerald-700 font-bold border border-emerald-200"><i class="fa-solid fa-copy mr-2"></i>Copy Semua Data</button>
-                  <button onclick="downloadCardRowsExcel()" class="px-3 py-2 rounded-xl bg-white text-emerald-700 font-bold border border-emerald-200"><i class="fa-solid fa-file-excel mr-2"></i>Export Excel</button>
-                </div>
-              </div>
-              <div class="rounded-2xl bg-blue-50 border border-blue-100 p-4">
-                <p class="text-xs uppercase font-bold text-blue-700">Field Kartu</p>
-                <p class="mt-2 text-sm font-semibold text-blue-800">ID Pegawai / No ID, NIK, Nama Lengkap, Nomor Kartu. Ada icon copy khusus di samping nomor kartu pada tabel.</p>
+                <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
               </div>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-5 gap-5 items-start">
-              <div class="xl:col-span-3 glass-strong rounded-[26px] overflow-hidden">
-                <div class="px-5 py-4 border-b bg-white/70" style="border-color: var(--border)">
-                  <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div>
-                      <h3 class="text-lg font-black">Daftar Data Kartu</h3>
-                      <p class="text-sm text-slate-500">Klik satu baris untuk preview. Download gambar akan mengikuti kartu yang sedang dipilih.</p>
+              <div class="xl:col-span-3 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1">
+                <div class="px-4 py-3 md:px-5 md:py-4 border-b bg-white/70" style="border-color: var(--border)">
+                  <div class="flex items-center justify-between gap-2">
+                    <h3 class="text-base md:text-lg font-black">Daftar Karyawan</h3>
+                    <div class="flex gap-2">
+                      <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs" style="border-color: var(--border)"><i class="fa-solid fa-file-excel"></i></button>
                     </div>
-                    <div class="text-xs font-semibold text-slate-500">Preview kartu ada di panel kanan</div>
                   </div>
                 </div>
-                <div class="overflow-auto max-h-[620px] bg-white">
-                  <table class="w-full text-sm whitespace-nowrap">
+                <div class="overflow-x-auto max-h-[400px] md:max-h-[620px] bg-white relative">
+                  <!-- MENCABUT PEMBATAS LEBAR MAKSIMAL (TRUNCATE). KINI TABEL BISA DIGULIR KEKANAN -->
+                  <table class="w-full text-xs md:text-sm whitespace-nowrap min-w-max">
                     <thead class="bg-slate-100 text-slate-600 sticky top-0 z-10">
                       <tr>
-                        <th class="px-4 py-3 text-left">ID / No ID</th>
+                        <th class="px-4 py-3 text-left">ID</th>
                         <th class="px-4 py-3 text-left">NIK</th>
                         <th class="px-4 py-3 text-left">Nama Lengkap</th>
-                        <th class="px-4 py-3 text-left">Nomor Kartu</th>
+                        <th class="px-4 py-3 text-left">No Kartu</th>
                         <th class="px-4 py-3 text-left">Aksi</th>
                       </tr>
                     </thead>
@@ -689,13 +601,10 @@
                 </div>
               </div>
 
-              <div class="xl:col-span-2 glass-strong rounded-[26px] p-5 sticky top-24">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                  <div>
-                    <h3 class="text-lg font-black">Preview 1 Kartu</h3>
-                    <p class="text-sm text-slate-500">Template akan mengikuti pilihan di atas.</p>
-                  </div>
-                  <span id="selectedCardBadge" class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Belum dipilih</span>
+              <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] p-4 md:p-5 sticky top-20 md:top-24 order-1 xl:order-2">
+                <div class="flex items-center justify-between gap-3 mb-3 md:mb-4">
+                  <h3 class="text-base md:text-lg font-black">Preview Visual</h3>
+                  <span id="selectedCardBadge" class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-slate-100 text-slate-600 text-[10px] md:text-xs font-bold truncate max-w-[100px]">Belum dipilih</span>
                 </div>
                 <div id="cardPreviewPanel"></div>
               </div>
@@ -705,47 +614,34 @@
 
         <section id="tab-settings" class="tab-panel space-y-6">
           <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="xl:col-span-2 glass rounded-[28px] p-6 md:p-7 space-y-6">
+            <div class="xl:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 space-y-5 md:space-y-6">
               <div>
-                <h2 class="text-2xl font-black tracking-tight">Pengaturan Tampilan</h2>
-                <p class="text-sm text-slate-500 mt-1">Ubah branding aplikasi, nama modul, logo, dan tema. Jika sheet APP_SETTINGS dan APP_LOGS tersedia, hasilnya akan sama di semua laptop.</p>
-                <div class="mt-5 grid md:grid-cols-2 gap-4">
-                  <div class="rounded-[24px] bg-slate-50 border p-4" style="border-color: var(--border)">
-                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Sinkron Pengaturan</p>
-                    <p id="settingsSyncStatus" class="mt-2 text-lg font-black">Browser Lokal</p>
-                    <p id="settingsSyncHint" class="text-sm text-slate-500 mt-1">Buat sheet APP_SETTINGS agar nama, logo, label modul, dan tema selalu sama di semua perangkat.</p>
-                  </div>
-                  <div class="rounded-[24px] bg-slate-50 border p-4" style="border-color: var(--border)">
-                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Sinkron Log Operasional</p>
-                    <p id="logsSyncStatus" class="mt-2 text-lg font-black">Browser Lokal</p>
-                    <p id="logsSyncHint" class="text-sm text-slate-500 mt-1">Buat sheet APP_LOGS agar aktivitas terakhir dan laporan in/out terbaca sama di mana pun dashboard dibuka.</p>
-                  </div>
-                </div>
+                <h2 class="text-xl md:text-2xl font-black tracking-tight">Pengaturan Aplikasi</h2>
               </div>
-              <div class="grid md:grid-cols-2 gap-5">
+              <div class="grid md:grid-cols-2 gap-4 md:gap-5">
                 <div>
-                  <label class="block text-sm font-bold mb-2">Nama Aplikasi</label>
-                  <input id="settingAppName" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Aplikasi</label>
+                  <input id="settingAppName" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold mb-2">Subtitle Aplikasi</label>
-                  <input id="settingAppSubtitle" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Subtitle Aplikasi</label>
+                  <input id="settingAppSubtitle" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold mb-2">Nama Modul Staff</label>
-                  <input id="settingLabelStaff" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul Staff</label>
+                  <input id="settingLabelStaff" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold mb-2">Nama Modul Worker</label>
-                  <input id="settingLabelWorker" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul Worker</label>
+                  <input id="settingLabelWorker" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold mb-2">Nama Modul SIPP</label>
-                  <input id="settingLabelUpah" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Nama Modul SIPP</label>
+                  <input id="settingLabelUpah" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                 </div>
                 <div>
-                  <label class="block text-sm font-bold mb-2">Tema Aplikasi</label>
-                  <select id="settingTheme" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none" style="border-color: var(--border)">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Tema Aplikasi</label>
+                  <select id="settingTheme" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base" style="border-color: var(--border)">
                     <option value="default">Default</option>
                     <option value="ocean">Ocean</option>
                     <option value="sunset">Sunset</option>
@@ -753,45 +649,45 @@
                   </select>
                 </div>
                 <div class="md:col-span-2">
-                  <label class="block text-sm font-bold mb-2">Upload Logo</label>
-                  <label class="block rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-5 text-center">
+                  <label class="block text-xs md:text-sm font-bold mb-2">Upload Logo (PNG/JPG)</label>
+                  <label class="block rounded-[20px] md:rounded-[24px] border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-teal-50 hover:border-teal-400 transition-colors cursor-pointer p-4 md:p-5 text-center">
                     <input id="settingLogoInput" type="file" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
-                    <i class="fa-solid fa-image mr-2"></i>Klik untuk pilih logo PNG/JPG
+                    <i class="fa-solid fa-image mr-2"></i><span class="text-sm md:text-base">Pilih File Logo</span>
                   </label>
                   <div class="mt-3 flex items-center gap-3">
-                    <img id="settingLogoPreview" class="w-16 h-16 rounded-2xl object-cover border hidden" style="border-color: var(--border)">
-                    <div class="text-sm text-slate-500">Jika tidak ada logo, aplikasi akan memakai icon default.</div>
+                    <img id="settingLogoPreview" class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover border hidden" style="border-color: var(--border)">
+                    <div class="text-[10px] md:text-xs text-slate-500">Aplikasi akan memakai icon default bila dikosongkan.</div>
                   </div>
                 </div>
               </div>
-              <div class="flex flex-wrap justify-end gap-3">
-                <button onclick="resetSettings()" class="px-5 py-3 rounded-2xl bg-white border font-bold" style="border-color: var(--border)">Reset Default</button>
-                <button onclick="saveSettings()" class="px-5 py-3 rounded-2xl text-white font-bold" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
+              <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+                <button onclick="resetSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Kembalikan Default</button>
+                <button onclick="saveSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
               </div>
             </div>
-            <div class="glass rounded-[28px] p-6 md:p-7">
-              <h3 class="text-xl font-black tracking-tight">Preview Branding</h3>
-              <div class="mt-5 rounded-[28px] p-5 text-white relative overflow-hidden" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
+            <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7">
+              <h3 class="text-lg md:text-xl font-black tracking-tight">Preview Tampilan</h3>
+              <div class="mt-4 md:mt-5 rounded-[24px] md:rounded-[28px] p-4 md:p-5 text-white relative overflow-hidden" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
                 <div class="absolute inset-0 soft-grid opacity-10"></div>
-                <div class="relative flex items-center gap-4">
-                  <div class="w-16 h-16 rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden">
+                <div class="relative flex items-center gap-3 md:gap-4">
+                  <div class="w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-[18px] md:rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden">
                     <img id="brandPreviewImg" class="hidden w-full h-full object-cover" alt="Preview logo">
-                    <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-2xl"></i>
+                    <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-xl md:text-2xl"></i>
                   </div>
-                  <div>
-                    <p id="brandPreviewName" class="font-black text-xl">BPJS Control Center</p>
-                    <p id="brandPreviewSubtitle" class="text-white/70 text-sm">BPJS KS Staff / Worker + SIPP Worker</p>
+                  <div class="min-w-0">
+                    <p id="brandPreviewName" class="font-black text-base md:text-xl truncate">BPJS Control Center</p>
+                    <p id="brandPreviewSubtitle" class="text-white/70 text-[10px] md:text-sm truncate">BPJS KS Staff / Worker + SIPP Worker</p>
                   </div>
                 </div>
-                <div class="mt-6 space-y-3 text-sm">
-                  <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-                    <p class="font-bold">Modul 1: <span id="brandPreviewStaff">BPJS KS Staff</span></p>
+                <div class="mt-5 space-y-2.5 text-xs md:text-sm">
+                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
+                    <p class="font-bold">1: <span id="brandPreviewStaff">BPJS KS Staff</span></p>
                   </div>
-                  <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-                    <p class="font-bold">Modul 2: <span id="brandPreviewWorker">BPJS KS Worker</span></p>
+                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
+                    <p class="font-bold">2: <span id="brandPreviewWorker">BPJS KS Worker</span></p>
                   </div>
-                  <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-                    <p class="font-bold">Modul 3: <span id="brandPreviewUpah">SIPP Worker</span></p>
+                  <div class="rounded-xl bg-white/10 border border-white/10 p-2.5 md:p-3 truncate">
+                    <p class="font-bold">3: <span id="brandPreviewUpah">SIPP Worker</span></p>
                   </div>
                 </div>
               </div>
@@ -802,18 +698,18 @@
     </main>
   </div>
 
-  <div id="dataModal" class="modal fixed inset-0 z-50 items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
-    <div class="glass-strong w-full max-w-4xl max-h-[92vh] rounded-[28px] overflow-hidden flex flex-col">
-      <div class="px-6 py-5 border-b flex items-center justify-between surface-border">
-        <h3 id="modalTitle" class="text-xl font-black tracking-tight">Form Data</h3>
-        <button onclick="closeModal()" class="w-10 h-10 rounded-2xl bg-slate-100"><i class="fa-solid fa-xmark"></i></button>
+  <div id="dataModal" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm transition-opacity">
+    <div class="glass-strong w-full max-w-4xl max-h-[92vh] rounded-[24px] md:rounded-[28px] overflow-hidden flex flex-col shadow-2xl">
+      <div class="px-5 py-4 md:px-6 md:py-5 border-b flex items-center justify-between surface-border bg-white/50">
+        <h3 id="modalTitle" class="text-lg md:text-xl font-black tracking-tight">Form Data</h3>
+        <button onclick="closeModal()" class="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-slate-100 hover:bg-slate-200 transition-colors"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="p-6 overflow-auto">
+      <div class="p-5 md:p-6 overflow-auto bg-white/30">
         <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-4"></form>
       </div>
-      <div class="px-6 py-5 border-t flex justify-end gap-3 surface-border">
-        <button onclick="closeModal()" type="button" class="px-5 py-3 rounded-2xl bg-white border font-bold" style="border-color: var(--border)">Batal</button>
-        <button onclick="submitDataForm()" type="button" id="btnSaveModal" class="px-5 py-3 rounded-2xl text-white font-bold" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan</button>
+      <div class="px-5 py-4 md:px-6 md:py-5 border-t flex flex-col sm:flex-row justify-end gap-3 surface-border bg-white/50">
+        <button onclick="closeModal()" type="button" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base" style="border-color: var(--border)">Batal</button>
+        <button onclick="submitDataForm()" type="button" id="btnSaveModal" class="w-full sm:w-auto px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan</button>
       </div>
     </div>
   </div>
@@ -822,9 +718,7 @@
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxpizb32MDEht_lJVAQ4rjMhQ-rUw2FahLGtvNd_cpilOJxlAqZ11bDpPN-Bof_8qOFxg/exec';
     const SETTINGS_SHEET = 'APP_SETTINGS';
     const LOGS_SHEET = 'APP_LOGS';
-    const SHEET_CACHE_KEY = 'bpjsSheetCacheV3';
-    const SHEET_CACHE_MAX_AGE = 1000 * 60 * 5;
-    const FAVICON_DEFAULT = './hoplun.png?v=20260415';
+    const CACHE_KEY_DB = 'bpjs_database_cache_v3';
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -893,12 +787,18 @@
     let pendingGeneralImportData = [];
     let pendingEmployeeIn = { rows: [], duplicates: [], invalid: [], fileName: '' };
     let pendingEmployeeOut = { matches: [], missing: [], fileName: '' };
-    let inOutLogs = JSON.parse(localStorage.getItem('bpjsInOutLogsV2') || '[]');
+    
+    let inOutLogs = [];
+    try {
+      inOutLogs = JSON.parse(localStorage.getItem('bpjsInOutLogsV2') || '[]');
+    } catch (e) {
+      inOutLogs = [];
+    }
+    
     let visibleCardRows = [];
     let selectedCardKey = '';
     let tempLogoData = appSettings.logoData || '';
     let syncState = { settings: 'browser', logs: 'browser' };
-    let settingsRowIndex = 2;
 
     function loadSettings() {
       try {
@@ -925,83 +825,11 @@
       localStorage.setItem('bpjsUiSettingsV2', JSON.stringify(appSettings));
     }
 
-    function readSheetCacheStore() {
-      try { return JSON.parse(localStorage.getItem(SHEET_CACHE_KEY) || '{}'); } catch (e) { return {}; }
-    }
-
-    function writeSheetCacheStore(store) {
-      localStorage.setItem(SHEET_CACHE_KEY, JSON.stringify(store || {}));
-    }
-
-    function getCachedSheetRows(sheet, maxAgeMs = SHEET_CACHE_MAX_AGE) {
-      const store = readSheetCacheStore();
-      const entry = store[sheet];
-      if (!entry || !Array.isArray(entry.rows) || !entry.savedAt) return null;
-      if (Date.now() - entry.savedAt > maxAgeMs) return null;
-      return entry;
-    }
-
-    function setCachedSheetRows(sheet, rows) {
-      const store = readSheetCacheStore();
-      store[sheet] = { rows: rows || [], savedAt: Date.now() };
-      writeSheetCacheStore(store);
-    }
-
-    function hydrateCachedAppState() {
-      ['STAFF', 'WORKER', 'DATA_UPAH'].forEach(sheet => {
-        const cached = getCachedSheetRows(sheet);
-        if (cached) database[sheet] = cached.rows || [];
-      });
-      filteredData = database[currentSheet] || [];
-      applySettingsToUI();
-      updateDashboardUI();
-      renderTable();
-      renderReport();
-      renderCardPrint();
-    }
-
-    function ensureFavicon(url) {
-      const href = url || FAVICON_DEFAULT;
-      ['icon', 'shortcut icon', 'apple-touch-icon'].forEach(rel => {
-        let link = document.querySelector(`link[rel="${rel}"]`);
-        if (!link) {
-          link = document.createElement('link');
-          link.setAttribute('rel', rel);
-          document.head.appendChild(link);
-        }
-        link.setAttribute('href', href);
-      });
-    }
-
-    function updateFaviconFromSettings() {
-      const source = appSettings.logoData && String(appSettings.logoData).startsWith('data:')
-        ? appSettings.logoData
-        : FAVICON_DEFAULT;
-      ensureFavicon(source);
-    }
-
     function pickAny(row, keys = []) {
       for (const key of keys) {
         if (row && row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== '') return row[key];
       }
       return '';
-    }
-
-    function updateSyncBadges() {
-      const settingsCloud = syncState.settings === 'cloud';
-      const logsCloud = syncState.logs === 'cloud';
-      const settingsStatus = document.getElementById('settingsSyncStatus');
-      const settingsHint = document.getElementById('settingsSyncHint');
-      const logsStatus = document.getElementById('logsSyncStatus');
-      const logsHint = document.getElementById('logsSyncHint');
-      if (settingsStatus) settingsStatus.textContent = settingsCloud ? 'Google Sheet (APP_SETTINGS)' : 'Browser Lokal';
-      if (settingsHint) settingsHint.textContent = settingsCloud
-        ? 'Nama aplikasi, logo, label modul, dan tema sudah dibaca dari APP_SETTINGS sehingga tampil sama di semua perangkat.'
-        : 'Buat sheet APP_SETTINGS agar nama, logo, label modul, dan tema selalu sama di semua perangkat.';
-      if (logsStatus) logsStatus.textContent = logsCloud ? 'Google Sheet (APP_LOGS)' : 'Browser Lokal';
-      if (logsHint) logsHint.textContent = logsCloud
-        ? 'Aktivitas terakhir dan laporan in/out sedang diambil dari APP_LOGS agar tampil konsisten di semua perangkat.'
-        : 'Buat sheet APP_LOGS agar aktivitas terakhir dan laporan in/out terbaca sama di mana pun dashboard dibuka.';
     }
 
     function mapSettingsFromRow(row) {
@@ -1051,26 +879,28 @@
       };
     }
 
-    async function fetchSheetRows(sheet, options = {}) {
-      const { preferCache = false, maxAgeMs = SHEET_CACHE_MAX_AGE } = options;
-      if (preferCache) {
-        const cached = getCachedSheetRows(sheet, maxAgeMs);
-        if (cached) return cached.rows || [];
-      }
-      const response = await fetch(`${gasApiUrl}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`, { cache: 'no-store' });
+    async function fetchSheetRows(sheet) {
+      const response = await fetch(`${gasApiUrl}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`, {
+        method: 'GET',
+        redirect: 'follow'
+      });
       const text = await response.text();
-      if (text.trim().startsWith('<')) throw new Error('HTML_RESPONSE');
-      const json = JSON.parse(text);
-      if (json.status !== 'success') throw new Error(json.message || 'Gagal mengambil data');
-      setCachedSheetRows(sheet, json.data || []);
-      return json.data || [];
+      if (!text || text.trim() === '') throw new Error('Respon kosong dari server. Periksa URL Google Apps Script.');
+      if (text.trim().startsWith('<')) throw new Error('Akses Ditolak: Pastikan Google Apps Script di-deploy dengan hak akses "Anyone" (Siapa saja).');
+      
+      try {
+        const json = JSON.parse(text);
+        if (json.status !== 'success') throw new Error(json.message || 'Gagal mengambil data');
+        return json.data || [];
+      } catch (e) {
+        throw new Error('Gagal memproses format JSON dari server.');
+      }
     }
 
     async function loadSharedSettingsRemote() {
       try {
-        const rows = await fetchSheetRows(SETTINGS_SHEET, { preferCache: false });
+        const rows = await fetchSheetRows(SETTINGS_SHEET);
         if (rows.length) {
-          settingsRowIndex = rows[0]._rowIndex || 2;
           appSettings = {
             ...structuredClone(DEFAULT_SETTINGS),
             ...mapSettingsFromRow(rows[0]),
@@ -1106,18 +936,13 @@
     async function persistSettingsRemote() {
       const payload = mapSettingsToRow(appSettings);
       try {
-        if (settingsRowIndex) {
-          try {
-            await postAction({ sheetName: SETTINGS_SHEET, action: 'edit', rowIndex: settingsRowIndex, data: payload });
-            syncState.settings = 'cloud';
-            setCachedSheetRows(SETTINGS_SHEET, [{ ...payload, _rowIndex: settingsRowIndex }]);
-            return true;
-          } catch (e) {}
+        const rows = await fetchSheetRows(SETTINGS_SHEET).catch(() => []);
+        if (rows.length) {
+          await postAction({ sheetName: SETTINGS_SHEET, action: 'edit', rowIndex: rows[0]._rowIndex, data: payload });
+        } else {
+          await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
         }
-        await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
-        settingsRowIndex = 2;
         syncState.settings = 'cloud';
-        setCachedSheetRows(SETTINGS_SHEET, [{ ...payload, _rowIndex: settingsRowIndex }]);
         return true;
       } catch (e) {
         syncState.settings = 'browser';
@@ -1134,7 +959,6 @@
       } catch (e) {
         syncState.logs = 'browser';
       }
-      updateSyncBadges();
     }
 
     function getSheetLabel(sheet) {
@@ -1162,14 +986,8 @@
 
     function setLoading(isLoading) {
       const box = document.getElementById('loadingIndicator');
-      if (!box) return;
-      if (isLoading) {
-        box.classList.remove('hidden');
-        box.classList.add('inline-flex');
-      } else {
-        box.classList.add('hidden');
-        box.classList.remove('inline-flex');
-      }
+      if (isLoading) box.classList.remove('hidden');
+      else box.classList.add('hidden');
     }
 
     function fmtDateTime(dateInput = new Date()) {
@@ -1193,71 +1011,61 @@
     async function postAction(payload) {
       const response = await fetch(gasApiUrl, {
         method: 'POST',
-        cache: 'no-store',
+        redirect: 'follow',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8' 
+        },
         body: JSON.stringify(payload)
       });
       const text = await response.text();
-      if (text.trim().startsWith('<')) throw new Error('Respon HTML / akses ditolak');
-      const json = JSON.parse(text);
-      if (json.status !== 'success') throw new Error(json.message || 'Proses gagal');
-      return json;
-    }
-
-    function setTextSafe(id, value) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = value ?? '';
-    }
-
-    function setValueSafe(id, value) {
-      const el = document.getElementById(id);
-      if (el) el.value = value ?? '';
-    }
-
-    function hasActiveTab(id) {
-      const el = document.getElementById(id);
-      return !!(el && el.classList.contains('active'));
+      if (!text || text.trim() === '') throw new Error('Respon kosong dari server saat mencoba menyimpan data.');
+      if (text.trim().startsWith('<')) throw new Error('Akses Ditolak: Cek pengaturan deploy GAS (harus "Anyone").');
+      
+      try {
+        const json = JSON.parse(text);
+        if (json.status !== 'success') throw new Error(json.message || 'Proses gagal');
+        return json;
+      } catch (e) {
+        throw new Error('Gagal memproses format JSON dari server.');
+      }
     }
 
     function applySettingsToUI() {
       document.body.setAttribute('data-theme', appSettings.theme || 'default');
-      setTextSafe('appNameSidebar', appSettings.appName);
-      setTextSafe('appSubtitleSidebar', appSettings.appSubtitle);
-      setTextSafe('appNameHeaderSmall', appSettings.appName);
-      setTextSafe('themeBadge', `Tema ${(appSettings.theme || 'default').charAt(0).toUpperCase() + (appSettings.theme || 'default').slice(1)}`);
+      
+      const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+      const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
 
-      setTextSafe('labelNavStaff', getSheetLabel('STAFF'));
-      setTextSafe('labelNavWorker', getSheetLabel('WORKER'));
-      setTextSafe('labelNavUpah', getSheetLabel('DATA_UPAH'));
-      setTextSafe('metricLabelStaff', getSheetLabel('STAFF'));
-      setTextSafe('metricLabelWorker', getSheetLabel('WORKER'));
-      setTextSafe('metricLabelUpah', getSheetLabel('DATA_UPAH'));
-      setTextSafe('dashboardLabelStaff', getSheetLabel('STAFF'));
-      setTextSafe('dashboardLabelWorker', getSheetLabel('WORKER'));
-      setTextSafe('dashboardLabelUpah', getSheetLabel('DATA_UPAH'));
-      setTextSafe('importLabelStaff', getSheetLabel('STAFF'));
-      setTextSafe('importLabelWorker', getSheetLabel('WORKER'));
-      setTextSafe('importLabelUpah', getSheetLabel('DATA_UPAH'));
+      setText('appNameSidebar', appSettings.appName);
+      setText('appSubtitleSidebar', appSettings.appSubtitle);
+      setText('appNameHeaderSmall', appSettings.appName);
 
-      setValueSafe('settingAppName', appSettings.appName);
-      setValueSafe('settingAppSubtitle', appSettings.appSubtitle);
-      setValueSafe('settingLabelStaff', getSheetLabel('STAFF'));
-      setValueSafe('settingLabelWorker', getSheetLabel('WORKER'));
-      setValueSafe('settingLabelUpah', getSheetLabel('DATA_UPAH'));
-      setValueSafe('settingTheme', appSettings.theme || 'default');
+      setText('labelNavStaff', getSheetLabel('STAFF'));
+      setText('labelNavWorker', getSheetLabel('WORKER'));
+      setText('labelNavUpah', getSheetLabel('DATA_UPAH'));
+      setText('metricLabelStaff', getSheetLabel('STAFF'));
+      setText('metricLabelWorker', getSheetLabel('WORKER'));
+      setText('metricLabelUpah', getSheetLabel('DATA_UPAH'));
 
-      setTextSafe('brandPreviewName', appSettings.appName);
-      setTextSafe('brandPreviewSubtitle', appSettings.appSubtitle);
-      setTextSafe('brandPreviewStaff', getSheetLabel('STAFF'));
-      setTextSafe('brandPreviewWorker', getSheetLabel('WORKER'));
-      setTextSafe('brandPreviewUpah', getSheetLabel('DATA_UPAH'));
+      setVal('settingAppName', appSettings.appName);
+      setVal('settingAppSubtitle', appSettings.appSubtitle);
+      setVal('settingLabelStaff', getSheetLabel('STAFF'));
+      setVal('settingLabelWorker', getSheetLabel('WORKER'));
+      setVal('settingLabelUpah', getSheetLabel('DATA_UPAH'));
+      setVal('settingTheme', appSettings.theme || 'default');
+
+      setText('brandPreviewName', appSettings.appName);
+      setText('brandPreviewSubtitle', appSettings.appSubtitle);
+      setText('brandPreviewStaff', getSheetLabel('STAFF'));
+      setText('brandPreviewWorker', getSheetLabel('WORKER'));
+      setText('brandPreviewUpah', getSheetLabel('DATA_UPAH'));
 
       updateLogoUI(appSettings.logoData || '');
-      updateFaviconFromSettings();
       refreshSelectLabels();
-      updateSyncBadges();
-      if (hasActiveTab('tab-data')) renderTable();
-      if (hasActiveTab('tab-report')) renderReport();
-      if (hasActiveTab('tab-card-print')) renderCardPrint();
+      
+      if (document.getElementById('tab-data').classList.contains('active')) renderTable();
+      if (document.getElementById('tab-report').classList.contains('active')) renderReport();
+      if (document.getElementById('tab-card-print').classList.contains('active')) renderCardPrint();
       updatePageTitleForCurrentTab();
     }
 
@@ -1277,9 +1085,6 @@
         logoIcon.classList.add('hidden');
         previewIcon.classList.add('hidden');
       } else {
-        logoImg.removeAttribute('src');
-        previewImg.removeAttribute('src');
-        settingPreview.removeAttribute('src');
         logoImg.classList.add('hidden');
         previewImg.classList.add('hidden');
         settingPreview.classList.add('hidden');
@@ -1314,70 +1119,45 @@
       `;
     }
 
-    function compressImageFile(file, maxSize = 192) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = new Image();
-          img.onload = () => {
-            const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.max(1, Math.round(img.width * ratio));
-            canvas.height = Math.max(1, Math.round(img.height * ratio));
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/png', 0.9));
-          };
-          img.onerror = reject;
-          img.src = e.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function handleLogoUpload(event) {
+    function handleLogoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-      setLoading(true);
-      try {
-        tempLogoData = await compressImageFile(file, 192);
+      const reader = new FileReader();
+      reader.onload = e => {
+        tempLogoData = e.target.result;
         updateLogoUI(tempLogoData);
-        updateFaviconFromSettings();
-      } catch (e) {
-        Swal.fire('Logo gagal diproses', 'File logo tidak bisa dibaca. Coba gunakan PNG/JPG lain.', 'error');
-      } finally {
-        setLoading(false);
-      }
+      };
+      reader.readAsDataURL(file);
     }
 
     async function saveSettings() {
-      const saveButton = document.querySelector('button[onclick="saveSettings()"]');
-      if (saveButton) { saveButton.disabled = true; saveButton.classList.add('opacity-70', 'pointer-events-none'); }
-      setLoading(true);
-      try {
-        appSettings = {
-          appName: document.getElementById('settingAppName').value.trim() || DEFAULT_SETTINGS.appName,
-          appSubtitle: document.getElementById('settingAppSubtitle').value.trim() || DEFAULT_SETTINGS.appSubtitle,
-          theme: document.getElementById('settingTheme').value,
-          logoData: tempLogoData || '',
-          modules: {
-            STAFF: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.STAFF,
-            WORKER: document.getElementById('settingLabelWorker').value.trim() || DEFAULT_SETTINGS.modules.WORKER,
-            DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
-          }
-        };
-        saveSettingsStorage();
-        applySettingsToUI();
-        const synced = await persistSettingsRemote();
-        updateSyncBadges();
-        Swal.fire('Tersimpan', synced
-          ? 'Pengaturan berhasil disimpan dan tersinkron ke semua perangkat melalui APP_SETTINGS.'
-          : 'Pengaturan berhasil disimpan di browser ini. Untuk sinkron semua perangkat, siapkan sheet APP_SETTINGS di Google Sheet.', 'success');
-      } finally {
-        setLoading(false);
-        if (saveButton) { saveButton.disabled = false; saveButton.classList.remove('opacity-70', 'pointer-events-none'); }
-      }
+      appSettings = {
+        appName: document.getElementById('settingAppName').value.trim() || DEFAULT_SETTINGS.appName,
+        appSubtitle: document.getElementById('settingAppSubtitle').value.trim() || DEFAULT_SETTINGS.appSubtitle,
+        theme: document.getElementById('settingTheme').value,
+        logoData: tempLogoData || '',
+        modules: {
+          STAFF: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.STAFF,
+          WORKER: document.getElementById('settingLabelWorker').value.trim() || DEFAULT_SETTINGS.modules.WORKER,
+          DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
+        }
+      };
+      saveSettingsStorage();
+      applySettingsToUI();
+      
+      Swal.fire({
+        title: 'Menyimpan...',
+        text: 'Sedang menyinkronkan pengaturan ke Database',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      const synced = await persistSettingsRemote();
+      Swal.fire('Tersimpan', synced
+        ? 'Pengaturan berhasil disimpan dan tersinkron ke semua perangkat melalui APP_SETTINGS.'
+        : 'Pengaturan berhasil disimpan di browser ini. Untuk sinkron semua perangkat, siapkan sheet APP_SETTINGS di Google Sheet.', 'success');
     }
 
     async function resetSettings() {
@@ -1385,8 +1165,14 @@
       tempLogoData = '';
       saveSettingsStorage();
       applySettingsToUI();
+      
+      Swal.fire({
+        title: 'Mereset...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       const synced = await persistSettingsRemote();
-      updateSyncBadges();
       Swal.fire('Reset berhasil', synced
         ? 'Pengaturan default berhasil dikirim ke APP_SETTINGS.'
         : 'Pengaturan dikembalikan ke default di browser ini.', 'success');
@@ -1395,6 +1181,7 @@
     function updatePageTitleForCurrentTab(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
       const map = {
         dashboard: 'Dashboard',
+        'global-search': 'Pencarian Global',
         import: 'Import Massal',
         'employee-in': 'Karyawan Baru',
         'employee-out': 'Karyawan Keluar',
@@ -1430,6 +1217,7 @@
         filteredData = database[currentSheet] || [];
         renderTable();
       }
+      if (tabId === 'global-search') performGlobalSearch();
       if (tabId === 'report') renderReport();
       if (tabId === 'card-print') renderCardPrint();
       updatePageTitleForCurrentTab(tabId, sheet || currentSheet);
@@ -1448,29 +1236,117 @@
       }
     }
 
-    async function loadAllDataForDashboard(options = {}) {
-      const { silent = false, forceSettings = false } = options;
-      if (!silent) setLoading(true);
+    function performGlobalSearch() {
+      const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+      const tbody = document.getElementById('globalSearchBody');
+      const countEl = document.getElementById('globalSearchCount');
+
+      if (!q) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci pencarian (ID/NIK/Nama) untuk menampilkan data.</td></tr>';
+        countEl.textContent = '0 hasil ditemukan';
+        return;
+      }
+
+      let results = [];
+      ['STAFF', 'WORKER', 'DATA_UPAH'].forEach(sheet => {
+        const rows = database[sheet] || [];
+        rows.forEach(row => {
+          const id = getEmployeeId(row).toLowerCase();
+          const name = getEmployeeName(row).toLowerCase();
+          const nik = String(getColValue(row, ['NIK']) || '').toLowerCase();
+
+          if (id.includes(q) || name.includes(q) || nik.includes(q)) {
+            results.push({
+              sheet,
+              id: getEmployeeId(row) || '-',
+              nik: String(getColValue(row, ['NIK']) || '-'),
+              name: getEmployeeName(row),
+              status: String(getColValue(row, STATUS_KEYS[sheet]) || '-'),
+              cardNo: getCardNumber(row, sheet) || '-'
+            });
+          }
+        });
+      });
+
+      if (!results.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-rose-500 text-sm">Tidak ada data yang cocok ditemukan di seluruh modul.</td></tr>';
+        countEl.textContent = '0 hasil ditemukan';
+        return;
+      }
+
+      tbody.innerHTML = results.map(item => {
+        let statusBadge = '';
+        const upperStatus = item.status.toUpperCase();
+        if (upperStatus === 'OK' || upperStatus === 'AKTIF') {
+          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] md:text-xs font-bold">Aktif / OK</span>`;
+        } else if (item.status === '-' || item.status === '') {
+          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-[10px] md:text-xs font-bold">Belum lengkap</span>`;
+        } else {
+          statusBadge = `<span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-bold">${escapeHtml(item.status)}</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3 md:px-5 md:py-4 font-semibold text-slate-700 whitespace-nowrap">${escapeHtml(getSheetLabel(item.sheet))}</td>
+            <td class="px-4 py-3 md:px-5 md:py-4 font-bold whitespace-nowrap">${escapeHtml(item.id)}</td>
+            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">${escapeHtml(item.nik)}</td>
+            <td class="px-4 py-3 md:px-5 md:py-4 max-w-none whitespace-normal min-w-[200px] leading-relaxed">${escapeHtml(item.name)}</td>
+            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">${statusBadge}</td>
+            <td class="px-4 py-3 md:px-5 md:py-4 whitespace-nowrap">
+               <div class="flex items-center gap-2">
+                 <span>${escapeHtml(item.cardNo)}</span>
+                 <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNo))}, 'Nomor kartu berhasil dicopy')" class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-slate-100 hover:bg-slate-200 shrink-0" title="Copy Nomor Kartu"><i class="fa-regular fa-copy text-xs md:text-sm"></i></button>
+               </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      countEl.textContent = `Menampilkan ${results.length} hasil`;
+    }
+
+    async function loadAllDataForDashboard(isManualRefresh = false) {
+      if (isManualRefresh) {
+        setLoading(true);
+      } else {
+        try {
+          const cachedDB = localStorage.getItem(CACHE_KEY_DB);
+          if (cachedDB) {
+            database = JSON.parse(cachedDB);
+            filteredData = database[currentSheet] || [];
+            applySettingsToUI();
+            updateDashboardUI();
+            renderTable();
+            renderReport();
+            renderCardPrint();
+            if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
+          }
+        } catch (e) {}
+        setLoading(true);
+      }
+
       try {
-        const tasks = [
+        await Promise.all([
           Promise.all(['STAFF', 'WORKER', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
+          loadSharedSettingsRemote().catch(() => false),
           loadSharedLogsRemote().catch(() => false)
-        ];
-        if (forceSettings || syncState.settings !== 'cloud') tasks.push(loadSharedSettingsRemote().catch(() => false));
-        await Promise.all(tasks);
+        ]);
+        
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+
         filteredData = database[currentSheet] || [];
         applySettingsToUI();
         updateDashboardUI();
         renderTable();
         renderReport();
         renderCardPrint();
+        if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
+        
+      } catch (err) {
+        // Silently fail or log if needed, let user retry
       } finally {
-        if (!silent) setLoading(false);
+        setLoading(false);
       }
-    }
-
-    async function refreshDataFast() {
-      await loadAllDataForDashboard({ silent: false, forceSettings: false });
     }
 
     function renderModuleBars() {
@@ -1485,21 +1361,19 @@
       host.innerHTML = items.map(item => {
         const pct = Math.max(10, Math.round((item.count / max) * 100));
         return `
-          <div class="rounded-[24px] border bg-white/70 p-4" style="border-color: var(--border)">
+          <div class="rounded-xl md:rounded-[24px] border bg-white/70 p-3 md:p-4" style="border-color: var(--border)">
             <div class="flex items-center justify-between gap-4">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0"><i class="fa-solid ${item.icon}"></i></div>
+              <div class="flex items-center gap-2 md:gap-3 min-w-0">
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0"><i class="fa-solid ${item.icon}"></i></div>
                 <div class="min-w-0">
-                  <p class="text-sm font-bold text-slate-800 truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
-                  <p class="text-xs text-slate-500">Total data aktif</p>
+                  <p class="text-xs md:text-sm font-bold text-slate-800 truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
                 </div>
               </div>
               <div class="text-right shrink-0">
-                <p class="text-2xl font-black">${item.count}</p>
-                <p class="text-xs text-slate-500">baris</p>
+                <p class="text-xl md:text-2xl font-black">${item.count}</p>
               </div>
             </div>
-            <div class="mt-4 h-3 rounded-full bg-slate-100 overflow-hidden">
+            <div class="mt-3 md:mt-4 h-2 md:h-3 rounded-full bg-slate-100 overflow-hidden">
               <div class="h-full rounded-full bg-gradient-to-r ${item.tone}" style="width:${pct}%"></div>
             </div>
           </div>`;
@@ -1515,9 +1389,9 @@
       const circumference = 2 * Math.PI * radius;
       const dash = total ? (ok / total) * circumference : 0;
       host.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          <div class="flex items-center justify-center">
-            <div class="relative w-[180px] h-[180px]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 items-center">
+          <div class="flex flex-col items-center justify-center relative">
+            <div class="relative w-[140px] h-[140px] md:w-[180px] md:h-[180px]">
               <svg viewBox="0 0 160 160" class="w-full h-full -rotate-90">
                 <circle cx="80" cy="80" r="58" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="16"></circle>
                 <circle cx="80" cy="80" r="58" fill="none" stroke="url(#statusGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${dash} ${circumference}"></circle>
@@ -1529,33 +1403,29 @@
                 </defs>
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <p class="text-4xl font-black">${pct}%</p>
-                <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold mt-1">Status OK</p>
+                <p class="text-3xl md:text-4xl font-black">${pct}%</p>
+                <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold mt-1">Data Valid</p>
               </div>
             </div>
           </div>
           <div class="space-y-3">
-            <div class="rounded-[22px] bg-emerald-50 border border-emerald-100 p-4">
-              <div class="flex items-center justify-between gap-4">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">OK / Aktif</p>
-                  <p class="text-sm text-emerald-700 mt-1">Data dengan status sehat.</p>
-                </div>
-                <p class="text-2xl font-black text-emerald-700">${ok}</p>
+            <div class="rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 p-3 md:p-4">
+              <div class="flex items-center justify-between gap-3 md:gap-4">
+                <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">OK / Aktif</p>
+                <p class="text-xl md:text-2xl font-black text-emerald-700">${ok}</p>
               </div>
             </div>
-            <div class="rounded-[22px] bg-rose-50 border border-rose-100 p-4">
-              <div class="flex items-center justify-between gap-4">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Perlu Cek</p>
-                  <p class="text-sm text-rose-700 mt-1">Status kosong atau belum sesuai.</p>
-                </div>
-                <p class="text-2xl font-black text-rose-700">${notOk}</p>
+            <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 p-3 md:p-4">
+              <div class="flex items-center justify-between gap-3 md:gap-4">
+                <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Perlu Cek</p>
+                <p class="text-xl md:text-2xl font-black text-rose-700">${notOk}</p>
               </div>
             </div>
-            <div class="rounded-[22px] bg-slate-50 border p-4" style="border-color: var(--border)">
-              <p class="text-xs uppercase tracking-[0.18em] font-bold text-slate-500">Total Terpantau</p>
-              <p class="text-2xl font-black mt-1">${total}</p>
+            <div class="rounded-xl md:rounded-2xl bg-slate-50 border p-3 md:p-4" style="border-color: var(--border)">
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-xs uppercase tracking-[0.18em] font-bold text-slate-500">Total Data</p>
+                <p class="text-xl md:text-2xl font-black mt-1">${total}</p>
+              </div>
             </div>
           </div>
         </div>`;
@@ -1602,11 +1472,11 @@
       const dotsOut = outValues.map((v, i) => `<circle cx="${xAt(i)}" cy="${yAt(v)}" r="4" fill="var(--danger)"></circle>`).join('');
       const labels = months.map((m, i) => `<text x="${xAt(i)}" y="${height - 8}" text-anchor="middle" font-size="11" fill="#64748b">${m.label}</text>`).join('');
       host.innerHTML = `
-        <div class="flex items-center gap-3 text-xs font-bold mb-4">
-          <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background: var(--primary)"></span> Karyawan Baru</span>
-          <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background: var(--danger)"></span> Karyawan Keluar</span>
+        <div class="flex items-center gap-3 text-[10px] md:text-xs font-bold mb-3 md:mb-4">
+          <span class="inline-flex items-center gap-1 md:gap-2"><span class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full" style="background: var(--primary)"></span> In (Baru)</span>
+          <span class="inline-flex items-center gap-1 md:gap-2"><span class="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full" style="background: var(--danger)"></span> Out (Keluar)</span>
         </div>
-        <div class="rounded-[24px] bg-slate-50 border p-3" style="border-color: var(--border)">
+        <div class="rounded-[20px] md:rounded-[24px] bg-slate-50 border p-2 md:p-3 w-full min-w-[320px]" style="border-color: var(--border)">
           <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto">
             ${grid}
             <polygon points="${areaIn}" fill="color-mix(in srgb, var(--primary) 18%, transparent)"></polygon>
@@ -1636,11 +1506,6 @@
           else notOk++;
         });
       });
-      const pct = total ? Math.round((ok / total) * 100) : 0;
-      document.getElementById('statusOk').textContent = ok;
-      document.getElementById('statusNotOk').textContent = notOk;
-      document.getElementById('healthPercent').textContent = `${pct}%`;
-      document.getElementById('healthBar').style.width = `${pct}%`;
 
       const monthKey = currentMonthKey();
       const inMonth = inOutLogs.filter(log => log.type === 'IN' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + Number(item.count || 0), 0);
@@ -1658,22 +1523,22 @@
       const feed = document.getElementById('activityFeed');
       const logs = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
       if (!logs.length) {
-        feed.innerHTML = '<div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-500">Belum ada log. Jalankan proses Karyawan Baru atau Karyawan Keluar.</div>';
+        feed.innerHTML = '<div class="rounded-2xl bg-slate-50 border border-slate-200 p-4 text-xs md:text-sm text-slate-500">Belum ada aktivitas.</div>';
         return;
       }
       feed.innerHTML = logs.map(log => {
         const isIn = log.type === 'IN';
         return `
-          <div class="rounded-2xl border p-4 ${isIn ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-rose-50 border-rose-100 text-rose-700'}">
+          <div class="rounded-xl md:rounded-2xl border p-3 md:p-4 ${isIn ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-rose-50 border-rose-100 text-rose-700'}">
             <div class="flex items-start justify-between gap-3">
-              <div class="flex gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-white flex items-center justify-center"><i class="fa-solid ${isIn ? 'fa-user-plus' : 'fa-user-minus'}"></i></div>
-                <div>
-                  <p class="font-bold">${isIn ? 'Karyawan Baru' : 'Karyawan Keluar'} • ${getSheetLabel(log.sheet)}</p>
-                  <p class="text-xs opacity-80 mt-1">${log.fileName || 'Manual'} • ${fmtDateTime(log.createdAt)}</p>
+              <div class="flex gap-2 md:gap-3 min-w-0">
+                <div class="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-xl md:rounded-2xl bg-white flex items-center justify-center"><i class="fa-solid ${isIn ? 'fa-user-plus' : 'fa-user-minus'}"></i></div>
+                <div class="min-w-0">
+                  <p class="font-bold text-xs md:text-sm truncate">${isIn ? 'Karyawan Baru' : 'Karyawan Keluar'} • ${getSheetLabel(log.sheet)}</p>
+                  <p class="text-[10px] md:text-xs opacity-80 mt-1 truncate">${log.fileName || 'Manual'} • ${fmtDateTime(log.createdAt)}</p>
                 </div>
               </div>
-              <span class="text-lg font-black">${log.count}</span>
+              <span class="text-base md:text-lg font-black shrink-0">${log.count}</span>
             </div>
           </div>`;
       }).join('');
@@ -1684,11 +1549,10 @@
       const tHead = document.getElementById('tableHead');
       const tBody = document.getElementById('tableBody');
       document.getElementById('tableTitle').textContent = getSheetLabel(currentSheet);
-      document.getElementById('tableSubtitle').textContent = `Menampilkan database aktif ${getSheetLabel(currentSheet)}.`;
-      tHead.innerHTML = `<tr>${cols.map(col => `<th class="px-5 py-4 text-left font-bold">${col.label}</th>`).join('')}<th class="px-5 py-4 text-right font-bold">Aksi</th></tr>`;
+      tHead.innerHTML = `<tr>${cols.map(col => `<th class="px-4 py-3 md:px-5 md:py-4 text-left font-bold">${col.label}</th>`).join('')}<th class="px-4 py-3 md:px-5 md:py-4 text-right font-bold">Aksi</th></tr>`;
 
       if (!filteredData.length) {
-        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500">Tidak ada data ditemukan.</td></tr>`;
+        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm">Tidak ada data ditemukan.</td></tr>`;
         document.getElementById('recordCount').textContent = 'Menampilkan 0 data';
         return;
       }
@@ -1699,25 +1563,25 @@
           const val = getColValue(row, col.keys) || '-';
           if (col.label === 'Status') {
             const upper = String(val).toUpperCase();
-            if (upper === 'OK' || upper === 'AKTIF') return `<td class="px-5 py-4"><span class="px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold">Aktif / OK</span></td>`;
-            if (upper === '-' || upper === '') return `<td class="px-5 py-4"><span class="px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-xs font-bold">Belum lengkap</span></td>`;
-            return `<td class="px-5 py-4"><span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold">${val}</span></td>`;
+            if (upper === 'OK' || upper === 'AKTIF') return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-[10px] md:text-xs font-bold whitespace-nowrap">Aktif / OK</span></td>`;
+            if (upper === '-' || upper === '') return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-rose-50 text-rose-700 border border-rose-100 text-[10px] md:text-xs font-bold whitespace-nowrap">Belum lengkap</span></td>`;
+            return `<td class="px-4 py-3 md:px-5 md:py-4"><span class="px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-[10px] md:text-xs font-bold whitespace-nowrap">${escapeHtml(val)}</span></td>`;
           }
-          return `<td class="px-5 py-4 max-w-[220px] truncate" title="${String(val).replace(/"/g, '&quot;')}">${val}</td>`;
+          return `<td class="px-4 py-3 md:px-5 md:py-4 max-w-[150px] md:max-w-[220px] truncate" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
         }).join('');
 
         return `
           <tr class="hover:bg-slate-50/80 transition-colors">
             ${cells}
-            <td class="px-5 py-4 text-right">
+            <td class="px-4 py-3 md:px-5 md:py-4 text-right">
               <div class="inline-flex gap-2">
-                <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100"><i class="fa-solid fa-pen"></i></button>
-                <button onclick="deleteRow(${row._rowIndex})" class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-trash"></i></button>
+                <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-2xl bg-blue-50 text-blue-600 border border-blue-100"><i class="fa-solid fa-pen text-xs md:text-sm"></i></button>
+                <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-2xl bg-rose-50 text-rose-600 border border-rose-100"><i class="fa-solid fa-trash text-xs md:text-sm"></i></button>
               </div>
             </td>
           </tr>`;
       }).join('');
-      document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} data`;
+      document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} baris data`;
     }
 
     function filterTable() {
@@ -1727,9 +1591,12 @@
     }
 
     function openModal(mode, encodedRow = null) {
-      const rowData = typeof encodedRow === 'string' ? JSON.parse(encodedRow) : encodedRow;
-      editingRowIndex = mode === 'edit' ? rowData._rowIndex : null;
-      document.getElementById('modalTitle').textContent = mode === 'edit' ? `Edit ${getSheetLabel(currentSheet)}` : `Tambah ${getSheetLabel(currentSheet)}`;
+      let rowData = encodedRow;
+      if (typeof encodedRow === 'string') {
+        try { rowData = JSON.parse(encodedRow); } catch (e) { rowData = null; }
+      }
+      editingRowIndex = mode === 'edit' ? (rowData ? rowData._rowIndex : null) : null;
+      document.getElementById('modalTitle').textContent = mode === 'edit' ? `Edit Data` : `Tambah Data`;
       const form = document.getElementById('dataForm');
       form.innerHTML = '';
       let keys = [];
@@ -1745,8 +1612,8 @@
         const span2 = /(NAMA|KETERANGAN)/i.test(key) ? 'md:col-span-2' : '';
         form.insertAdjacentHTML('beforeend', `
           <div class="${span2}">
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${key}</label>
-            <input data-key="${key}" type="${numberField ? 'number' : 'text'}" value="${String(value).replace(/"/g, '&quot;')}" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none ${readOnly ? 'bg-slate-100 text-slate-500' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
+            <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${key}</label>
+            <input data-key="${key}" type="${numberField ? 'number' : 'text'}" value="${escapeHtml(value)}" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base ${readOnly ? 'bg-slate-100 text-slate-500' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
           </div>
         `);
       });
@@ -1762,22 +1629,25 @@
       const data = {};
       inputs.forEach(input => data[input.dataset.key] = input.value);
       const payload = { sheetName: currentSheet, action: editingRowIndex !== null ? 'edit' : 'add', rowIndex: editingRowIndex, data };
-      const btn = document.getElementById('btnSaveModal');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Menyimpan';
+      
+      closeModal();
+      Swal.fire({
+        title: 'Menyimpan...',
+        text: 'Mengirim data ke server',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       try {
         await postAction(payload);
-        closeModal();
         await safeFetchSheet(currentSheet);
         filteredData = database[currentSheet] || [];
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database)); 
         renderTable();
         updateDashboardUI();
         Swal.fire('Berhasil', 'Data berhasil disimpan.', 'success');
       } catch (e) {
         Swal.fire('Gagal', e.message, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'Simpan';
       }
     }
 
@@ -1790,18 +1660,23 @@
         confirmButtonText: 'Ya, hapus'
       });
       if (!confirm.isConfirmed) return;
-      setLoading(true);
+      
+      Swal.fire({
+        title: 'Menghapus...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       try {
         await postAction({ sheetName: currentSheet, action: 'delete', rowIndex });
         await safeFetchSheet(currentSheet);
         filteredData = database[currentSheet] || [];
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         renderTable();
         updateDashboardUI();
         Swal.fire('Terhapus', 'Data berhasil dihapus.', 'success');
       } catch (e) {
         Swal.fire('Gagal', e.message, 'error');
-      } finally {
-        setLoading(false);
       }
     }
 
@@ -1830,7 +1705,7 @@
       const body = document.getElementById(bodyId);
       if (!rows.length) {
         head.innerHTML = '';
-        body.innerHTML = '<tr><td class="px-4 py-6 text-slate-500">Tidak ada data.</td></tr>';
+        body.innerHTML = '<tr><td class="px-4 py-6 text-slate-500 text-center">Tidak ada data.</td></tr>';
         if (countId) document.getElementById(countId).textContent = 0;
         return;
       }
@@ -1868,22 +1743,25 @@
         confirmButtonText: 'Ya, proses'
       });
       if (!confirm.isConfirmed) return;
-      const btn = document.getElementById('btnGeneralImport');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Memproses';
+      
+      Swal.fire({
+        title: 'Memproses Import...',
+        text: 'Sedang menimpa/menambah data ke server',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       try {
         await postAction({ sheetName: target, action: 'import', data: pendingGeneralImportData });
         await safeFetchSheet(target);
         filteredData = database[currentSheet] || [];
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         renderTable();
         updateDashboardUI();
         renderCardPrint();
         Swal.fire('Import selesai', `Data berhasil diproses ke ${getSheetLabel(target)}.`, 'success');
       } catch (e) {
         Swal.fire('Import gagal', e.message, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-database mr-2"></i>Sinkronisasi Database';
       }
     }
 
@@ -1950,9 +1828,13 @@
         confirmButtonText: 'Ya, proses'
       });
       if (!confirm.isConfirmed) return;
-      const btn = document.getElementById('btnEmployeeIn');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Memproses';
+      
+      Swal.fire({
+        title: 'Memproses...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       try {
         await postAction({ sheetName: target, action: 'import', data: pendingEmployeeIn.rows });
         await safeFetchSheet(target);
@@ -1963,15 +1845,13 @@
           fileName: pendingEmployeeIn.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         resetEmployeeIn();
         updateDashboardUI();
         renderReport();
         Swal.fire('Berhasil', 'Karyawan baru berhasil diproses.', 'success');
       } catch (e) {
         Swal.fire('Gagal', e.message, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'Proses Karyawan Baru';
       }
     }
 
@@ -2034,9 +1914,13 @@
         confirmButtonText: 'Ya, hapus'
       });
       if (!confirm.isConfirmed) return;
-      const btn = document.getElementById('btnEmployeeOut');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Memproses';
+      
+      Swal.fire({
+        title: 'Memproses...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
+      
       try {
         const sorted = [...pendingEmployeeOut.matches].sort((a, b) => (b._rowIndex || 0) - (a._rowIndex || 0));
         for (const row of sorted) {
@@ -2050,15 +1934,13 @@
           fileName: pendingEmployeeOut.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         resetEmployeeOut();
         updateDashboardUI();
         renderReport();
         Swal.fire('Berhasil', 'Karyawan keluar berhasil diproses.', 'success');
       } catch (e) {
         Swal.fire('Gagal', e.message, 'error');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'Proses Karyawan Keluar';
       }
     }
 
@@ -2074,7 +1956,7 @@
           <td class="px-4 py-3">${log.type === 'IN' ? 'Karyawan Baru' : 'Karyawan Keluar'}</td>
           <td class="px-4 py-3">${getSheetLabel(log.sheet)}</td>
           <td class="px-4 py-3">${log.count}</td>
-          <td class="px-4 py-3">${log.fileName || '-'}</td>
+          <td class="px-4 py-3 max-w-[150px] truncate" title="${escapeHtml(log.fileName || '-')}">${escapeHtml(log.fileName || '-')}</td>
         </tr>`).join('');
     }
 
@@ -2122,7 +2004,6 @@
       }
       inOutLogs = [];
       saveLogs();
-      updateSyncBadges();
       renderReport();
       updateDashboardUI();
     }
@@ -2153,61 +2034,57 @@
       const badge = document.getElementById('selectedCardBadge');
       if (!item) {
         badge.textContent = 'Belum dipilih';
-        panel.innerHTML = '<div class="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">Pilih salah satu baris pada tabel untuk melihat template 1 kartu di sini.</div>';
+        panel.innerHTML = '<div class="rounded-[20px] md:rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-6 md:p-8 text-center text-sm md:text-base text-slate-500">Pilih baris pada tabel untuk melihat template kartu di sini.</div>';
         return;
       }
       badge.textContent = item.id || 'Terpilih';
-      const cardDataText = `ID Pegawai / No ID: ${item.id}
-NIK: ${item.nik}
-Nama Lengkap: ${item.name}
-Nomor Kartu: ${item.cardNumber}`;
+      const cardDataText = `ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`;
       const domId = 'selected-card-template';
       panel.innerHTML = `
-        <div id="${domId}" class="card-template ${template} rounded-[26px] p-5 flex flex-col justify-between">
-          <div class="relative z-10 flex items-start justify-between gap-4">
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden">
-                ${appSettings.logoData ? `<img src="${appSettings.logoData}" class="w-full h-full object-cover">` : '<i class="fa-solid fa-shield-heart text-xl"></i>'}
+        <div id="${domId}" class="card-template ${template} rounded-[20px] md:rounded-[26px] p-4 md:p-5 flex flex-col justify-between">
+          <div class="relative z-10 flex items-start justify-between gap-3 md:gap-4">
+            <div class="flex items-center gap-2 md:gap-3 min-w-0">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden shrink-0">
+                ${appSettings.logoData ? `<img src="${appSettings.logoData}" class="w-full h-full object-cover">` : '<i class="fa-solid fa-shield-heart text-lg md:text-xl"></i>'}
               </div>
               <div class="min-w-0">
-                <p class="text-[11px] uppercase tracking-[0.28em] text-white/75 font-bold">${escapeHtml(getSheetLabel(item.sheet))}</p>
-                <p class="text-lg font-black truncate">${escapeHtml(appSettings.appName)}</p>
+                <p class="text-[9px] md:text-[11px] uppercase tracking-[0.28em] text-white/75 font-bold truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
+                <p class="text-base md:text-lg font-black truncate">${escapeHtml(appSettings.appName)}</p>
               </div>
             </div>
-            <div class="text-right text-xs text-white/80 font-semibold">Template Kartu</div>
           </div>
-          <div class="relative z-10 mt-5 space-y-3 text-sm">
-            <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-              <div class="text-white/70 text-[11px] uppercase tracking-[0.18em] font-bold">ID Pegawai / No ID</div>
-              <div class="mt-1 font-black text-base break-words">${escapeHtml(item.id)}</div>
+          <div class="relative z-10 mt-4 md:mt-5 space-y-2 md:space-y-3 text-xs md:text-sm">
+            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+              <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">ID Pegawai / No ID</div>
+              <div class="mt-1 font-black text-sm md:text-base break-words">${escapeHtml(item.id)}</div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-                <div class="text-white/70 text-[11px] uppercase tracking-[0.18em] font-bold">NIK</div>
+            <div class="grid grid-cols-2 gap-2 md:gap-3">
+              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+                <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">NIK</div>
                 <div class="mt-1 font-bold break-words">${escapeHtml(item.nik)}</div>
               </div>
-              <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-                <div class="flex items-center justify-between gap-2 text-white/70 text-[11px] uppercase tracking-[0.18em] font-bold">
-                  <span>Nomor Kartu</span>
-                  <button onclick="copyText(${JSON.stringify(item.cardNumber)}, 'Nomor kartu berhasil dicopy')" class="text-white"><i class="fa-regular fa-copy"></i></button>
+              <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+                <div class="flex items-center justify-between gap-2 text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">
+                  <span>No Kartu</span>
+                  <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="text-white hover:opacity-75"><i class="fa-regular fa-copy"></i></button>
                 </div>
                 <div class="mt-1 font-bold break-words">${escapeHtml(item.cardNumber)}</div>
               </div>
             </div>
-            <div class="rounded-2xl bg-white/10 border border-white/10 p-3">
-              <div class="text-white/70 text-[11px] uppercase tracking-[0.18em] font-bold">Nama Lengkap</div>
-              <div class="mt-1 font-black text-lg leading-tight break-words">${escapeHtml(item.name)}</div>
+            <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3">
+              <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">Nama Lengkap</div>
+              <div class="mt-1 font-black text-base md:text-lg leading-tight break-words">${escapeHtml(item.name)}</div>
             </div>
           </div>
-          <div class="relative z-10 mt-5 flex items-center justify-between text-xs text-white/75">
-            <span>${escapeHtml(appSettings.appSubtitle)}</span>
-            <span>${item.cardNumber !== '-' ? 'READY' : 'NO CARD'}</span>
+          <div class="relative z-10 mt-4 md:mt-5 flex items-center justify-between text-[10px] md:text-xs text-white/75">
+            <span class="truncate pr-2">${escapeHtml(appSettings.appSubtitle)}</span>
+            <span class="shrink-0 font-bold">${item.cardNumber !== '-' ? 'READY' : 'NO CARD'}</span>
           </div>
         </div>
         <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <button onclick="copyText(${JSON.stringify(cardDataText)}, 'Data kartu berhasil dicopy')" class="px-3 py-2 rounded-xl bg-white border font-bold text-sm" style="border-color: var(--border)"><i class="fa-solid fa-copy mr-2"></i>Copy Data</button>
-          <button onclick="copyText(${JSON.stringify(item.cardNumber)}, 'Nomor kartu berhasil dicopy')" class="px-3 py-2 rounded-xl bg-white border font-bold text-sm" style="border-color: var(--border)"><i class="fa-regular fa-copy mr-2"></i>No Kartu</button>
-          <button onclick="downloadCardImage('${domId}', '${escapeHtml(item.id || 'kartu')}')" class="px-3 py-2 rounded-xl text-white font-bold text-sm" style="background: linear-gradient(90deg, var(--primary), var(--secondary));"><i class="fa-solid fa-image mr-2"></i>Download PNG</button>
+          <button onclick="copyText(${escapeHtml(JSON.stringify(cardDataText))}, 'Data kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm" style="border-color: var(--border)"><i class="fa-solid fa-copy mr-2"></i>Copy Data</button>
+          <button onclick="copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm" style="border-color: var(--border)"><i class="fa-regular fa-copy mr-2"></i>No Kartu</button>
+          <button onclick="downloadCardImage('${domId}', ${escapeHtml(JSON.stringify(item.id || 'kartu'))})" class="px-3 py-2 md:py-2.5 rounded-xl text-white font-bold text-xs md:text-sm" style="background: linear-gradient(90deg, var(--primary), var(--secondary));"><i class="fa-solid fa-image mr-2"></i>Download PNG</button>
         </div>`;
     }
 
@@ -2225,11 +2102,14 @@ Nomor Kartu: ${item.cardNumber}`;
         return [r.id, r.nik, r.name, r.cardNumber].some(v => String(v).toLowerCase().includes(query));
       });
       visibleCardRows = rows;
-      document.getElementById('cardCount').textContent = rows.length;
+      
+      const cardCountEl = document.getElementById('cardCount');
+      if (cardCountEl) cardCountEl.textContent = rows.length;
+      
       const tableBody = document.getElementById('cardTableBody');
       if (!rows.length) {
         selectedCardKey = '';
-        tableBody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">Tidak ada data kartu ditemukan.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500 text-sm md:text-base">Tidak ada data kartu ditemukan.</td></tr>';
         renderCardPreview(null, template);
         return;
       }
@@ -2239,23 +2119,20 @@ Nomor Kartu: ${item.cardNumber}`;
       tableBody.innerHTML = rows.map(item => {
         const isActive = item.key === selectedCardKey;
         return `
-          <tr onclick="selectCardRow('${item.key}')" class="cursor-pointer transition-colors ${isActive ? 'bg-teal-50' : 'hover:bg-slate-50'}">
-            <td class="px-4 py-3 font-semibold">${escapeHtml(item.id)}</td>
-            <td class="px-4 py-3">${escapeHtml(item.nik)}</td>
-            <td class="px-4 py-3">${escapeHtml(item.name)}</td>
-            <td class="px-4 py-3">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="truncate">${escapeHtml(item.cardNumber)}</span>
-                <button onclick="event.stopPropagation(); copyText(${JSON.stringify(item.cardNumber)}, 'Nomor kartu berhasil dicopy')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 shrink-0"><i class="fa-regular fa-copy"></i></button>
+          <tr onclick="selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="cursor-pointer transition-colors ${isActive ? 'bg-teal-50' : 'hover:bg-slate-50'}">
+            <td class="px-4 py-3 font-semibold whitespace-nowrap">${escapeHtml(item.id)}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${escapeHtml(item.nik)}</td>
+            <td class="px-4 py-3 whitespace-nowrap">${escapeHtml(item.name)}</td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              <div class="flex items-center gap-2">
+                <span>${escapeHtml(item.cardNumber)}</span>
+                <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')" class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-slate-100 hover:bg-slate-200 shrink-0"><i class="fa-regular fa-copy text-xs md:text-sm"></i></button>
               </div>
             </td>
-            <td class="px-4 py-3">
-              <div class="flex flex-wrap gap-2">
-                <button onclick="event.stopPropagation(); selectCardRow('${item.key}')" class="px-3 py-1.5 rounded-lg bg-white border font-semibold text-xs" style="border-color: var(--border)">Preview</button>
-                <button onclick="event.stopPropagation(); copyText(${JSON.stringify(`ID Pegawai / No ID: ${item.id}
-NIK: ${item.nik}
-Nama Lengkap: ${item.name}
-Nomor Kartu: ${item.cardNumber}`)}, 'Data kartu berhasil dicopy')" class="px-3 py-1.5 rounded-lg bg-white border font-semibold text-xs" style="border-color: var(--border)">Copy</button>
+            <td class="px-4 py-3 whitespace-nowrap">
+              <div class="flex flex-wrap gap-1 md:gap-2">
+                <button onclick="event.stopPropagation(); selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-white border font-semibold text-[10px] md:text-xs" style="border-color: var(--border)">Preview</button>
+                <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-2 py-1 md:px-3 md:py-1.5 rounded-lg bg-white border font-semibold text-[10px] md:text-xs" style="border-color: var(--border)">Copy</button>
               </div>
             </td>
           </tr>`;
@@ -2287,10 +2164,7 @@ Nomor Kartu: ${item.cardNumber}`)}, 'Data kartu berhasil dicopy')" class="px-3 p
         Swal.fire('Tidak ada data', 'Tidak ada data kartu untuk dicopy.', 'info');
         return;
       }
-      const text = visibleCardRows.map(item => `ID Pegawai / No ID: ${item.id}
-NIK: ${item.nik}
-Nama Lengkap: ${item.name}
-Nomor Kartu: ${item.cardNumber}`).join('\n\n');
+      const text = visibleCardRows.map(item => `ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`).join('\n\n');
       copyText(text, 'Semua data kartu berhasil dicopy');
     }
 
@@ -2313,11 +2187,8 @@ Nomor Kartu: ${item.cardNumber}`).join('\n\n');
       document.getElementById('openSidebar').addEventListener('click', openNav);
       document.getElementById('closeSidebar').addEventListener('click', closeNav);
       document.getElementById('overlay').addEventListener('click', closeNav);
-      hydrateCachedAppState();
       applySettingsToUI();
-      updateFaviconFromSettings();
-      updateSyncBadges();
-      loadAllDataForDashboard({ silent: false, forceSettings: true });
+      loadAllDataForDashboard();
     });
   </script>
 </body>
