@@ -375,7 +375,7 @@
               </div>
             </div>
             <div class="overflow-x-auto min-h-[300px] w-full">
-              <table class="table-modern min-w-[900px]">
+              <table class="table-modern w-full">
                 <thead>
                   <tr>
                     <th class="whitespace-nowrap">Modul</th>
@@ -416,7 +416,7 @@
               <!-- JS Content here -->
             </div>
             <div class="overflow-x-auto min-h-[300px] w-full">
-              <table class="table-modern min-w-[800px]">
+              <table class="table-modern w-full">
                 <thead id="tableHead"></thead>
                 <tbody id="tableBody"></tbody>
               </table>
@@ -620,8 +620,8 @@
                   </div>
                 </div>
                 <div class="overflow-x-auto min-h-[300px] max-h-[620px] bg-white relative w-full">
-                  <table class="table-modern min-w-[950px]">
-                    <thead>
+                  <table class="table-modern w-full">
+                    <thead class="bg-slate-100 text-slate-600 sticky top-0 z-10">
                       <tr>
                         <th class="whitespace-nowrap">ID Pegawai</th>
                         <th class="whitespace-nowrap">NIK</th>
@@ -1330,7 +1330,7 @@
                 <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy NIK"><i class="fa-regular fa-copy text-[10px]"></i></button>
               </div>
             </td>
-            <td class="min-w-[200px] max-w-[300px] whitespace-normal leading-snug">${escapeHtml(item.name)}</td>
+            <td class="whitespace-normal leading-snug max-w-[150px] md:max-w-none break-words">${escapeHtml(item.name)}</td>
             <td class="whitespace-nowrap">${statusBadge}</td>
             <td class="whitespace-nowrap">
                <div class="flex items-center gap-2 group cursor-pointer" onclick="copyText(${escapeHtml(JSON.stringify(item.cardNo))}, 'Nomor kartu berhasil dicopy')">
@@ -1646,7 +1646,7 @@
             if (upper === '-' || upper === '') return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span></td>`;
             return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(val)}</span></td>`;
           }
-          return `<td class="max-w-[200px] whitespace-normal leading-snug font-medium" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
+          return `<td class="whitespace-normal leading-snug font-medium max-w-[150px] md:max-w-[250px] lg:max-w-none break-words" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
         }).join('');
 
         return `
@@ -2199,18 +2199,18 @@
         const isActive = item.key === selectedCardKey;
         return `
           <tr onclick="selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="cursor-pointer transition-colors ${isActive ? 'bg-teal-50' : 'hover:bg-slate-50'}">
-            <td class="whitespace-nowrap font-bold text-slate-800">${escapeHtml(item.id)}</td>
-            <td class="whitespace-nowrap font-medium text-slate-600">${escapeHtml(item.nik)}</td>
-            <td class="min-w-[200px] whitespace-normal leading-snug font-medium text-slate-700">${escapeHtml(item.name)}</td>
-            <td class="whitespace-nowrap font-bold text-slate-800">
+            <td class="whitespace-nowrap font-bold text-slate-800 align-middle">${escapeHtml(item.id)}</td>
+            <td class="whitespace-nowrap font-medium text-slate-600 align-middle">${escapeHtml(item.nik)}</td>
+            <td class="whitespace-normal leading-snug font-medium text-slate-700 align-middle max-w-[140px] md:max-w-none break-words">${escapeHtml(item.name)}</td>
+            <td class="whitespace-nowrap font-bold text-slate-800 align-middle">
               <div class="flex items-center gap-2 group" onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')">
                 <span>${escapeHtml(item.cardNumber)}</span>
-                <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
+                <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
               </div>
             </td>
-            <td class="whitespace-nowrap text-right pr-6">
-              <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-[11px] md:text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
-                <i class="fa-regular fa-copy mr-1.5"></i>Copy Data
+            <td class="whitespace-nowrap text-right pr-4 md:pr-6 align-middle w-[100px] md:w-auto">
+              <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-[10px] md:text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm w-full flex justify-center items-center">
+                <i class="fa-regular fa-copy md:mr-1.5"></i><span class="hidden md:inline">Copy Data</span><span class="md:hidden ml-1">Copy</span>
               </button>
             </td>
           </tr>`;
