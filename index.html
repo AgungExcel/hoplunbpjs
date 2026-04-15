@@ -263,17 +263,17 @@
               <div class="xl:col-span-2">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-sm font-semibold">
                   <i class="fa-solid fa-sparkles" style="color: #a7f3d0"></i>
-                  UI fleksibel dengan setting nama, logo, label modul, tema, dan kartu template
+                  Dashboard operasional dengan branding, log, dan modul yang bisa disinkronkan
                 </div>
-                <h2 class="mt-5 text-3xl md:text-4xl font-black leading-tight max-w-3xl">Satu dashboard untuk operasional BPJS KS Staff, BPJS KS Worker, SIPP Worker, import massal, in/out karyawan, dan cetak kartu.</h2>
-                <p class="mt-4 text-slate-300 max-w-2xl leading-relaxed">Semua label modul bisa diganti dari pengaturan. Menu <b>Import Massal</b> sekarang bisa dipakai untuk semua data, sedangkan <b>Karyawan Baru</b> dan <b>Karyawan Keluar</b> tetap fokus untuk dua modul BPJS KS.</p>
+                <h2 class="mt-5 text-3xl md:text-4xl font-black leading-tight max-w-3xl">Dashboard operasional BPJS dengan rekap data, grafik profesional, log in/out, dan cetak kartu per karyawan.</h2>
+                <p class="mt-4 text-slate-300 max-w-2xl leading-relaxed">Pengaturan nama aplikasi, logo, label modul, dan tema dapat dibuat sama di semua laptop melalui sheet <b>APP_SETTINGS</b>. Log aktivitas juga dapat dibuat terpusat melalui <b>APP_LOGS</b> agar dashboard menampilkan data yang konsisten di mana pun dibuka.</p>
                 <div class="mt-6 flex flex-wrap gap-3">
-                  <button onclick="switchTab('import')" class="px-5 py-3 rounded-2xl font-bold shadow-lg text-slate-950" style="background: color-mix(in srgb, var(--primary) 85%, white)">Mulai Import</button>
-                  <button onclick="switchTab('settings')" class="px-5 py-3 rounded-2xl bg-white/10 border border-white/10 font-bold hover:bg-white/15 transition-colors">Buka Pengaturan</button>
+                  <button onclick="switchTab('import')" class="px-5 py-3 rounded-2xl font-bold shadow-lg text-slate-950" style="background: color-mix(in srgb, var(--primary) 85%, white)">Refresh & Import</button>
+                  <button onclick="switchTab('settings')" class="px-5 py-3 rounded-2xl bg-white/10 border border-white/10 font-bold hover:bg-white/15 transition-colors">Buka Sinkronisasi</button>
                 </div>
               </div>
               <div class="glass rounded-[28px] p-5 text-slate-800">
-                <p class="text-sm font-bold text-slate-500 uppercase tracking-[0.18em]">Health Check</p>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-[0.18em]">Rekap Kesehatan Data</p>
                 <div class="mt-5 space-y-4">
                   <div class="flex items-center justify-between">
                     <span class="text-sm text-slate-500">Kelengkapan data BPJS</span>
@@ -344,33 +344,36 @@
               </div>
             </div>
           </div>
-
           <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <div class="xl:col-span-2 glass rounded-[28px] p-6">
-              <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
-                <div>
-                  <h3 class="text-xl font-black tracking-tight">Ringkasan Operasional</h3>
-                  <p class="text-sm text-slate-500">Import semua data, log in/out, dan cetak kartu gambar.</p>
+            <div class="xl:col-span-2 space-y-6">
+              <div class="glass rounded-[28px] p-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+                  <div>
+                    <h3 class="text-xl font-black tracking-tight">Rekap Data per Modul</h3>
+                    <p class="text-sm text-slate-500">Perbandingan jumlah data aktif di setiap modul utama.</p>
+                  </div>
+                  <div class="inline-flex gap-2 flex-wrap">
+                    <span class="px-3 py-2 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Live Google Sheet</span>
+                    <span class="px-3 py-2 rounded-full text-xs font-bold" style="background: color-mix(in srgb, var(--primary) 16%, white); color: color-mix(in srgb, var(--primary) 78%, black);">Profesional & Ringkas</span>
+                  </div>
                 </div>
-                <div class="inline-flex gap-2 flex-wrap">
-                  <span class="px-3 py-2 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Configurable Branding</span>
-                  <span class="px-3 py-2 rounded-full text-xs font-bold" style="background: color-mix(in srgb, var(--primary) 16%, white); color: color-mix(in srgb, var(--primary) 78%, black);">Card Image Export</span>
-                </div>
+                <div id="chartModuleBars" class="space-y-4"></div>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="rounded-[24px] bg-slate-950 text-white p-5 relative overflow-hidden">
-                  <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-teal-400/20 blur-2xl"></div>
-                  <p class="text-xs uppercase tracking-[0.18em] text-slate-400 font-bold">Import Massal</p>
-                  <h4 class="mt-3 text-xl font-black">Semua modul bisa di-import</h4>
-                  <p class="mt-2 text-sm text-slate-300 leading-relaxed">Pilih target impor untuk <span id="dashboardLabelStaff">BPJS KS Staff</span>, <span id="dashboardLabelWorker">BPJS KS Worker</span>, atau <span id="dashboardLabelUpah">SIPP Worker</span>.</p>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass rounded-[28px] p-6">
+                  <h3 class="text-xl font-black tracking-tight">Status Kepesertaan BPJS</h3>
+                  <p class="text-sm text-slate-500 mt-1">Rekap status OK vs perlu pengecekan untuk dua modul BPJS KS.</p>
+                  <div id="chartStatusSummary" class="mt-5"></div>
                 </div>
-                <div class="rounded-[24px] bg-white/90 border p-5" style="border-color: var(--border)">
-                  <p class="text-xs uppercase tracking-[0.18em] muted font-bold">Cetak Kartu</p>
-                  <h4 class="mt-3 text-xl font-black text-main">Template kartu siap unduh</h4>
-                  <p class="mt-2 text-sm muted leading-relaxed">Data kartu bisa dicopy penuh, nomor kartu saja bisa dicopy dari icon samping, dan preview kartu bisa diunduh jadi gambar PNG.</p>
+                <div class="glass rounded-[28px] p-6">
+                  <h3 class="text-xl font-black tracking-tight">Tren In / Out 6 Bulan</h3>
+                  <p class="text-sm text-slate-500 mt-1">Pergerakan karyawan baru dan keluar berdasarkan log operasional.</p>
+                  <div id="chartTrend" class="mt-5"></div>
                 </div>
               </div>
             </div>
+
             <div class="glass rounded-[28px] p-6">
               <div class="flex items-center justify-between mb-4">
                 <div>
@@ -700,7 +703,19 @@
             <div class="xl:col-span-2 glass rounded-[28px] p-6 md:p-7 space-y-6">
               <div>
                 <h2 class="text-2xl font-black tracking-tight">Pengaturan Tampilan</h2>
-                <p class="text-sm text-slate-500 mt-1">Ubah branding aplikasi, nama modul, logo, dan tema lalu simpan ke browser.</p>
+                <p class="text-sm text-slate-500 mt-1">Ubah branding aplikasi, nama modul, logo, dan tema. Jika sheet APP_SETTINGS dan APP_LOGS tersedia, hasilnya akan sama di semua laptop.</p>
+                <div class="mt-5 grid md:grid-cols-2 gap-4">
+                  <div class="rounded-[24px] bg-slate-50 border p-4" style="border-color: var(--border)">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Sinkron Pengaturan</p>
+                    <p id="settingsSyncStatus" class="mt-2 text-lg font-black">Browser Lokal</p>
+                    <p id="settingsSyncHint" class="text-sm text-slate-500 mt-1">Buat sheet APP_SETTINGS agar nama, logo, label modul, dan tema selalu sama di semua perangkat.</p>
+                  </div>
+                  <div class="rounded-[24px] bg-slate-50 border p-4" style="border-color: var(--border)">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Sinkron Log Operasional</p>
+                    <p id="logsSyncStatus" class="mt-2 text-lg font-black">Browser Lokal</p>
+                    <p id="logsSyncHint" class="text-sm text-slate-500 mt-1">Buat sheet APP_LOGS agar aktivitas terakhir dan laporan in/out terbaca sama di mana pun dashboard dibuka.</p>
+                  </div>
+                </div>
               </div>
               <div class="grid md:grid-cols-2 gap-5">
                 <div>
@@ -800,6 +815,8 @@
 
   <script>
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxspaygnKoq1sl_IIRB3G0sgYXiUFfEJ61P04RMLJB_Za11L0vf0ZAEpbVvAysD6C2ZXg/exec';
+    const SETTINGS_SHEET = 'APP_SETTINGS';
+    const LOGS_SHEET = 'APP_LOGS';
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -872,6 +889,7 @@
     let visibleCardRows = [];
     let selectedCardKey = '';
     let tempLogoData = appSettings.logoData || '';
+    let syncState = { settings: 'browser', logs: 'browser' };
 
     function loadSettings() {
       try {
@@ -896,6 +914,151 @@
 
     function saveSettingsStorage() {
       localStorage.setItem('bpjsUiSettingsV2', JSON.stringify(appSettings));
+    }
+
+    function pickAny(row, keys = []) {
+      for (const key of keys) {
+        if (row && row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== '') return row[key];
+      }
+      return '';
+    }
+
+    function updateSyncBadges() {
+      const settingsCloud = syncState.settings === 'cloud';
+      const logsCloud = syncState.logs === 'cloud';
+      const settingsStatus = document.getElementById('settingsSyncStatus');
+      const settingsHint = document.getElementById('settingsSyncHint');
+      const logsStatus = document.getElementById('logsSyncStatus');
+      const logsHint = document.getElementById('logsSyncHint');
+      if (settingsStatus) settingsStatus.textContent = settingsCloud ? 'Google Sheet (APP_SETTINGS)' : 'Browser Lokal';
+      if (settingsHint) settingsHint.textContent = settingsCloud
+        ? 'Nama aplikasi, logo, label modul, dan tema sudah dibaca dari APP_SETTINGS sehingga tampil sama di semua perangkat.'
+        : 'Buat sheet APP_SETTINGS agar nama, logo, label modul, dan tema selalu sama di semua perangkat.';
+      if (logsStatus) logsStatus.textContent = logsCloud ? 'Google Sheet (APP_LOGS)' : 'Browser Lokal';
+      if (logsHint) logsHint.textContent = logsCloud
+        ? 'Aktivitas terakhir dan laporan in/out sedang diambil dari APP_LOGS agar tampil konsisten di semua perangkat.'
+        : 'Buat sheet APP_LOGS agar aktivitas terakhir dan laporan in/out terbaca sama di mana pun dashboard dibuka.';
+    }
+
+    function mapSettingsFromRow(row) {
+      return {
+        appName: String(pickAny(row, ['APP_NAME', 'APP NAME', 'appName']) || DEFAULT_SETTINGS.appName),
+        appSubtitle: String(pickAny(row, ['APP_SUBTITLE', 'APP SUBTITLE', 'appSubtitle']) || DEFAULT_SETTINGS.appSubtitle),
+        theme: String(pickAny(row, ['THEME', 'theme']) || DEFAULT_SETTINGS.theme),
+        logoData: String(pickAny(row, ['LOGO_DATA', 'LOGO DATA', 'logoData']) || ''),
+        modules: {
+          STAFF: String(pickAny(row, ['MODULE_STAFF', 'MODULE STAFF', 'STAFF_LABEL']) || DEFAULT_SETTINGS.modules.STAFF),
+          WORKER: String(pickAny(row, ['MODULE_WORKER', 'MODULE WORKER', 'WORKER_LABEL']) || DEFAULT_SETTINGS.modules.WORKER),
+          DATA_UPAH: String(pickAny(row, ['MODULE_DATA_UPAH', 'MODULE DATA UPAH', 'MODULE_UPAH', 'UPAH_LABEL']) || DEFAULT_SETTINGS.modules.DATA_UPAH)
+        }
+      };
+    }
+
+    function mapSettingsToRow(settings) {
+      return {
+        APP_NAME: settings.appName,
+        APP_SUBTITLE: settings.appSubtitle,
+        THEME: settings.theme,
+        LOGO_DATA: settings.logoData || '',
+        MODULE_STAFF: settings.modules.STAFF,
+        MODULE_WORKER: settings.modules.WORKER,
+        MODULE_DATA_UPAH: settings.modules.DATA_UPAH
+      };
+    }
+
+    function mapLogFromRow(row) {
+      return {
+        type: String(pickAny(row, ['TYPE', 'type']) || '').toUpperCase(),
+        sheet: String(pickAny(row, ['SHEET', 'sheet']) || ''),
+        count: Number(pickAny(row, ['COUNT', 'count']) || 0),
+        fileName: String(pickAny(row, ['FILE_NAME', 'FILE NAME', 'fileName']) || ''),
+        createdAt: String(pickAny(row, ['CREATED_AT', 'CREATED AT', 'createdAt']) || new Date().toISOString()),
+        _rowIndex: row._rowIndex
+      };
+    }
+
+    function mapLogToRow(log) {
+      return {
+        TYPE: log.type,
+        SHEET: log.sheet,
+        COUNT: log.count,
+        FILE_NAME: log.fileName || '',
+        CREATED_AT: log.createdAt
+      };
+    }
+
+    async function fetchSheetRows(sheet) {
+      const response = await fetch(`${gasApiUrl}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`);
+      const text = await response.text();
+      if (text.trim().startsWith('<')) throw new Error('HTML_RESPONSE');
+      const json = JSON.parse(text);
+      if (json.status !== 'success') throw new Error(json.message || 'Gagal mengambil data');
+      return json.data || [];
+    }
+
+    async function loadSharedSettingsRemote() {
+      try {
+        const rows = await fetchSheetRows(SETTINGS_SHEET);
+        if (rows.length) {
+          appSettings = {
+            ...structuredClone(DEFAULT_SETTINGS),
+            ...mapSettingsFromRow(rows[0]),
+            modules: { ...DEFAULT_SETTINGS.modules, ...mapSettingsFromRow(rows[0]).modules }
+          };
+          tempLogoData = appSettings.logoData || '';
+          saveSettingsStorage();
+          syncState.settings = 'cloud';
+          return true;
+        }
+      } catch (e) {}
+      syncState.settings = 'browser';
+      return false;
+    }
+
+    async function loadSharedLogsRemote() {
+      try {
+        const rows = await fetchSheetRows(LOGS_SHEET);
+        if (rows.length) {
+          inOutLogs = rows
+            .map(mapLogFromRow)
+            .filter(log => log.type && log.sheet && log.createdAt)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          saveLogs();
+          syncState.logs = 'cloud';
+          return true;
+        }
+      } catch (e) {}
+      syncState.logs = 'browser';
+      return false;
+    }
+
+    async function persistSettingsRemote() {
+      const payload = mapSettingsToRow(appSettings);
+      try {
+        const rows = await fetchSheetRows(SETTINGS_SHEET).catch(() => []);
+        if (rows.length) {
+          await postAction({ sheetName: SETTINGS_SHEET, action: 'edit', rowIndex: rows[0]._rowIndex, data: payload });
+        } else {
+          await postAction({ sheetName: SETTINGS_SHEET, action: 'add', data: payload });
+        }
+        syncState.settings = 'cloud';
+        return true;
+      } catch (e) {
+        syncState.settings = 'browser';
+        return false;
+      }
+    }
+
+    async function appendLog(log) {
+      inOutLogs.unshift(log);
+      saveLogs();
+      try {
+        await postAction({ sheetName: LOGS_SHEET, action: 'add', data: mapLogToRow(log) });
+        syncState.logs = 'cloud';
+      } catch (e) {
+        syncState.logs = 'browser';
+      }
+      updateSyncBadges();
     }
 
     function getSheetLabel(sheet) {
@@ -940,12 +1103,8 @@
     }
 
     async function safeFetchSheet(sheet) {
-      const response = await fetch(`${gasApiUrl}?sheet=${sheet}&t=${Date.now()}`);
-      const text = await response.text();
-      if (text.trim().startsWith('<')) throw new Error('HTML_RESPONSE');
-      const json = JSON.parse(text);
-      if (json.status !== 'success') throw new Error(json.message || 'Gagal mengambil data');
-      database[sheet] = json.data || [];
+      const rows = await fetchSheetRows(sheet);
+      database[sheet] = rows;
       return database[sheet];
     }
 
@@ -996,6 +1155,7 @@
 
       updateLogoUI(appSettings.logoData || '');
       refreshSelectLabels();
+      updateSyncBadges();
       if (document.getElementById('tab-data').classList.contains('active')) renderTable();
       if (document.getElementById('tab-report').classList.contains('active')) renderReport();
       if (document.getElementById('tab-card-print').classList.contains('active')) renderCardPrint();
@@ -1063,7 +1223,7 @@
       reader.readAsDataURL(file);
     }
 
-    function saveSettings() {
+    async function saveSettings() {
       appSettings = {
         appName: document.getElementById('settingAppName').value.trim() || DEFAULT_SETTINGS.appName,
         appSubtitle: document.getElementById('settingAppSubtitle').value.trim() || DEFAULT_SETTINGS.appSubtitle,
@@ -1077,15 +1237,23 @@
       };
       saveSettingsStorage();
       applySettingsToUI();
-      Swal.fire('Tersimpan', 'Pengaturan tampilan berhasil disimpan.', 'success');
+      const synced = await persistSettingsRemote();
+      updateSyncBadges();
+      Swal.fire('Tersimpan', synced
+        ? 'Pengaturan berhasil disimpan dan tersinkron ke semua perangkat melalui APP_SETTINGS.'
+        : 'Pengaturan berhasil disimpan di browser ini. Untuk sinkron semua perangkat, siapkan sheet APP_SETTINGS di Google Sheet.', 'success');
     }
 
-    function resetSettings() {
+    async function resetSettings() {
       appSettings = structuredClone(DEFAULT_SETTINGS);
       tempLogoData = '';
       saveSettingsStorage();
       applySettingsToUI();
-      Swal.fire('Reset berhasil', 'Pengaturan dikembalikan ke mode default.', 'success');
+      const synced = await persistSettingsRemote();
+      updateSyncBadges();
+      Swal.fire('Reset berhasil', synced
+        ? 'Pengaturan default berhasil dikirim ke APP_SETTINGS.'
+        : 'Pengaturan dikembalikan ke default di browser ini.', 'success');
     }
 
     function updatePageTitleForCurrentTab(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
@@ -1147,8 +1315,13 @@
     async function loadAllDataForDashboard() {
       setLoading(true);
       try {
-        await Promise.all(['STAFF', 'WORKER', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; })));
+        await Promise.all([
+          Promise.all(['STAFF', 'WORKER', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
+          loadSharedSettingsRemote().catch(() => false),
+          loadSharedLogsRemote().catch(() => false)
+        ]);
         filteredData = database[currentSheet] || [];
+        applySettingsToUI();
         updateDashboardUI();
         renderTable();
         renderReport();
@@ -1156,6 +1329,153 @@
       } finally {
         setLoading(false);
       }
+    }
+
+    function renderModuleBars() {
+      const host = document.getElementById('chartModuleBars');
+      if (!host) return;
+      const items = [
+        { sheet: 'STAFF', icon: 'fa-user-tie', tone: 'from-teal-500 to-cyan-500', count: database.STAFF?.length || 0 },
+        { sheet: 'WORKER', icon: 'fa-users', tone: 'from-blue-500 to-indigo-500', count: database.WORKER?.length || 0 },
+        { sheet: 'DATA_UPAH', icon: 'fa-wallet', tone: 'from-violet-500 to-fuchsia-500', count: database.DATA_UPAH?.length || 0 }
+      ];
+      const max = Math.max(...items.map(item => item.count), 1);
+      host.innerHTML = items.map(item => {
+        const pct = Math.max(10, Math.round((item.count / max) * 100));
+        return `
+          <div class="rounded-[24px] border bg-white/70 p-4" style="border-color: var(--border)">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0"><i class="fa-solid ${item.icon}"></i></div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-slate-800 truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
+                  <p class="text-xs text-slate-500">Total data aktif</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl font-black">${item.count}</p>
+                <p class="text-xs text-slate-500">baris</p>
+              </div>
+            </div>
+            <div class="mt-4 h-3 rounded-full bg-slate-100 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r ${item.tone}" style="width:${pct}%"></div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderStatusSummary(ok, notOk) {
+      const host = document.getElementById('chartStatusSummary');
+      if (!host) return;
+      const total = ok + notOk;
+      const pct = total ? Math.round((ok / total) * 100) : 0;
+      const radius = 58;
+      const circumference = 2 * Math.PI * radius;
+      const dash = total ? (ok / total) * circumference : 0;
+      host.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div class="flex items-center justify-center">
+            <div class="relative w-[180px] h-[180px]">
+              <svg viewBox="0 0 160 160" class="w-full h-full -rotate-90">
+                <circle cx="80" cy="80" r="58" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="16"></circle>
+                <circle cx="80" cy="80" r="58" fill="none" stroke="url(#statusGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${dash} ${circumference}"></circle>
+                <defs>
+                  <linearGradient id="statusGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="var(--primary)" />
+                    <stop offset="100%" stop-color="var(--secondary)" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <p class="text-4xl font-black">${pct}%</p>
+                <p class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold mt-1">Status OK</p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="rounded-[22px] bg-emerald-50 border border-emerald-100 p-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">OK / Aktif</p>
+                  <p class="text-sm text-emerald-700 mt-1">Data dengan status sehat.</p>
+                </div>
+                <p class="text-2xl font-black text-emerald-700">${ok}</p>
+              </div>
+            </div>
+            <div class="rounded-[22px] bg-rose-50 border border-rose-100 p-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Perlu Cek</p>
+                  <p class="text-sm text-rose-700 mt-1">Status kosong atau belum sesuai.</p>
+                </div>
+                <p class="text-2xl font-black text-rose-700">${notOk}</p>
+              </div>
+            </div>
+            <div class="rounded-[22px] bg-slate-50 border p-4" style="border-color: var(--border)">
+              <p class="text-xs uppercase tracking-[0.18em] font-bold text-slate-500">Total Terpantau</p>
+              <p class="text-2xl font-black mt-1">${total}</p>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function getRecentMonthSeries(count = 6) {
+      const base = new Date();
+      base.setDate(1);
+      const list = [];
+      for (let i = count - 1; i >= 0; i--) {
+        const d = new Date(base.getFullYear(), base.getMonth() - i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const label = new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(d);
+        list.push({ key, label });
+      }
+      return list;
+    }
+
+    function renderTrendChart() {
+      const host = document.getElementById('chartTrend');
+      if (!host) return;
+      const months = getRecentMonthSeries(6);
+      const inValues = months.map(month => inOutLogs.filter(log => log.type === 'IN' && String(log.createdAt).startsWith(month.key)).reduce((sum, item) => sum + Number(item.count || 0), 0));
+      const outValues = months.map(month => inOutLogs.filter(log => log.type === 'OUT' && String(log.createdAt).startsWith(month.key)).reduce((sum, item) => sum + Number(item.count || 0), 0));
+      const maxVal = Math.max(...inValues, ...outValues, 1);
+      const width = 520;
+      const height = 240;
+      const padX = 34;
+      const padY = 24;
+      const innerW = width - padX * 2;
+      const innerH = height - padY * 2 - 26;
+      const xAt = idx => padX + ((innerW) / Math.max(months.length - 1, 1)) * idx;
+      const yAt = val => padY + innerH - (val / maxVal) * innerH;
+      const pointsIn = inValues.map((v, i) => `${xAt(i)},${yAt(v)}`).join(' ');
+      const pointsOut = outValues.map((v, i) => `${xAt(i)},${yAt(v)}`).join(' ');
+      const areaIn = `${padX},${padY + innerH} ${pointsIn} ${xAt(months.length - 1)},${padY + innerH}`;
+      const areaOut = `${padX},${padY + innerH} ${pointsOut} ${xAt(months.length - 1)},${padY + innerH}`;
+      const grid = Array.from({ length: 4 }).map((_, i) => {
+        const val = Math.round((maxVal / 3) * i);
+        const y = yAt(val);
+        return `<g><line x1="${padX}" y1="${y}" x2="${padX + innerW}" y2="${y}" stroke="rgba(148,163,184,0.2)" stroke-dasharray="4 4"></line><text x="${padX - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#64748b">${val}</text></g>`;
+      }).join('');
+      const dotsIn = inValues.map((v, i) => `<circle cx="${xAt(i)}" cy="${yAt(v)}" r="4" fill="var(--primary)"></circle>`).join('');
+      const dotsOut = outValues.map((v, i) => `<circle cx="${xAt(i)}" cy="${yAt(v)}" r="4" fill="var(--danger)"></circle>`).join('');
+      const labels = months.map((m, i) => `<text x="${xAt(i)}" y="${height - 8}" text-anchor="middle" font-size="11" fill="#64748b">${m.label}</text>`).join('');
+      host.innerHTML = `
+        <div class="flex items-center gap-3 text-xs font-bold mb-4">
+          <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background: var(--primary)"></span> Karyawan Baru</span>
+          <span class="inline-flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background: var(--danger)"></span> Karyawan Keluar</span>
+        </div>
+        <div class="rounded-[24px] bg-slate-50 border p-3" style="border-color: var(--border)">
+          <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto">
+            ${grid}
+            <polygon points="${areaIn}" fill="color-mix(in srgb, var(--primary) 18%, transparent)"></polygon>
+            <polygon points="${areaOut}" fill="color-mix(in srgb, var(--danger) 10%, transparent)"></polygon>
+            <polyline points="${pointsIn}" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <polyline points="${pointsOut}" fill="none" stroke="var(--danger)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            ${dotsIn}
+            ${dotsOut}
+            ${labels}
+          </svg>
+        </div>`;
     }
 
     function updateDashboardUI() {
@@ -1181,10 +1501,14 @@
       document.getElementById('healthBar').style.width = `${pct}%`;
 
       const monthKey = currentMonthKey();
-      const inMonth = inOutLogs.filter(log => log.type === 'IN' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + item.count, 0);
-      const outMonth = inOutLogs.filter(log => log.type === 'OUT' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + item.count, 0);
+      const inMonth = inOutLogs.filter(log => log.type === 'IN' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + Number(item.count || 0), 0);
+      const outMonth = inOutLogs.filter(log => log.type === 'OUT' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + Number(item.count || 0), 0);
       document.getElementById('metricInMonth').textContent = inMonth;
       document.getElementById('metricOutMonth').textContent = outMonth;
+
+      renderModuleBars();
+      renderStatusSummary(ok, notOk);
+      renderTrendChart();
       renderActivityFeed();
     }
 
@@ -1490,14 +1814,13 @@
       try {
         await postAction({ sheetName: target, action: 'import', data: pendingEmployeeIn.rows });
         await safeFetchSheet(target);
-        inOutLogs.unshift({
+        await appendLog({
           type: 'IN',
           sheet: target,
           count: pendingEmployeeIn.rows.length,
           fileName: pendingEmployeeIn.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
-        saveLogs();
         resetEmployeeIn();
         updateDashboardUI();
         renderReport();
@@ -1578,14 +1901,13 @@
           await postAction({ sheetName: target, action: 'delete', rowIndex: row._rowIndex });
         }
         await safeFetchSheet(target);
-        inOutLogs.unshift({
+        await appendLog({
           type: 'OUT',
           sheet: target,
           count: pendingEmployeeOut.matches.length,
           fileName: pendingEmployeeOut.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
-        saveLogs();
         resetEmployeeOut();
         updateDashboardUI();
         renderReport();
@@ -1639,14 +1961,26 @@
     async function clearLogs() {
       const confirm = await Swal.fire({
         title: 'Hapus semua log?',
-        text: 'Log laporan di browser akan dihapus.',
+        text: syncState.logs === 'cloud' ? 'Log pada APP_LOGS dan browser ini akan dihapus.' : 'Log laporan di browser akan dihapus.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Ya, hapus'
       });
       if (!confirm.isConfirmed) return;
+      try {
+        if (syncState.logs === 'cloud') {
+          const rows = await fetchSheetRows(LOGS_SHEET).catch(() => []);
+          const sorted = [...rows].sort((a, b) => (b._rowIndex || 0) - (a._rowIndex || 0));
+          for (const row of sorted) {
+            await postAction({ sheetName: LOGS_SHEET, action: 'delete', rowIndex: row._rowIndex });
+          }
+        }
+      } catch (e) {
+        syncState.logs = 'browser';
+      }
       inOutLogs = [];
       saveLogs();
+      updateSyncBadges();
       renderReport();
       updateDashboardUI();
     }
@@ -1838,6 +2172,7 @@ Nomor Kartu: ${item.cardNumber}`).join('\n\n');
       document.getElementById('closeSidebar').addEventListener('click', closeNav);
       document.getElementById('overlay').addEventListener('click', closeNav);
       applySettingsToUI();
+      updateSyncBadges();
       loadAllDataForDashboard();
     });
   </script>
