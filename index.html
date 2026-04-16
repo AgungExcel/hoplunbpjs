@@ -253,40 +253,45 @@
       table-layout: fixed;
     }
     .table-modern.table-fit-view thead th {
-      font-size: 0.58rem;
-      line-height: 1.25;
-      padding: 0.75rem 0.45rem;
-      letter-spacing: 0.11em;
+      font-size: 0.54rem;
+      line-height: 1.18;
+      padding: 0.72rem 0.34rem;
+      letter-spacing: 0.09em;
       white-space: normal;
       word-break: break-word;
     }
     .table-modern.table-fit-view thead tr.table-filter-row th {
-      top: 40px;
-      padding: 0.55rem 0.35rem;
+      top: 38px;
+      padding: 0.5rem 0.3rem;
     }
     .table-modern.table-fit-view tbody td {
-      padding: 0.75rem 0.45rem;
-      font-size: 0.77rem;
-      line-height: 1.32;
+      padding: 0.72rem 0.34rem;
+      font-size: 0.74rem;
+      line-height: 1.26;
       word-break: break-word;
       overflow-wrap: anywhere;
     }
     .table-modern.table-fit-view .filter-control {
       min-width: 0;
-      padding: 0.45rem 0.55rem;
-      font-size: 0.72rem;
-      border-radius: 0.75rem;
+      padding: 0.42rem 0.45rem;
+      font-size: 0.69rem;
+      border-radius: 0.72rem;
     }
     .table-modern.table-fit-view .bpjs-inline-badge {
       display: inline-flex;
       justify-content: center;
       width: 100%;
-      padding: 0.42rem 0.35rem;
-      font-size: 0.63rem;
-      line-height: 1.15;
+      padding: 0.34rem 0.22rem;
+      font-size: 0.58rem;
+      line-height: 1.1;
       white-space: normal;
       text-align: center;
-      border-radius: 0.8rem;
+      border-radius: 0.72rem;
+    }
+    .table-modern.table-fit-view .membership-badge {
+      padding: 0.28rem 0.16rem;
+      font-size: 0.54rem;
+      letter-spacing: 0.01em;
     }
     .table-modern.table-fit-view .sticky-action-header,
     .table-modern.table-fit-view .sticky-action-cell {
@@ -322,6 +327,47 @@
       color: #475569;
       font-size: 0.72rem;
       font-weight: 700;
+    }
+    .copy-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      max-width: 100%;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .copy-inline-text {
+      min-width: 0;
+      word-break: normal;
+      overflow-wrap: normal;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .copy-inline-btn {
+      width: 1.42rem;
+      height: 1.42rem;
+      border-radius: 0.52rem;
+      border: 1px solid rgba(203,213,225,0.95);
+      background: rgba(248,250,252,0.96);
+      color: #64748b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .table-modern.table-fit-view td.copyable-cell {
+      font-size: 0.68rem;
+      line-height: 1.15;
+    }
+    .table-modern.table-fit-view td.copyable-cell .copy-inline-btn {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    .copy-inline:hover .copy-inline-btn {
+      background: rgba(239,246,255,0.98);
+      color: #2563eb;
+      border-color: rgba(147,197,253,0.9);
     }
     .sticky-action-header {
       position: sticky;
@@ -567,7 +613,7 @@
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto">
                 <div class="relative min-w-0 sm:w-72 md:w-96">
                   <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari semua kolom..." />
+                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari cepat data BPJS..." />
                 </div>
                 <button onclick="clearTableFilters()" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm text-sm md:text-base hover:bg-slate-50 transition-colors">
                   <i class="fa-solid fa-filter-circle-xmark mr-2 text-slate-500"></i>Reset Filter
@@ -580,7 +626,7 @@
             <div id="dataTabRecap" class="p-4 md:px-6 bg-slate-50/50 border-b surface-border hidden"></div>
             <div class="px-4 md:px-6 py-3 bg-white/70 border-b surface-border flex flex-wrap gap-2 items-center">
               <span class="table-note-chip"><i class="fa-solid fa-table-columns"></i> Filter per kolom ada di bawah judul kolom</span>
-              <span class="table-note-chip"><i class="fa-solid fa-thumbtack"></i> Judul kolom tetap terlihat saat tabel discroll</span>
+              <span class="table-note-chip"><i class="fa-solid fa-bolt"></i> Pencarian dibuat lebih ringan dan kolom penting ditampilkan penuh</span>
             </div>
             <div id="tableWrap" class="overflow-auto min-h-[300px] max-h-[calc(100dvh-21rem)] w-full">
               <table id="bpjsDataTable" class="table-modern w-full">
@@ -920,7 +966,7 @@
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxpizb32MDEht_lJVAQ4rjMhQ-rUw2FahLGtvNd_cpilOJxlAqZ11bDpPN-Bof_8qOFxg/exec';
     const SETTINGS_SHEET = 'APP_SETTINGS';
     const LOGS_SHEET = 'APP_LOGS';
-    const CACHE_KEY_DB = 'bpjs_database_cache_v3';
+    const CACHE_KEY_DB = 'bpjs_database_cache_v5';
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -944,18 +990,14 @@
         { label: 'NOMOR ID', keys: ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI'], type: 'text' },
         { label: 'NAMA', keys: ['NAMA', 'NAMA_LENGKAP'], type: 'text' },
         { label: 'DEPARTEMENT', keys: ['DEPARTEMENT', 'SECTION'], type: 'text' },
-        { label: 'POSISI', keys: ['POSISI', 'POSITION'], type: 'text' },
         { label: 'STATUS', keys: ['STATUS'], type: 'bpjs-type' },
         { label: 'JOIN DATE', keys: ['JOIN DATE'], type: 'date' },
-        { label: 'MASA KERJA', keys: ['MASA KERJA'], type: 'number' },
-        { label: 'GAJI POKOK', keys: ['GAJI POKOK'], type: 'currency' },
         { label: 'STATUS KEPESERTAAN', keys: ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'], type: 'membership-status' },
         { label: 'POTONGAN', keys: ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN'], type: 'percent' },
         { label: 'TOTAL', keys: ['TOTAL', 'TOTAL POTONGAN'], type: 'currency' },
-        { label: 'KETERANGAN', keys: ['KETERANGAN'], type: 'text' },
-        { label: 'NOMOR KARTU', keys: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'], type: 'text' },
-        { label: 'NO HP', keys: ['NO HP'], type: 'text' },
-        { label: 'NIK', keys: ['NIK'], type: 'text' }
+        { label: 'NOMOR KARTU', keys: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'], type: 'copyable', copyMessage: 'Nomor kartu berhasil dicopy' },
+        { label: 'NO HP', keys: ['NO HP'], type: 'copyable', copyMessage: 'No HP berhasil dicopy' },
+        { label: 'NIK', keys: ['NIK'], type: 'copyable', copyMessage: 'NIK berhasil dicopy' }
       ],
       DATA_UPAH: [
         { label: 'ID Pegawai', keys: ['ID_PEGAWAI', 'NOMOR ID', 'NEW ID NO', 'NO ID'], type: 'text' },
@@ -1368,10 +1410,29 @@
 
     function renderMembershipBadge(value) {
       const status = normalizeMembershipStatus(value);
-      if (status === 'AKTIF') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif</span>`;
-      if (status === 'KELUAR') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Keluar</span>`;
-      if (status === '-' || status === '') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-500 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum diisi</span>`;
-      return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(status)}</span>`;
+      if (status === 'AKTIF') return `<span class="bpjs-inline-badge membership-badge px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif</span>`;
+      if (status === 'KELUAR') return `<span class="bpjs-inline-badge membership-badge px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Keluar</span>`;
+      if (status === '-' || status === '') return `<span class="bpjs-inline-badge membership-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-500 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum</span>`;
+      return `<span class="bpjs-inline-badge membership-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(status)}</span>`;
+    }
+
+    function escapeJsString(value) {
+      return String(value ?? '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\r/g, '')
+        .replace(/\n/g, '\\n');
+    }
+
+    function renderCopyableValue(value, successMessage = 'Berhasil dicopy') {
+      const cleanValue = String(value ?? '').trim();
+      if (!cleanValue) return '<span class="text-slate-400">-</span>';
+      return `
+        <div class="copy-inline" onclick="event.stopPropagation(); copyText('${escapeJsString(cleanValue)}', ${JSON.stringify(successMessage)})">
+          <span class="copy-inline-text">${escapeHtml(cleanValue)}</span>
+          <button type="button" class="copy-inline-btn" title="Copy ke clipboard"><i class="fa-regular fa-copy text-[11px]"></i></button>
+        </div>
+      `;
     }
 
     function getDisplayValue(row, col) {
@@ -1382,6 +1443,7 @@
         if (col.type === 'date') return escapeHtml(formatDateDisplay(raw));
         if (col.type === 'currency') return escapeHtml(formatCurrency(raw));
         if (col.type === 'percent') return escapeHtml(formatPercentDisplay(raw));
+        if (col.type === 'copyable') return renderCopyableValue(raw, col.copyMessage || 'Berhasil dicopy');
       }
       if (currentSheet === 'DATA_UPAH' && col.type === 'currency') return escapeHtml(formatCurrency(raw));
       return escapeHtml(raw || '-');
@@ -1408,6 +1470,7 @@
     async function safeFetchSheet(sheet) {
       const rows = await fetchSheetRows(sheet);
       database[sheet] = rows;
+      primeSheetCaches(sheet);
       return database[sheet];
     }
 
@@ -1664,7 +1727,14 @@
       }
     }
 
-    function performGlobalSearch() {
+    let globalSearchTimer = null;
+
+    function performGlobalSearch(force = false) {
+      if (!force) {
+        clearTimeout(globalSearchTimer);
+        globalSearchTimer = setTimeout(() => performGlobalSearch(true), 120);
+        return;
+      }
       const q = document.getElementById('globalSearchInput').value.toLowerCase().trim();
       const tbody = document.getElementById('globalSearchBody');
       const countEl = document.getElementById('globalSearchCount');
@@ -1756,6 +1826,7 @@
           const cachedDB = localStorage.getItem(CACHE_KEY_DB);
           if (cachedDB) {
             database = JSON.parse(cachedDB);
+            ['ALL_BPJS', 'DATA_UPAH'].forEach(sheet => primeSheetCaches(sheet));
             filteredData = database[currentSheet] || [];
             applySettingsToUI();
             updateDashboardUI();
@@ -1958,9 +2029,9 @@
       return tableColumnFilters[currentSheet];
     }
 
-    function getFilterableValue(row, col) {
+    function getFilterableValue(row, col, sheet = currentSheet) {
       const raw = getColValue(row, col.keys);
-      if (currentSheet === 'ALL_BPJS') {
+      if (sheet === 'ALL_BPJS') {
         if (col.type === 'bpjs-type') return normalizeBpjsType(raw) === 'STAFF' ? 'Staff' : 'Worker';
         if (col.type === 'membership-status') {
           const membership = normalizeMembershipStatus(raw);
@@ -1972,15 +2043,70 @@
         if (col.type === 'currency') return formatCurrency(raw);
         if (col.type === 'percent') return formatPercentDisplay(raw);
       }
-      if (currentSheet === 'DATA_UPAH' && col.type === 'currency') return formatCurrency(raw);
+      if (sheet === 'DATA_UPAH' && col.type === 'currency') return formatCurrency(raw);
       return String(raw || '').trim();
     }
 
-    function buildSearchText(row) {
-      const cols = DISPLAY_COLS[currentSheet] || [];
-      const rawValues = Object.values(row || {}).map(value => String(value ?? ''));
-      const displayValues = cols.map(col => getFilterableValue(row, col));
+    function buildSearchText(row, sheet = currentSheet) {
+      if (sheet === 'ALL_BPJS') {
+        return [
+          getColValue(row, ['NO']),
+          getColValue(row, ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI']),
+          getColValue(row, ['NAMA', 'NAMA_LENGKAP']),
+          getColValue(row, ['DEPARTEMENT', 'SECTION']),
+          getColValue(row, ['STATUS']),
+          getColValue(row, ['JOIN DATE']),
+          getColValue(row, ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN']),
+          getColValue(row, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU']),
+          getColValue(row, ['NO HP']),
+          getColValue(row, ['NIK'])
+        ].map(value => String(value ?? '').trim()).join(' ').toLowerCase();
+      }
+      const cols = DISPLAY_COLS[sheet] || [];
+      const rawValues = Object.entries(row || {})
+        .filter(([key]) => !String(key).startsWith('_'))
+        .map(([, value]) => String(value ?? ''));
+      const displayValues = cols.map(col => getFilterableValue(row, col, sheet));
       return rawValues.concat(displayValues).join(' ').toLowerCase();
+    }
+
+    function primeSheetCaches(sheet) {
+      const cols = DISPLAY_COLS[sheet] || [];
+      (database[sheet] || []).forEach(row => {
+        const filterCache = {};
+        cols.forEach(col => {
+          filterCache[`${sheet}:${col.label}`] = String(getFilterableValue(row, col, sheet) || '').toLowerCase();
+        });
+        Object.defineProperty(row, '_searchCache', {
+          value: buildSearchText(row, sheet),
+          writable: true,
+          configurable: true,
+          enumerable: false
+        });
+        Object.defineProperty(row, '_filterValueCache', {
+          value: filterCache,
+          writable: true,
+          configurable: true,
+          enumerable: false
+        });
+      });
+      sheetSearchState[sheet] = { query: '', filterKey: '', rows: database[sheet] || [] };
+    }
+
+    function getCachedFilterValue(row, col, sheet = currentSheet) {
+      const cacheKey = `${sheet}:${col.label}`;
+      if (!row._filterValueCache) {
+        Object.defineProperty(row, '_filterValueCache', {
+          value: {},
+          writable: true,
+          configurable: true,
+          enumerable: false
+        });
+      }
+      if (!(cacheKey in row._filterValueCache)) {
+        row._filterValueCache[cacheKey] = String(getFilterableValue(row, col, sheet) || '').toLowerCase();
+      }
+      return row._filterValueCache[cacheKey];
     }
 
     function getColumnFilterOptions(col, rows) {
@@ -2011,30 +2137,40 @@
         const searchInput = document.getElementById('searchInput');
         if (searchInput) searchInput.value = '';
       }
-      renderTable();
+      renderTable(true);
     }
 
     function getFilteredRowsForCurrentSheet() {
       const searchInput = document.getElementById('searchInput');
       const q = String(searchInput?.value || '').toLowerCase().trim();
       const filters = getCurrentSheetFilters();
+      const filterKey = JSON.stringify(filters);
       const cols = DISPLAY_COLS[currentSheet] || [];
-      return (database[currentSheet] || []).filter(row => {
-        if (q && !buildSearchText(row).includes(q)) return false;
-        return cols.every(col => {
+      const allRows = database[currentSheet] || [];
+      const state = sheetSearchState[currentSheet] || { query: '', filterKey: '', rows: allRows };
+      const sameFilters = state.filterKey === filterKey;
+      const canNarrowFromPrevious = q && sameFilters && state.query && q.startsWith(state.query) && (state.rows || []).length <= allRows.length;
+      const baseRows = canNarrowFromPrevious ? (state.rows || allRows) : allRows;
+      const results = baseRows.filter(row => {
+        const searchHaystack = row._searchCache || buildSearchText(row, currentSheet);
+        if (q && !searchHaystack.includes(q)) return false;
+        for (const col of cols) {
           const activeFilter = String(filters[col.label] || '').trim().toLowerCase();
-          if (!activeFilter) return true;
-          const candidate = String(getFilterableValue(row, col) || '').toLowerCase();
-          return candidate.includes(activeFilter);
-        });
+          if (!activeFilter) continue;
+          const candidate = getCachedFilterValue(row, col, currentSheet);
+          if (!candidate.includes(activeFilter)) return false;
+        }
+        return true;
       });
+      sheetSearchState[currentSheet] = { query: q, filterKey, rows: results };
+      return results;
     }
 
     function getActiveColumnFilterCount() {
       return Object.values(getCurrentSheetFilters()).filter(value => String(value || '').trim() !== '').length;
     }
 
-    function renderTable() {
+    function renderTable(forceHeader = false) {
       const cols = DISPLAY_COLS[currentSheet];
       const tHead = document.getElementById('tableHead');
       const tBody = document.getElementById('tableBody');
@@ -2097,30 +2233,35 @@
       const tableEl = document.getElementById('bpjsDataTable');
       const colgroupEl = document.getElementById('tableColgroup');
       if (tableEl) tableEl.classList.toggle('table-fit-view', isFitViewTable);
-      if (colgroupEl) {
-        if (isFitViewTable) {
-          colgroupEl.innerHTML = `
-            <col style="width:3%"><col style="width:5%"><col style="width:10%"><col style="width:7%"><col style="width:10%"><col style="width:5%"><col style="width:6%"><col style="width:4%"><col style="width:7%"><col style="width:7%"><col style="width:4%"><col style="width:6%"><col style="width:4.5%"><col style="width:6%"><col style="width:4%"><col style="width:6%"><col style="width:5.5%">`;
-        } else {
-          colgroupEl.innerHTML = '';
+      const headerKey = `${currentSheet}:${sourceRows.length}:${cols.map(col => col.label).join('|')}`;
+      const shouldRenderHeader = forceHeader || tableRenderState.headerKey !== headerKey || !tHead.innerHTML.trim();
+      if (shouldRenderHeader) {
+        if (colgroupEl) {
+          if (isFitViewTable) {
+            colgroupEl.innerHTML = `
+              <col style="width:3.2%"><col style="width:7.8%"><col style="width:13.9%"><col style="width:8.4%"><col style="width:5.3%"><col style="width:7.2%"><col style="width:6.1%"><col style="width:4.6%"><col style="width:6.2%"><col style="width:9.7%"><col style="width:8.5%"><col style="width:12.0%"><col style="width:7.1%">`;
+          } else {
+            colgroupEl.innerHTML = '';
+          }
         }
+
+        const headerClass = isFitViewTable ? 'whitespace-normal' : 'whitespace-nowrap';
+        const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
+        const filterRowCells = cols.map(col => {
+          const currentValue = String(activeFilters[col.label] || '');
+          const options = getColumnFilterOptions(col, sourceRows);
+          if (shouldUseSelectFilter(col, sourceRows)) {
+            return `<th><select class="filter-control" onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)"><option value="">Semua</option>${options.map(option => `<option value="${escapeHtml(option)}" ${option === currentValue ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select></th>`;
+          }
+          return `<th><input class="filter-control" value="${escapeHtml(currentValue)}" placeholder="Filter..." onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)" onkeydown="if(event.key==='Enter'){setColumnFilter(${JSON.stringify(col.label)}, this.value)}"></th>`;
+        }).join('');
+
+        tHead.innerHTML = `
+          <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
+          <tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset Kolom</button></th></tr>
+        `;
+        tableRenderState.headerKey = headerKey;
       }
-
-      const headerClass = isFitViewTable ? 'whitespace-normal' : 'whitespace-nowrap';
-      const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
-      const filterRowCells = cols.map(col => {
-        const currentValue = String(activeFilters[col.label] || '');
-        const options = getColumnFilterOptions(col, sourceRows);
-        if (shouldUseSelectFilter(col, sourceRows)) {
-          return `<th><select class="filter-control" onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)"><option value="">Semua</option>${options.map(option => `<option value="${escapeHtml(option)}" ${option === currentValue ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select></th>`;
-        }
-        return `<th><input class="filter-control" value="${escapeHtml(currentValue)}" placeholder="Filter..." onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)" onkeydown="if(event.key==='Enter'){setColumnFilter(${JSON.stringify(col.label)}, this.value)}"></th>`;
-      }).join('');
-
-      tHead.innerHTML = `
-        <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
-        <tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset Kolom</button></th></tr>
-      `;
 
       if (!filteredData.length) {
         tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan untuk pencarian / filter yang dipakai.</td></tr>`;
@@ -2134,11 +2275,12 @@
           const display = getDisplayValue(row, col);
           const isBadge = ['bpjs-type', 'membership-status'].includes(col.type);
           const alignRight = ['currency', 'number', 'percent'].includes(col.type);
-          const wrapText = ['NAMA', 'DEPARTEMENT', 'POSISI', 'KETERANGAN', 'Nama Lengkap'].includes(col.label);
+          const wrapText = ['NAMA', 'DEPARTEMENT', 'NOMOR KARTU', 'Nama Lengkap'].includes(col.label);
           const isFitViewCell = currentSheet === 'ALL_BPJS';
+          const isCopyable = col.type === 'copyable';
           const baseClass = isBadge
             ? `${isFitViewCell ? 'whitespace-normal text-center' : 'whitespace-nowrap'}`
-            : (isFitViewCell ? 'whitespace-normal break-words' : (wrapText ? 'whitespace-normal min-w-[170px] max-w-[230px]' : 'whitespace-nowrap'));
+            : (isFitViewCell ? `${isCopyable ? 'whitespace-nowrap copyable-cell' : 'whitespace-normal break-words'}` : (wrapText ? 'whitespace-normal min-w-[170px] max-w-[230px]' : 'whitespace-nowrap'));
           return `<td class="${baseClass} leading-snug font-medium ${alignRight ? 'text-right' : ''}" title="${escapeHtml(String(getFilterableValue(row, col) || ''))}">${display}</td>`;
         }).join('');
 
@@ -2162,8 +2304,18 @@
       document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} dari ${sourceRows.length} baris data${activeSummary.length ? ' • ' + activeSummary.join(' • ') : ''}`;
     }
 
-    function filterTable() {
-      renderTable();
+    let tableSearchTimer = null;
+    const sheetSearchState = {};
+    const tableRenderState = { headerKey: '', lastRowsCount: -1 };
+
+    function filterTable(force = false) {
+      if (force) {
+        clearTimeout(tableSearchTimer);
+        renderTable();
+        return;
+      }
+      clearTimeout(tableSearchTimer);
+      tableSearchTimer = setTimeout(() => renderTable(), 90);
     }
 
     function openModal(mode, encodedRow = null) {
@@ -2798,12 +2950,38 @@
       XLSX.writeFile(workbook, safeName);
     }
 
-    function copyText(text, successMessage = 'Berhasil dicopy') {
-      navigator.clipboard.writeText(text).then(() => {
+    async function copyText(text, successMessage = 'Berhasil dicopy') {
+      const value = String(text ?? '');
+      if (!value) {
+        Swal.fire({ toast: true, position: 'top-end', timer: 1800, showConfirmButton: false, icon: 'info', title: 'Tidak ada data untuk dicopy' });
+        return;
+      }
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = value;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          textarea.style.pointerEvents = 'none';
+          textarea.style.top = '-1000px';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, textarea.value.length);
+          const copied = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (!copied) throw new Error('copy-failed');
+        }
         Swal.fire({ toast: true, position: 'top-end', timer: 1800, showConfirmButton: false, icon: 'success', title: successMessage });
-      }).catch(() => {
-        Swal.fire('Gagal', 'Clipboard tidak tersedia di browser ini.', 'warning');
-      });
+      } catch (error) {
+        try {
+          window.prompt('Copy manual data berikut:', value);
+        } catch (e) {}
+        Swal.fire({ toast: true, position: 'top-end', timer: 2200, showConfirmButton: false, icon: 'warning', title: 'Clipboard dibuka manual' });
+      }
     }
 
     async function downloadCardImage(elementId, fileName) {
