@@ -289,7 +289,7 @@
         </div>
       </header>
 
-      <div id="mainScrollContainer" class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 py-5 md:py-6 pb-20 md:pb-24 scroll-smooth">
+      <div id="mainScrollContainer" class="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-8 py-5 md:py-6 pb-12 md:pb-16 scroll-smooth">
         <section id="tab-dashboard" class="tab-panel active space-y-6">
           
           <!-- TOP METRICS ROW -->
@@ -358,7 +358,7 @@
           </div>
 
           <!-- CHARTS ROW 2 -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 -mt-2 md:-mt-4">
             <div class="lg:col-span-2 glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg md:text-xl font-black tracking-tight">Tren In / Out</h3>
@@ -456,10 +456,10 @@
                   <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk Import Massal sesuai modul tujuan.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <a href="template-import-massal-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
-                  <a href="template-import-massal-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
-                  <a href="template-import-massal-data-upah.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>SIPP</a>
-                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                  <button type="button" onclick="downloadTemplateFile('template-import-massal-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
+                  <button type="button" onclick="downloadTemplateFile('template-import-massal-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-import-massal-data-upah.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>SIPP</button>
+                  <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
             </div>
@@ -513,9 +513,9 @@
                   <p class="text-sm text-emerald-900 mt-1">Gunakan template sesuai target menu Karyawan Baru.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <a href="template-karyawan-baru-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
-                  <a href="template-karyawan-baru-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
-                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-emerald-600 border border-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-baru-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-baru-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-emerald-600 border border-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
             </div>
@@ -574,9 +574,9 @@
                   <p class="text-sm text-rose-900 mt-1">Gunakan template sesuai target menu Karyawan Keluar. Minimal isi kolom ID.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <a href="template-karyawan-keluar-staff.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</a>
-                  <a href="template-karyawan-keluar-worker.xlsx" download class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</a>
-                  <a href="template-upload-bpjs-pack.zip" download class="px-4 py-2 rounded-xl bg-rose-600 border border-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</a>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-keluar-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-keluar-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-rose-600 border border-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
             </div>
@@ -665,36 +665,22 @@
             </div>
             <div class="rounded-[18px] border border-teal-100 bg-teal-50 p-3 md:p-4 mb-5">
               <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Perbaikan Tampilan</p>
-              <p class="text-sm text-teal-900 mt-1">Tabel cetak kartu sudah dibuat full sampai kolom Aksi, dan kolom Aksi akan tetap terlihat di sisi kanan saat digeser.</p>
+              <p class="text-sm text-teal-900 mt-1">Daftar pada menu Cetak Kartu kini tampil utuh tanpa scroll horizontal. Data disusun responsif agar ID, NIK, Nama, dan No Kartu langsung terlihat di layar.</p>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start flex-col-reverse xl:flex-row">
               <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1 shadow-sm">
                 <div class="px-4 py-4 md:px-6 md:py-5 border-b bg-white/80" style="border-color: var(--border)">
                   <div class="flex items-center justify-between gap-2">
-                    <div><h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3><p class="text-xs text-slate-500 mt-1">Kolom sampai Aksi tetap tampil. Header dan isi kolom Aksi dikunci di kanan saat tabel digeser.</p></div>
+                    <div><h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3><p class="text-xs text-slate-500 mt-1">Semua data tampil utuh tanpa geser kanan-kiri. Klik salah satu baris untuk menampilkan preview kartu.</p></div>
                     <div class="flex gap-2 items-center">
                        <span class="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg"><span id="cardCount">0</span> Data</span>
                       <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs text-slate-600 hover:bg-slate-50 hover:text-emerald-700 transition-colors" style="border-color: var(--border)" title="Export Excel"><i class="fa-solid fa-file-excel text-emerald-600"></i></button>
                     </div>
                   </div>
                 </div>
-                <div class="overflow-x-auto min-h-[300px] max-h-[620px] bg-white relative w-full">
-                  <table class="table-modern min-w-[980px] w-full">
-                    <thead class="bg-slate-100 text-slate-600 sticky top-0 z-10">
-                      <tr>
-                        <th class="whitespace-nowrap">ID Pegawai</th>
-                        <th class="whitespace-nowrap">NIK</th>
-                        <th class="whitespace-nowrap">Nama Lengkap</th>
-                        <th class="whitespace-nowrap">No Kartu</th>
-                        <th class="whitespace-nowrap text-right sticky-action-header">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody id="cardTableBody"></tbody>
-                  </table>
-                </div>
+                <div id="cardTableBody" class="min-h-[300px] max-h-[620px] overflow-y-auto bg-white p-3 md:p-4 space-y-3"></div>
               </div>
-
               <div class="xl:col-span-1 glass-strong rounded-[20px] md:rounded-[26px] p-4 md:p-6 sticky top-20 md:top-24 order-1 xl:order-2 shadow-sm">
                 <div class="flex items-center justify-between gap-3 mb-4 md:mb-5">
                   <h3 class="text-base md:text-lg font-black text-slate-800">Preview Visual</h3>
@@ -2241,41 +2227,83 @@
         return [r.id, r.nik, r.name, r.cardNumber].some(v => String(v).toLowerCase().includes(query));
       });
       visibleCardRows = rows;
-      
+
       const cardCountEl = document.getElementById('cardCount');
       if (cardCountEl) cardCountEl.textContent = rows.length;
-      
-      const tableBody = document.getElementById('cardTableBody');
+
+      const listBody = document.getElementById('cardTableBody');
       if (!rows.length) {
         selectedCardKey = '';
-        tableBody.innerHTML = '<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500 font-medium">Tidak ada data kartu ditemukan.</td></tr>';
+        listBody.innerHTML = '<div class="px-4 py-10 text-center text-slate-500 font-medium rounded-2xl border border-dashed border-slate-300 bg-slate-50">Tidak ada data kartu ditemukan.</div>';
         renderCardPreview(null, template);
         return;
       }
       if (!rows.some(item => item.key === selectedCardKey)) {
         selectedCardKey = rows[0].key;
       }
-      tableBody.innerHTML = rows.map(item => {
+      listBody.innerHTML = rows.map(item => {
         const isActive = item.key === selectedCardKey;
         return `
-          <tr onclick="selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="cursor-pointer transition-colors ${isActive ? 'bg-teal-50' : 'hover:bg-slate-50'}">
-            <td class="whitespace-nowrap font-bold text-slate-800 align-middle">${escapeHtml(item.id)}</td>
-            <td class="whitespace-nowrap font-medium text-slate-600 align-middle">${escapeHtml(item.nik)}</td>
-            <td class="whitespace-normal leading-snug font-medium text-slate-700 align-middle max-w-[140px] md:max-w-none break-words">${escapeHtml(item.name)}</td>
-            <td class="whitespace-nowrap font-bold text-slate-800 align-middle">
-              <div class="flex items-center gap-2 group" onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')">
-                <span>${escapeHtml(item.cardNumber)}</span>
-                <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
+          <div onclick="selectCardRow(${escapeHtml(JSON.stringify(item.key))})" class="cursor-pointer rounded-2xl border p-3 md:p-4 transition-all shadow-sm ${isActive ? 'border-teal-300 bg-teal-50 ring-2 ring-teal-100' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}">
+            <div class="grid grid-cols-1 md:grid-cols-[140px_170px_minmax(0,1fr)_180px] gap-3 md:gap-4 items-start md:items-center">
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">ID Pegawai</p>
+                <p class="mt-1 font-black text-slate-800 break-words">${escapeHtml(item.id)}</p>
               </div>
-            </td>
-            <td class="whitespace-nowrap text-right pr-4 md:pr-6 align-middle w-[100px] md:w-auto sticky-action-cell ${isActive ? 'row-active' : 'row-normal'}">
-              <button onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(`ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`))}, 'Data kartu berhasil dicopy')" class="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold text-[10px] md:text-xs hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm w-full flex justify-center items-center">
-                <i class="fa-regular fa-copy md:mr-1.5"></i><span class="hidden md:inline">Copy Data</span><span class="md:hidden ml-1">Copy</span>
-              </button>
-            </td>
-          </tr>`;
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">NIK</p>
+                <p class="mt-1 font-semibold text-slate-700 break-words">${escapeHtml(item.nik)}</p>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">Nama Lengkap</p>
+                <p class="mt-1 font-semibold text-slate-800 break-words leading-snug">${escapeHtml(item.name)}</p>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">No Kartu</p>
+                <div class="mt-1 flex items-center gap-2 group" onclick="event.stopPropagation(); copyText(${escapeHtml(JSON.stringify(item.cardNumber))}, 'Nomor kartu berhasil dicopy')">
+                  <span class="font-bold text-slate-800 break-all">${escapeHtml(item.cardNumber)}</span>
+                  <button class="w-7 h-7 rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
+                </div>
+                <p class="mt-2 text-[11px] text-slate-400">Klik baris untuk preview kartu.</p>
+              </div>
+            </div>
+          </div>`;
       }).join('');
       renderCardPreview(rows.find(item => item.key === selectedCardKey), template);
+    }
+
+
+    async function downloadTemplateFile(fileName) {
+      const safeName = String(fileName || '').split('/').pop();
+      if (!safeName) return;
+      try {
+        const response = await fetch(safeName, { cache: 'no-store' });
+        if (!response.ok) throw new Error('File template tidak ditemukan');
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = safeName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      } catch (err) {
+        const a = document.createElement('a');
+        a.href = safeName;
+        a.download = safeName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          timer: 2200,
+          showConfirmButton: false,
+          icon: 'info',
+          title: 'Download template dimulai'
+        });
+      }
     }
 
     function copyText(text, successMessage = 'Berhasil dicopy') {
