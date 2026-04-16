@@ -384,6 +384,97 @@
       background: rgba(255,255,255,0.98) !important;
     }
     .table-modern tbody tr:hover .sticky-action-cell { background: rgba(248, 250, 252, 0.98) !important; }
+    .mini-progress-track {
+      width: 100%;
+      height: 0.56rem;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(226,232,240,0.75);
+      display: flex;
+    }
+    .mini-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+    .dashboard-percent-card {
+      border-radius: 1.1rem;
+      border: 1px solid rgba(226,232,240,0.9);
+      background: rgba(255,255,255,0.84);
+      padding: 1rem;
+    }
+    .dashboard-percent-card .percent-big {
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .dashboard-percent-card .percent-meta {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .bpjs-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+    .bpjs-summary-card {
+      border-radius: 1.25rem;
+      border: 1px solid rgba(226,232,240,0.95);
+      background: rgba(255,255,255,0.96);
+      padding: 0.95rem 1rem;
+      box-shadow: 0 8px 22px rgba(15,23,42,0.04);
+      min-width: 0;
+    }
+    .bpjs-summary-card h4 {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 0.55rem;
+    }
+    .bpjs-summary-total {
+      font-size: 1.7rem;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+    }
+    .bpjs-summary-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem 0.6rem;
+      margin-top: 0.75rem;
+    }
+    .bpjs-summary-pill {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 0.9rem;
+      padding: 0.45rem 0.62rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: rgba(248,250,252,0.95);
+      color: #334155;
+    }
+    .bpjs-summary-pill span:last-child {
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .bpjs-summary-highlight { background: rgba(239,246,255,0.95); color: #0369a1; }
+    .bpjs-summary-highlight span:last-child { color: #075985; }
+    .bpjs-summary-success { background: rgba(236,253,245,0.95); color: #047857; }
+    .bpjs-summary-success span:last-child { color: #065f46; }
+    .bpjs-summary-danger { background: rgba(255,241,242,0.95); color: #be123c; }
+    .bpjs-summary-danger span:last-child { color: #9f1239; }
+    .bpjs-summary-accent { background: rgba(243,232,255,0.95); color: #7c3aed; }
+    .bpjs-summary-accent span:last-child { color: #6d28d9; }
+    @media (max-width: 1279px) {
+      .bpjs-summary-strip { grid-template-columns: 1fr; }
+    }
     .recap-section-title {
       font-size: 0.7rem;
       font-weight: 800;
@@ -966,7 +1057,8 @@
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxpizb32MDEht_lJVAQ4rjMhQ-rUw2FahLGtvNd_cpilOJxlAqZ11bDpPN-Bof_8qOFxg/exec';
     const SETTINGS_SHEET = 'APP_SETTINGS';
     const LOGS_SHEET = 'APP_LOGS';
-    const CACHE_KEY_DB = 'bpjs_database_cache_v5';
+    const CACHE_KEY_DB = 'bpjs_database_cache_v6';
+    const CACHE_KEY_DASHBOARD = 'bpjs_dashboard_snapshot_v1';
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -1289,6 +1381,49 @@
     function formatPercentDisplay(value) {
       const num = parsePercentValue(value);
       return `${(num * 100).toFixed(Number.isInteger(num * 100) ? 0 : 2).replace(/\.00$/, '')}%`;
+    }
+
+    function calcPercent(part, total) {
+      if (!total) return 0;
+      return Math.round((Number(part || 0) / Number(total || 0)) * 1000) / 10;
+    }
+
+    function formatPercentRatio(part, total) {
+      const pct = calcPercent(part, total);
+      return `${Number.isInteger(pct) ? pct.toFixed(0) : pct.toFixed(1)}%`;
+    }
+
+    function saveDashboardSnapshot(stats) {
+      try {
+        localStorage.setItem(CACHE_KEY_DASHBOARD, JSON.stringify({
+          stats,
+          sippCount: database.DATA_UPAH?.length || 0,
+          savedAt: new Date().toISOString()
+        }));
+      } catch (e) {}
+    }
+
+    function loadDashboardSnapshot() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY_DASHBOARD);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function applyDashboardSnapshot(snapshot) {
+      if (!snapshot || !snapshot.stats) return;
+      const stats = snapshot.stats;
+      document.getElementById('metricStaff').textContent = stats.staffTotal || 0;
+      document.getElementById('metricWorker').textContent = stats.workerTotal || 0;
+      document.getElementById('metricUpah').textContent = snapshot.sippCount || 0;
+      document.getElementById('metricInMonth').textContent = stats.staffActive || 0;
+      document.getElementById('metricOutMonth').textContent = stats.workerActive || 0;
+      renderModuleBars(stats);
+      renderStatusSummary(stats);
+      renderTrendChart();
+      renderActivityFeed();
     }
 
     function normalizeBpjsType(value) {
@@ -1819,9 +1954,7 @@
     }
 
     async function loadAllDataForDashboard(isManualRefresh = false) {
-      if (isManualRefresh) {
-        setLoading(true);
-      } else {
+      if (!isManualRefresh) {
         try {
           const cachedDB = localStorage.getItem(CACHE_KEY_DB);
           if (cachedDB) {
@@ -1834,20 +1967,31 @@
             renderReport();
             renderCardPrint();
             if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
+          } else {
+            const dashboardSnapshot = loadDashboardSnapshot();
+            if (dashboardSnapshot) applyDashboardSnapshot(dashboardSnapshot);
           }
         } catch (e) {}
-        setLoading(true);
       }
 
+      setLoading(true);
+
       try {
-        await Promise.all([
-          Promise.all(['ALL_BPJS', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
+        await safeFetchSheet('ALL_BPJS').catch(() => { database.ALL_BPJS = database.ALL_BPJS || []; primeSheetCaches('ALL_BPJS'); });
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        filteredData = database[currentSheet] || [];
+        applySettingsToUI();
+        updateDashboardUI();
+        renderTable();
+        if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
+
+        await Promise.allSettled([
+          safeFetchSheet('DATA_UPAH').catch(() => { database.DATA_UPAH = database.DATA_UPAH || []; primeSheetCaches('DATA_UPAH'); }),
           loadSharedSettingsRemote().catch(() => false),
           loadSharedLogsRemote().catch(() => false)
         ]);
-        
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
 
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         filteredData = database[currentSheet] || [];
         applySettingsToUI();
         updateDashboardUI();
@@ -1855,38 +1999,36 @@
         renderReport();
         renderCardPrint();
         if (document.getElementById('tab-global-search').classList.contains('active')) performGlobalSearch();
-        
       } catch (err) {} finally {
         setLoading(false);
       }
     }
 
-    function renderModuleBars() {
+    function renderModuleBars(stats = getBpjsStats(database.ALL_BPJS || [])) {
       const host = document.getElementById('chartModuleBars');
       if (!host) return;
       const compact = window.innerWidth >= 1024 && document.getElementById('tab-dashboard')?.classList.contains('dashboard-fit');
-      const stats = getBpjsStats(database.ALL_BPJS || []);
       const items = [
-        { label: 'Staff · Potongan 1%', count: stats.staffPot1, tone: 'from-sky-500 to-cyan-500' },
-        { label: 'Staff · > 1%', count: stats.staffPotMore, tone: 'from-teal-500 to-emerald-500' },
-        { label: 'Worker · Potongan 1%', count: stats.workerPot1, tone: 'from-indigo-500 to-blue-500' },
-        { label: 'Worker · > 1%', count: stats.workerPotMore, tone: 'from-violet-500 to-fuchsia-500' }
+        { label: 'Staff · Potongan 1%', count: stats.staffPot1, total: stats.staffTotal, tone: 'from-sky-500 to-cyan-500' },
+        { label: 'Staff · > 1%', count: stats.staffPotMore, total: stats.staffTotal, tone: 'from-teal-500 to-emerald-500' },
+        { label: 'Worker · Potongan 1%', count: stats.workerPot1, total: stats.workerTotal, tone: 'from-indigo-500 to-blue-500' },
+        { label: 'Worker · > 1%', count: stats.workerPotMore, total: stats.workerTotal, tone: 'from-violet-500 to-fuchsia-500' }
       ];
-      const max = Math.max(...items.map(item => item.count), 1);
       host.className = compact ? 'space-y-3' : 'space-y-4';
       host.innerHTML = items.map(item => {
-        const pct = Math.max(8, Math.round((item.count / max) * 100));
+        const pct = item.total ? Math.max(8, Math.round((item.count / item.total) * 100)) : 0;
         return `
           <div class="rounded-xl md:rounded-[24px] border bg-white/70 ${compact ? 'p-3' : 'p-3 md:p-4'}" style="border-color: var(--border)">
             <div class="flex items-center justify-between gap-3">
               <div class="min-w-0">
                 <p class="${compact ? 'text-xs' : 'text-xs md:text-sm'} font-bold text-slate-800 truncate">${item.label}</p>
+                <p class="text-[11px] text-slate-500 mt-1">${formatPercentRatio(item.count, item.total)} dari ${item.total || 0} data</p>
               </div>
               <div class="text-right shrink-0">
                 <p class="${compact ? 'text-xl' : 'text-xl md:text-2xl'} font-black">${item.count}</p>
               </div>
             </div>
-            <div class="${compact ? 'mt-2.5 h-2' : 'mt-3 md:mt-4 h-2 md:h-3'} rounded-full bg-slate-100 overflow-hidden">
+            <div class="${compact ? 'mt-2.5 h-2.5' : 'mt-3 md:mt-4 h-2.5 md:h-3'} rounded-full bg-slate-100 overflow-hidden">
               <div class="h-full rounded-full bg-gradient-to-r ${item.tone}" style="width:${pct}%"></div>
             </div>
           </div>`;
@@ -1899,25 +2041,59 @@
       const compact = window.innerWidth >= 1024 && document.getElementById('tab-dashboard')?.classList.contains('dashboard-fit');
       const totalAktif = stats.staffActive + stats.workerActive;
       const totalKeluar = stats.staffOut + stats.workerOut;
+      const totalData = stats.total || 0;
+      const staffPct = formatPercentRatio(stats.staffActive, stats.staffTotal);
+      const workerPct = formatPercentRatio(stats.workerActive, stats.workerTotal);
+      const overallPct = formatPercentRatio(totalAktif, totalData);
+      const overallFill = calcPercent(totalAktif, totalData);
       host.innerHTML = `
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 ${compact ? '' : 'md:gap-4'}">
-          <div class="rounded-xl md:rounded-2xl bg-sky-50 border border-sky-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-sky-700">Staff Aktif</p>
-            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-sky-800 mt-2">${stats.staffActive}</p>
-            <p class="text-[11px] text-sky-700 mt-1">Keluar: ${stats.staffOut}</p>
+        <div class="space-y-3 ${compact ? '' : 'md:space-y-4'}">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 ${compact ? '' : 'md:gap-4'}">
+            <div class="dashboard-percent-card">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-sky-700">Staff Aktif</p>
+                  <p class="percent-big text-sky-800 mt-2">${staffPct}</p>
+                  <p class="percent-meta mt-2">${stats.staffActive} aktif • ${stats.staffOut} keluar dari ${stats.staffTotal}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <p class="text-2xl font-black text-sky-700">${stats.staffActive}</p>
+                </div>
+              </div>
+              <div class="mini-progress-track mt-4">
+                <div class="mini-progress-fill" style="width:${calcPercent(stats.staffActive, stats.staffTotal)}%; background: linear-gradient(90deg, #0ea5e9, #38bdf8)"></div>
+              </div>
+            </div>
+            <div class="dashboard-percent-card">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] font-bold text-indigo-700">Worker Aktif</p>
+                  <p class="percent-big text-indigo-800 mt-2">${workerPct}</p>
+                  <p class="percent-meta mt-2">${stats.workerActive} aktif • ${stats.workerOut} keluar dari ${stats.workerTotal}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <p class="text-2xl font-black text-indigo-700">${stats.workerActive}</p>
+                </div>
+              </div>
+              <div class="mini-progress-track mt-4">
+                <div class="mini-progress-fill" style="width:${calcPercent(stats.workerActive, stats.workerTotal)}%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div>
+              </div>
+            </div>
           </div>
-          <div class="rounded-xl md:rounded-2xl bg-indigo-50 border border-indigo-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-indigo-700">Worker Aktif</p>
-            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-indigo-800 mt-2">${stats.workerActive}</p>
-            <p class="text-[11px] text-indigo-700 mt-1">Keluar: ${stats.workerOut}</p>
-          </div>
-          <div class="rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">Total Aktif</p>
-            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-emerald-800 mt-2">${totalAktif}</p>
-          </div>
-          <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-            <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Total Keluar</p>
-            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-rose-800 mt-2">${totalKeluar}</p>
+          <div class="rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 ${compact ? 'p-3' : 'p-3.5 md:p-4'}">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">Total Aktif BPJS</p>
+                <p class="text-2xl md:text-3xl font-black text-emerald-800 mt-2">${overallPct}</p>
+                <p class="text-[11px] text-emerald-700 mt-1">${totalAktif} aktif • ${totalKeluar} keluar dari ${totalData} data</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-2xl md:text-3xl font-black text-emerald-700">${totalAktif}</p>
+              </div>
+            </div>
+            <div class="mini-progress-track mt-4">
+              <div class="mini-progress-fill" style="width:${overallFill}%; background: linear-gradient(90deg, #10b981, #34d399)"></div>
+            </div>
           </div>
         </div>`;
     }
@@ -1990,10 +2166,11 @@
       document.getElementById('metricInMonth').textContent = stats.staffActive;
       document.getElementById('metricOutMonth').textContent = stats.workerActive;
 
-      renderModuleBars();
+      renderModuleBars(stats);
       renderStatusSummary(stats);
       renderTrendChart();
       renderActivityFeed();
+      saveDashboardSnapshot(stats);
     }
 
     function renderActivityFeed() {
@@ -2185,35 +2362,37 @@
         recapContainer.classList.remove('hidden');
         if (currentSheet === 'ALL_BPJS') {
           const stats = getBpjsStats(filteredData);
-          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border space-y-4';
+          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border';
           recapContainer.innerHTML = `
-            <div>
-              <p class="recap-section-title">Ringkasan Utama</p>
-              <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-                <div class="rounded-2xl bg-white border border-slate-200 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">Total Data</p><p class="text-2xl md:text-3xl font-black text-slate-800 mt-1">${stats.total}</p></div>
-                <div class="rounded-2xl bg-sky-50 border border-sky-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-sky-700 uppercase tracking-wide">Total Staff</p><p class="text-2xl md:text-3xl font-black text-sky-800 mt-1">${stats.staffTotal}</p></div>
-                <div class="rounded-2xl bg-indigo-50 border border-indigo-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-indigo-700 uppercase tracking-wide">Total Worker</p><p class="text-2xl md:text-3xl font-black text-indigo-800 mt-1">${stats.workerTotal}</p></div>
-                <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-emerald-700 uppercase tracking-wide">Total Aktif</p><p class="text-2xl md:text-3xl font-black text-emerald-800 mt-1">${stats.staffActive + stats.workerActive}</p></div>
-                <div class="rounded-2xl bg-rose-50 border border-rose-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-rose-700 uppercase tracking-wide">Total Keluar</p><p class="text-2xl md:text-3xl font-black text-rose-800 mt-1">${stats.staffOut + stats.workerOut}</p></div>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-              <div class="rounded-[22px] bg-white border border-slate-200 p-4 shadow-sm">
-                <p class="recap-section-title">Status Kepesertaan</p>
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="rounded-xl bg-sky-50 border border-sky-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-sky-700">Staff Aktif</p><p class="text-xl font-black text-sky-800 mt-1">${stats.staffActive}</p></div>
-                  <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-indigo-700">Worker Aktif</p><p class="text-xl font-black text-indigo-800 mt-1">${stats.workerActive}</p></div>
-                  <div class="rounded-xl bg-rose-50 border border-rose-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-rose-700">Staff Keluar</p><p class="text-xl font-black text-rose-800 mt-1">${stats.staffOut}</p></div>
-                  <div class="rounded-xl bg-fuchsia-50 border border-fuchsia-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-fuchsia-700">Worker Keluar</p><p class="text-xl font-black text-fuchsia-800 mt-1">${stats.workerOut}</p></div>
+            <div class="bpjs-summary-strip">
+              <div class="bpjs-summary-card">
+                <h4>Total BPJS</h4>
+                <p class="bpjs-summary-total">${stats.total}</p>
+                <div class="bpjs-summary-meta">
+                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>Staff</span><span>${stats.staffTotal}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>Worker</span><span>${stats.workerTotal}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive + stats.workerActive}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.staffOut + stats.workerOut}</span></div>
                 </div>
               </div>
-              <div class="rounded-[22px] bg-white border border-slate-200 p-4 shadow-sm">
-                <p class="recap-section-title">Ringkasan Potongan</p>
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="rounded-xl bg-cyan-50 border border-cyan-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-cyan-700">Staff 1%</p><p class="text-xl font-black text-cyan-800 mt-1">${stats.staffPot1}</p></div>
-                  <div class="rounded-xl bg-teal-50 border border-teal-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-teal-700">Staff &gt; 1%</p><p class="text-xl font-black text-teal-800 mt-1">${stats.staffPotMore}</p></div>
-                  <div class="rounded-xl bg-violet-50 border border-violet-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-violet-700">Worker 1%</p><p class="text-xl font-black text-violet-800 mt-1">${stats.workerPot1}</p></div>
-                  <div class="rounded-xl bg-purple-50 border border-purple-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-purple-700">Worker &gt; 1%</p><p class="text-xl font-black text-purple-800 mt-1">${stats.workerPotMore}</p></div>
+              <div class="bpjs-summary-card">
+                <h4>Staff</h4>
+                <p class="bpjs-summary-total text-sky-800">${stats.staffTotal}</p>
+                <div class="bpjs-summary-meta">
+                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.staffOut}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>Pot. 1%</span><span>${stats.staffPot1}</span></div>
+                  <div class="bpjs-summary-pill"><span>Pot. >1%</span><span>${stats.staffPotMore}</span></div>
+                </div>
+              </div>
+              <div class="bpjs-summary-card">
+                <h4>Worker</h4>
+                <p class="bpjs-summary-total text-indigo-800">${stats.workerTotal}</p>
+                <div class="bpjs-summary-meta">
+                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.workerActive}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.workerOut}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>Pot. 1%</span><span>${stats.workerPot1}</span></div>
+                  <div class="bpjs-summary-pill"><span>Pot. >1%</span><span>${stats.workerPotMore}</span></div>
                 </div>
               </div>
             </div>
