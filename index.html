@@ -92,8 +92,7 @@
     }
     .nav-link[data-tab="dashboard"] i { color: #14b8a6; }
     .nav-link[data-tab="global-search"] i { color: #3b82f6; }
-    .nav-link[data-tab="data"][data-sheet="STAFF"] i { color: #0ea5e9; }
-    .nav-link[data-tab="data"][data-sheet="WORKER"] i { color: #6366f1; }
+    .nav-link[data-tab="data"][data-sheet="ALL_BPJS"] i { color: #0ea5e9; }
     .nav-link[data-tab="data"][data-sheet="DATA_UPAH"] i { color: #ec4899; }
     .nav-link[data-tab="import"] i { color: #f59e0b; }
     .nav-link[data-tab="employee-in"] i { color: #10b981; }
@@ -219,34 +218,116 @@
     
     .table-modern { width: 100%; text-align: left; border-collapse: separate; border-spacing: 0; }
     .table-modern thead th { 
-      background: rgba(248, 250, 252, 0.85); 
-      backdrop-filter: blur(8px);
+      background: rgba(248, 250, 252, 0.92); 
+      backdrop-filter: blur(10px);
       color: #64748b; 
-      font-size: 0.65rem; 
+      font-size: 0.64rem; 
       font-weight: 800; 
       text-transform: uppercase; 
       letter-spacing: 0.15em; 
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.85);
       position: sticky; 
       top: 0; 
-      z-index: 10;
+      z-index: 12;
+    }
+    .table-modern thead tr.table-filter-row th {
+      top: 47px;
+      padding: 0.65rem 0.9rem;
+      background: rgba(255,255,255,0.98);
+      z-index: 11;
+      text-transform: none;
+      letter-spacing: normal;
     }
     .table-modern tbody td { 
-      padding: 1rem 1.25rem; 
+      padding: 0.9rem 1rem; 
       font-size: 0.875rem; 
       font-weight: 500; 
       color: #334155; 
-      border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+      border-bottom: 1px solid rgba(241, 245, 249, 0.9);
       transition: background-color 0.2s ease;
+      background: rgba(255,255,255,0.98);
+      vertical-align: top;
     }
-    .table-modern tbody tr:hover td { background-color: rgba(248, 250, 252, 0.6); }
+    .table-modern.table-fit-view {
+      table-layout: fixed;
+    }
+    .table-modern.table-fit-view thead th {
+      font-size: 0.58rem;
+      line-height: 1.25;
+      padding: 0.75rem 0.45rem;
+      letter-spacing: 0.11em;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .table-modern.table-fit-view thead tr.table-filter-row th {
+      top: 40px;
+      padding: 0.55rem 0.35rem;
+    }
+    .table-modern.table-fit-view tbody td {
+      padding: 0.75rem 0.45rem;
+      font-size: 0.77rem;
+      line-height: 1.32;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .table-modern.table-fit-view .filter-control {
+      min-width: 0;
+      padding: 0.45rem 0.55rem;
+      font-size: 0.72rem;
+      border-radius: 0.75rem;
+    }
+    .table-modern.table-fit-view .bpjs-inline-badge {
+      display: inline-flex;
+      justify-content: center;
+      width: 100%;
+      padding: 0.42rem 0.35rem;
+      font-size: 0.63rem;
+      line-height: 1.15;
+      white-space: normal;
+      text-align: center;
+      border-radius: 0.8rem;
+    }
+    .table-modern.table-fit-view .sticky-action-header,
+    .table-modern.table-fit-view .sticky-action-cell {
+      position: static;
+      box-shadow: none;
+    }
+    .table-modern tbody tr:hover td { background-color: rgba(248, 250, 252, 0.92); }
     .table-modern tbody tr:last-child td { border-bottom: none; }
+    .filter-control {
+      width: 100%;
+      min-width: 96px;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid rgba(203, 213, 225, 0.9);
+      border-radius: 0.85rem;
+      background: #fff;
+      color: #334155;
+      font-size: 0.78rem;
+      font-weight: 600;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(15,23,42,0.03);
+    }
+    .filter-control:focus {
+      border-color: rgba(20,184,166,0.7);
+      box-shadow: 0 0 0 3px rgba(20,184,166,0.12);
+    }
+    .table-note-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.04);
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
     .sticky-action-header {
       position: sticky;
       right: 0;
       z-index: 20;
-      background: rgba(248, 250, 252, 0.96) !important;
+      background: rgba(248, 250, 252, 0.98) !important;
       box-shadow: -1px 0 0 rgba(226,232,240,1);
     }
     .sticky-action-cell {
@@ -254,10 +335,17 @@
       right: 0;
       z-index: 5;
       box-shadow: -1px 0 0 rgba(241,245,249,1);
+      background: rgba(255,255,255,0.98) !important;
     }
-    .sticky-action-cell.row-active { background: rgb(240 253 250) !important; }
-    .sticky-action-cell.row-normal { background: rgba(255,255,255,0.98) !important; }
     .table-modern tbody tr:hover .sticky-action-cell { background: rgba(248, 250, 252, 0.98) !important; }
+    .recap-section-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+    }
   </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
@@ -272,7 +360,7 @@
             </div>
             <div class="min-w-0">
               <p id="appNameSidebar" class="text-white font-extrabold tracking-tight text-xl truncate">BPJS Control Center</p>
-              <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS KS Staff / Worker + SIPP Worker</p>
+              <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS Kesehatan Staff & Worker + SIPP Worker</p>
             </div>
           </div>
           <button id="closeSidebar" class="md:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 shrink-0"><i class="fa-solid fa-xmark"></i></button>
@@ -287,11 +375,8 @@
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="global-search">
           <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Semua Data</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="STAFF">
-          <i class="fa-solid fa-user-tie w-5 text-center"></i><span id="labelNavStaff">BPJS KS Staff</span>
-        </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="WORKER">
-          <i class="fa-solid fa-helmet-safety w-5 text-center"></i><span id="labelNavWorker">BPJS KS Worker</span>
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="ALL_BPJS">
+          <i class="fa-solid fa-users-line w-5 text-center"></i><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH">
           <i class="fa-solid fa-wallet w-5 text-center"></i><span id="labelNavUpah">SIPP Worker</span>
@@ -359,7 +444,7 @@
             <div class="dashboard-metric metric-card glass rounded-[20px] md:rounded-[24px] p-3 md:p-4">
               <div class="flex items-start justify-between">
                 <div class="min-w-0">
-                  <p id="metricLabelStaff" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">BPJS KS Staff</p>
+                  <p id="metricLabelStaff" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">BPJS Kesehatan</p>
                   <p id="metricStaff" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
                 <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-tie"></i></div>
@@ -368,10 +453,10 @@
             <div class="dashboard-metric metric-card glass rounded-[20px] md:rounded-[24px] p-3 md:p-4">
               <div class="flex items-start justify-between">
                 <div class="min-w-0">
-                  <p id="metricLabelWorker" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">BPJS KS Worker</p>
+                  <p id="metricLabelWorker" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">Data Valid BPJS</p>
                   <p id="metricWorker" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
-                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-users"></i></div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-circle-check"></i></div>
               </div>
             </div>
             <div class="dashboard-metric metric-card glass rounded-[20px] md:rounded-[24px] p-3 md:p-4">
@@ -386,7 +471,7 @@
             <div class="dashboard-metric metric-card glass rounded-[20px] md:rounded-[24px] p-3 md:p-4">
               <div class="flex items-start justify-between">
                 <div class="min-w-0">
-                  <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">In Bulan Ini</p>
+                  <p id="metricLabelIn" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">Staff Aktif</p>
                   <p id="metricInMonth" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
                 <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-plus"></i></div>
@@ -395,7 +480,7 @@
             <div class="dashboard-metric metric-card glass rounded-[20px] md:rounded-[24px] p-3 md:p-4">
               <div class="flex items-start justify-between">
                 <div class="min-w-0">
-                  <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">Out Bulan Ini</p>
+                  <p id="metricLabelOut" class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold truncate">Worker Aktif</p>
                   <p id="metricOutMonth" class="mt-2 md:mt-3 text-2xl md:text-3xl font-black">0</p>
                 </div>
                 <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 ml-2"><i class="fa-solid fa-user-minus"></i></div>
@@ -406,13 +491,13 @@
           <div class="dashboard-row-top grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div class="dashboard-panel-card glass rounded-[24px] md:rounded-[28px] p-4 md:p-5 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-lg md:text-xl font-black tracking-tight">Data per Modul</h3>
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Rekap Potongan BPJS</h3>
               </div>
               <div id="chartModuleBars" class="space-y-4"></div>
             </div>
             <div class="dashboard-panel-card glass rounded-[24px] md:rounded-[28px] p-4 md:p-5 min-w-0 overflow-hidden">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-lg md:text-xl font-black tracking-tight">Kesehatan Data BPJS</h3>
+                <h3 class="text-lg md:text-xl font-black tracking-tight">Status Kepesertaan BPJS</h3>
               </div>
               <div id="chartStatusSummary"></div>
             </div>
@@ -454,7 +539,7 @@
                 <thead>
                   <tr>
                     <th class="whitespace-nowrap">Modul</th>
-                    <th class="whitespace-nowrap">ID Pegawai</th>
+                    <th class="whitespace-nowrap">NOMOR ID</th>
                     <th class="whitespace-nowrap">NIK</th>
                     <th class="whitespace-nowrap">Nama Lengkap</th>
                     <th class="whitespace-nowrap">Status</th>
@@ -474,21 +559,32 @@
 
         <section id="tab-data" class="tab-panel">
           <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden shadow-sm">
-            <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
-              <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
-              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
-                <div class="relative min-w-0 sm:w-64 md:w-80">
+            <div class="p-4 md:p-6 border-b flex flex-col xl:flex-row xl:items-center justify-between gap-4 surface-border">
+              <div>
+                <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
+                <p class="text-xs md:text-sm text-slate-500 mt-1">Semua kolom bisa difilter seperti Excel. Rekap di bawah ikut berubah saat pencarian atau filter kolom dipakai.</p>
+              </div>
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto">
+                <div class="relative min-w-0 sm:w-72 md:w-96">
                   <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari nama, ID, NIK..." />
+                  <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari semua kolom..." />
                 </div>
+                <button onclick="clearTableFilters()" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm text-sm md:text-base hover:bg-slate-50 transition-colors">
+                  <i class="fa-solid fa-filter-circle-xmark mr-2 text-slate-500"></i>Reset Filter
+                </button>
                 <button onclick="openModal('add')" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold shadow-lg text-sm md:text-base hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
                   <i class="fa-solid fa-plus mr-2"></i>Tambah Data
                 </button>
               </div>
             </div>
-            <div id="dataTabRecap" class="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 md:px-6 bg-slate-50/50 border-b surface-border hidden"></div>
-            <div class="overflow-x-auto min-h-[300px] w-full">
-              <table class="table-modern w-full">
+            <div id="dataTabRecap" class="p-4 md:px-6 bg-slate-50/50 border-b surface-border hidden"></div>
+            <div class="px-4 md:px-6 py-3 bg-white/70 border-b surface-border flex flex-wrap gap-2 items-center">
+              <span class="table-note-chip"><i class="fa-solid fa-table-columns"></i> Filter per kolom ada di bawah judul kolom</span>
+              <span class="table-note-chip"><i class="fa-solid fa-thumbtack"></i> Judul kolom tetap terlihat saat tabel discroll</span>
+            </div>
+            <div id="tableWrap" class="overflow-auto min-h-[300px] max-h-[calc(100dvh-21rem)] w-full">
+              <table id="bpjsDataTable" class="table-modern w-full">
+                <colgroup id="tableColgroup"></colgroup>
                 <thead id="tableHead"></thead>
                 <tbody id="tableBody"></tbody>
               </table>
@@ -509,11 +605,10 @@
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Download Template</p>
-                  <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk Import Massal sesuai modul tujuan.</p>
+                  <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk BPJS gabungan atau SIPP Worker.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <button type="button" onclick="downloadTemplateFile('template-import-massal-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
-                  <button type="button" onclick="downloadTemplateFile('template-import-massal-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-import-massal-all-bpjs.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>BPJS</button>
                   <button type="button" onclick="downloadTemplateFile('template-import-massal-data-upah.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>SIPP</button>
                   <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
@@ -566,11 +661,10 @@
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">Download Template</p>
-                  <p class="text-sm text-emerald-900 mt-1">Gunakan template sesuai target menu Karyawan Baru.</p>
+                  <p class="text-sm text-emerald-900 mt-1">Gunakan template BPJS gabungan untuk menu Karyawan Baru.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <button type="button" onclick="downloadTemplateFile('template-karyawan-baru-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
-                  <button type="button" onclick="downloadTemplateFile('template-karyawan-baru-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-baru-all-bpjs.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>BPJS</button>
                   <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-emerald-600 border border-emerald-600 text-white font-bold text-sm hover:bg-emerald-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
@@ -605,8 +699,9 @@
                 <table class="table-modern min-w-max">
                   <thead>
                     <tr>
-                      <th class="whitespace-nowrap">ID Pegawai</th>
+                      <th class="whitespace-nowrap">NOMOR ID</th>
                       <th class="whitespace-nowrap">Nama Lengkap</th>
+                      <th class="whitespace-nowrap">Status Worker/Staff</th>
                       <th class="whitespace-nowrap">Status Preview</th>
                     </tr>
                   </thead>
@@ -627,11 +722,10 @@
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.18em] text-rose-700">Download Template</p>
-                  <p class="text-sm text-rose-900 mt-1">Gunakan template sesuai target menu Karyawan Keluar. Minimal isi kolom ID.</p>
+                  <p class="text-sm text-rose-900 mt-1">Gunakan template BPJS gabungan untuk menu Karyawan Keluar. Minimal isi kolom ID.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <button type="button" onclick="downloadTemplateFile('template-karyawan-keluar-staff.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Staff</button>
-                  <button type="button" onclick="downloadTemplateFile('template-karyawan-keluar-worker.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>Worker</button>
+                  <button type="button" onclick="downloadTemplateFile('template-karyawan-keluar-all-bpjs.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>BPJS</button>
                   <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-rose-600 border border-rose-600 text-white font-bold text-sm hover:bg-rose-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
@@ -662,8 +756,9 @@
                 <table class="table-modern min-w-max">
                   <thead>
                     <tr>
-                      <th class="whitespace-nowrap">ID Pegawai</th>
+                      <th class="whitespace-nowrap">NOMOR ID</th>
                       <th class="whitespace-nowrap">Nama Lengkap</th>
+                      <th class="whitespace-nowrap">Status Worker/Staff</th>
                       <th class="whitespace-nowrap">Status Preview</th>
                     </tr>
                   </thead>
@@ -763,11 +858,11 @@
                 <input id="settingAppSubtitle" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
               <div>
-                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul Staff</label>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul BPJS</label>
                 <input id="settingLabelStaff" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
-              <div>
-                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul Worker</label>
+              <div class="hidden">
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Label Worker lama (otomatis disamakan)</label>
                 <input id="settingLabelWorker" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
               <div>
@@ -800,34 +895,6 @@
               <button onclick="saveSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base hover:opacity-90 transition-opacity shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
             </div>
           </div>
-          
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
-            <h3 class="text-lg md:text-xl font-black tracking-tight">Preview Tampilan</h3>
-            <div class="mt-4 md:mt-5 rounded-[24px] md:rounded-[28px] p-4 md:p-6 text-white relative overflow-hidden shadow-inner" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
-              <div class="absolute inset-0 soft-grid opacity-10"></div>
-              <div class="relative flex items-center gap-3 md:gap-4">
-                <div class="w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-[18px] md:rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/5 shadow-sm">
-                  <img id="brandPreviewImg" class="hidden w-full h-full object-cover" alt="Preview logo">
-                  <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-xl md:text-2xl text-white/90"></i>
-                </div>
-                <div class="min-w-0">
-                  <p id="brandPreviewName" class="font-black text-base md:text-xl truncate tracking-tight">BPJS Control Center</p>
-                  <p id="brandPreviewSubtitle" class="text-white/60 text-[10px] md:text-sm truncate font-medium mt-0.5">BPJS KS Staff / Worker + SIPP Worker</p>
-                </div>
-              </div>
-              <div class="mt-6 space-y-2.5 text-xs md:text-sm">
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 1: <span id="brandPreviewStaff" class="ml-1 text-white">BPJS KS Staff</span></p>
-                </div>
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 2: <span id="brandPreviewWorker" class="ml-1 text-white">BPJS KS Worker</span></p>
-                </div>
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 3: <span id="brandPreviewUpah" class="ml-1 text-white">SIPP Worker</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
       </div>
     </main>
@@ -857,82 +924,81 @@
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
-      appSubtitle: 'BPJS KS Staff / Worker + SIPP Worker',
+      appSubtitle: 'BPJS Kesehatan Staff & Worker + SIPP Worker',
       theme: 'default',
       logoData: '',
       modules: {
-        STAFF: 'BPJS KS Staff',
-        WORKER: 'BPJS KS Worker',
+        ALL_BPJS: 'BPJS Kesehatan Staff & Worker',
         DATA_UPAH: 'SIPP Worker'
       }
     };
 
     const FULL_KEYS = {
-      STAFF: ['NO', 'NEW ID NO', 'NAMA', 'POSITION', 'SECTION', 'DEPARTEMENT', 'JOIN DATE', 'STATUS KEPESERTAAN MAR 2026', 'STATUS KEPESERTAAN APR 2026', 'TOTAL POTONGAN', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'],
-      WORKER: ['NO', 'NO ID', 'NAMA', 'POSITION', 'SECTION', 'DEPARTEMENT', 'JOIN DATE', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'POTONGAN KARYAWAN', 'KETERANGAN', 'NO KARTU BPJS', 'NO HP', 'NIK'],
+      ALL_BPJS: ['NO', 'NOMOR ID', 'NAMA', 'DEPARTEMENT', 'POSISI', 'STATUS', 'JOIN DATE', 'MASA KERJA', 'GAJI POKOK', 'STATUS KEPESERTAAN', 'POTONGAN', 'TOTAL', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'],
       DATA_UPAH: ['NIK', 'ID_PEGAWAI', 'KPJ', 'KODE_TK', 'NAMA_LENGKAP', 'TGL_LAHIR', 'UPAH', 'RAPEL', 'BLTH', 'NPP']
     };
 
     const DISPLAY_COLS = {
-      STAFF: [
-        { label: 'ID Pegawai', keys: ['NEW ID NO', 'ID_PEGAWAI', 'NO ID'] },
-        { label: 'NIK', keys: ['NIK'] },
-        { label: 'Nama Lengkap', keys: ['NAMA', 'NAMA_LENGKAP'] },
-        { label: 'Departemen', keys: ['DEPARTEMENT', 'SECTION'] },
-        { label: 'Status', keys: ['STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN MAR 2026', 'STATUS_KEPESERTAAN'] },
-        { label: 'No Kartu', keys: ['NOMOR KARTU', 'NO_KARTU', 'NO KARTU BPJS'] }
-      ],
-      WORKER: [
-        { label: 'ID Pegawai', keys: ['NO ID', 'NEW ID NO', 'ID_PEGAWAI'] },
-        { label: 'NIK', keys: ['NIK'] },
-        { label: 'Nama Lengkap', keys: ['NAMA', 'NAMA_LENGKAP'] },
-        { label: 'Departemen', keys: ['DEPARTEMENT', 'SECTION'] },
-        { label: 'Status', keys: ['STATUS KEPESERTAAN  TMT APR 2026', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS_KEPESERTAAN'] },
-        { label: 'No Kartu', keys: ['NO KARTU BPJS', 'NOMOR KARTU', 'NO_KARTU'] }
+      ALL_BPJS: [
+        { label: 'NO', keys: ['NO'], type: 'number' },
+        { label: 'NOMOR ID', keys: ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI'], type: 'text' },
+        { label: 'NAMA', keys: ['NAMA', 'NAMA_LENGKAP'], type: 'text' },
+        { label: 'DEPARTEMENT', keys: ['DEPARTEMENT', 'SECTION'], type: 'text' },
+        { label: 'POSISI', keys: ['POSISI', 'POSITION'], type: 'text' },
+        { label: 'STATUS', keys: ['STATUS'], type: 'bpjs-type' },
+        { label: 'JOIN DATE', keys: ['JOIN DATE'], type: 'date' },
+        { label: 'MASA KERJA', keys: ['MASA KERJA'], type: 'number' },
+        { label: 'GAJI POKOK', keys: ['GAJI POKOK'], type: 'currency' },
+        { label: 'STATUS KEPESERTAAN', keys: ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'], type: 'membership-status' },
+        { label: 'POTONGAN', keys: ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN'], type: 'percent' },
+        { label: 'TOTAL', keys: ['TOTAL', 'TOTAL POTONGAN'], type: 'currency' },
+        { label: 'KETERANGAN', keys: ['KETERANGAN'], type: 'text' },
+        { label: 'NOMOR KARTU', keys: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'], type: 'text' },
+        { label: 'NO HP', keys: ['NO HP'], type: 'text' },
+        { label: 'NIK', keys: ['NIK'], type: 'text' }
       ],
       DATA_UPAH: [
-        { label: 'ID Pegawai', keys: ['ID_PEGAWAI', 'NEW ID NO', 'NO ID'] },
-        { label: 'NIK', keys: ['NIK'] },
-        { label: 'Nama Lengkap', keys: ['NAMA_LENGKAP', 'NAMA'] },
-        { label: 'KPJ / Kartu', keys: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU'] },
-        { label: 'Upah', keys: ['UPAH'] },
-        { label: 'BLTH', keys: ['BLTH'] }
+        { label: 'ID Pegawai', keys: ['ID_PEGAWAI', 'NOMOR ID', 'NEW ID NO', 'NO ID'], type: 'text' },
+        { label: 'NIK', keys: ['NIK'], type: 'text' },
+        { label: 'Nama Lengkap', keys: ['NAMA_LENGKAP', 'NAMA'], type: 'text' },
+        { label: 'KPJ / Kartu', keys: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU'], type: 'text' },
+        { label: 'Upah', keys: ['UPAH'], type: 'currency' },
+        { label: 'BLTH', keys: ['BLTH'], type: 'text' }
       ]
     };
 
     const STATUS_KEYS = {
-      STAFF: ['STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN MAR 2026', 'STATUS_KEPESERTAAN'],
-      WORKER: ['STATUS KEPESERTAAN  TMT APR 2026', 'STATUS KEPESERTAAN  TMT MAR 2026', 'STATUS_KEPESERTAAN'],
+      ALL_BPJS: ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'],
       DATA_UPAH: []
     };
 
-    const ID_KEYS = ['NEW ID NO', 'NO ID', 'ID_PEGAWAI'];
+    const ID_KEYS = ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI'];
 
     const CARD_KEYS = {
-      STAFF: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'],
-      WORKER: ['NO KARTU BPJS', 'NOMOR KARTU', 'KPJ', 'NO_KARTU'],
+      ALL_BPJS: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'],
       DATA_UPAH: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU', 'NO_KARTU']
     };
 
     let appSettings = loadSettings();
-    let currentSheet = 'STAFF';
-    let database = { STAFF: [], WORKER: [], DATA_UPAH: [] };
+    let currentSheet = 'ALL_BPJS';
+    let database = { ALL_BPJS: [], DATA_UPAH: [] };
     let filteredData = [];
     let editingRowIndex = null;
     let pendingGeneralImportData = [];
     let pendingEmployeeIn = { rows: [], duplicates: [], invalid: [], fileName: '' };
     let pendingEmployeeOut = { matches: [], missing: [], fileName: '' };
-    
+
     let inOutLogs = [];
     try {
       inOutLogs = JSON.parse(localStorage.getItem('bpjsInOutLogsV2') || '[]');
     } catch (e) {
       inOutLogs = [];
     }
-    
+
     let visibleCardRows = [];
     let selectedCardKey = '';
     let tempLogoData = appSettings.logoData || '';
+    let tableColumnFilters = { ALL_BPJS: {}, DATA_UPAH: {} };
 
     function loadSettings() {
       try {
@@ -973,8 +1039,7 @@
         theme: String(pickAny(row, ['THEME', 'theme']) || DEFAULT_SETTINGS.theme),
         logoData: String(pickAny(row, ['LOGO_DATA', 'LOGO DATA', 'logoData']) || ''),
         modules: {
-          STAFF: String(pickAny(row, ['MODULE_STAFF', 'MODULE STAFF', 'STAFF_LABEL']) || DEFAULT_SETTINGS.modules.STAFF),
-          WORKER: String(pickAny(row, ['MODULE_WORKER', 'MODULE WORKER', 'WORKER_LABEL']) || DEFAULT_SETTINGS.modules.WORKER),
+          ALL_BPJS: String(pickAny(row, ['MODULE_ALL_BPJS', 'MODULE ALL BPJS', 'MODULE_STAFF', 'MODULE STAFF', 'STAFF_LABEL', 'MODULE_WORKER', 'MODULE WORKER', 'WORKER_LABEL']) || DEFAULT_SETTINGS.modules.ALL_BPJS),
           DATA_UPAH: String(pickAny(row, ['MODULE_DATA_UPAH', 'MODULE DATA UPAH', 'MODULE_UPAH', 'UPAH_LABEL']) || DEFAULT_SETTINGS.modules.DATA_UPAH)
         }
       };
@@ -986,8 +1051,9 @@
         APP_SUBTITLE: settings.appSubtitle,
         THEME: settings.theme,
         LOGO_DATA: settings.logoData || '',
-        MODULE_STAFF: settings.modules.STAFF,
-        MODULE_WORKER: settings.modules.WORKER,
+        MODULE_ALL_BPJS: settings.modules.ALL_BPJS,
+        MODULE_STAFF: settings.modules.ALL_BPJS,
+        MODULE_WORKER: settings.modules.ALL_BPJS,
         MODULE_DATA_UPAH: settings.modules.DATA_UPAH
       };
     }
@@ -1108,6 +1174,218 @@
     function getCardNumber(row, sheet) {
       return String(getColValue(row, CARD_KEYS[sheet] || []) || '').trim();
     }
+    function normalizeUpper(value) {
+      return String(value ?? '').trim().toUpperCase();
+    }
+
+    function parseDateValue(value) {
+      if (value instanceof Date && !Number.isNaN(value.getTime())) return value;
+      if (typeof value === 'number' && Number.isFinite(value)) {
+        const utcDays = Math.floor(value - 25569);
+        const utcValue = utcDays * 86400;
+        const fractionalDay = value - Math.floor(value) + 1e-7;
+        const totalSeconds = Math.floor(utcValue + fractionalDay * 86400);
+        const date = new Date(totalSeconds * 1000);
+        if (!Number.isNaN(date.getTime())) return date;
+      }
+      const raw = String(value ?? '').trim();
+      if (!raw) return null;
+      const isoMatch = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (isoMatch) {
+        const date = new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+        if (!Number.isNaN(date.getTime())) return date;
+      }
+      const slashMatch = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+      if (slashMatch) {
+        let year = Number(slashMatch[3]);
+        if (year < 100) year += 2000;
+        const date = new Date(year, Number(slashMatch[2]) - 1, Number(slashMatch[1]));
+        if (!Number.isNaN(date.getTime())) return date;
+      }
+      const parsed = new Date(raw);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    function formatDateDisplay(value) {
+      const date = parseDateValue(value);
+      if (!date) return '-';
+      return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
+    }
+
+    function parseNumberValue(value) {
+      if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+      const raw = String(value ?? '').trim();
+      if (!raw) return 0;
+      const normalized = raw
+        .replace(/\s+/g, '')
+        .replace(/Rp/gi, '')
+        .replace(/,/g, '.')
+        .replace(/\.(?=.*\.)/g, '');
+      const num = Number(normalized);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function parsePercentValue(value) {
+      if (typeof value === 'number') return value > 1 ? value / 100 : value;
+      const raw = String(value ?? '').trim();
+      if (!raw) return 0;
+      const cleaned = raw.replace(/\s+/g, '').replace(/,/g, '.');
+      if (cleaned.endsWith('%')) {
+        const num = Number(cleaned.slice(0, -1));
+        return Number.isFinite(num) ? num / 100 : 0;
+      }
+      const num = Number(cleaned);
+      if (!Number.isFinite(num)) return 0;
+      return num > 1 ? num / 100 : num;
+    }
+
+    function formatCurrency(value) {
+      const num = parseNumberValue(value);
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+    }
+
+    function formatPercentDisplay(value) {
+      const num = parsePercentValue(value);
+      return `${(num * 100).toFixed(Number.isInteger(num * 100) ? 0 : 2).replace(/\.00$/, '')}%`;
+    }
+
+    function normalizeBpjsType(value) {
+      const upper = normalizeUpper(value);
+      return upper === 'WORKER' ? 'WORKER' : 'STAFF';
+    }
+
+    function normalizeMembershipStatus(value) {
+      const upper = normalizeUpper(value);
+      if (!upper) return '-';
+      if (['OK', 'AKTIF', 'ACTIVE'].includes(upper)) return 'AKTIF';
+      if (['OUT', 'KELUAR', 'NON AKTIF', 'NONAKTIF'].includes(upper)) return 'KELUAR';
+      return upper;
+    }
+
+    function calculateMasaKerja(joinDateValue) {
+      const joinDate = parseDateValue(joinDateValue);
+      if (!joinDate) return 0;
+      const now = new Date();
+      let years = now.getFullYear() - joinDate.getFullYear();
+      const monthDiff = now.getMonth() - joinDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < joinDate.getDate())) years -= 1;
+      return Math.max(0, years);
+    }
+
+    function calculateGajiPokok(typeValue, masaKerjaValue) {
+      const type = normalizeBpjsType(typeValue);
+      const masaKerja = parseNumberValue(masaKerjaValue);
+      if (type === 'STAFF') return 2990088;
+      if (masaKerja <= 5) return 2940088 + (10000 * masaKerja);
+      return 2990088;
+    }
+
+    function computeBpjsNo(row, index = null) {
+      const current = parseNumberValue(row?.NO);
+      if (current > 0) return current;
+      if (index !== null && index !== undefined) return index + 1;
+      return (database.ALL_BPJS?.length || 0) + 1;
+    }
+
+    function enrichBpjsRow(row = {}, index = null, existingRow = null) {
+      const source = { ...(existingRow || {}), ...(row || {}) };
+      const joinDateRaw = getColValue(source, ['JOIN DATE', 'JOIN_DATE', 'TANGGAL MASUK', 'DATE JOIN']);
+      const masaKerja = calculateMasaKerja(joinDateRaw);
+      const type = normalizeBpjsType(getColValue(source, ['STATUS', 'TIPE', 'JENIS']));
+      const gajiPokok = calculateGajiPokok(type, masaKerja);
+      const potongan = parsePercentValue(getColValue(source, ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN']));
+      const total = Math.round(gajiPokok * potongan);
+      const joinDate = parseDateValue(joinDateRaw);
+
+      return {
+        NO: computeBpjsNo(source, index),
+        'NOMOR ID': String(getColValue(source, ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI']) || '').trim(),
+        NAMA: String(getColValue(source, ['NAMA', 'NAMA_LENGKAP']) || '').trim(),
+        DEPARTEMENT: String(getColValue(source, ['DEPARTEMENT', 'DEPARTMENT', 'SECTION']) || '').trim(),
+        POSISI: String(getColValue(source, ['POSISI', 'POSITION']) || '').trim(),
+        STATUS: type,
+        'JOIN DATE': joinDate ? joinDate.toISOString().slice(0, 10) : '',
+        'MASA KERJA': masaKerja,
+        'GAJI POKOK': gajiPokok,
+        'STATUS KEPESERTAAN': normalizeMembershipStatus(getColValue(source, ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'])),
+        POTONGAN: potongan,
+        TOTAL: total,
+        KETERANGAN: String(getColValue(source, ['KETERANGAN']) || '-').trim() || '-',
+        'NOMOR KARTU': String(getColValue(source, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU']) || '').trim(),
+        'NO HP': String(getColValue(source, ['NO HP', 'HP', 'NOHP']) || '').trim(),
+        NIK: String(getColValue(source, ['NIK']) || '').trim()
+      };
+    }
+
+    function enrichBpjsRows(rows = []) {
+      return rows.map((row, index) => enrichBpjsRow(row, index));
+    }
+
+    function getBpjsStats(rows = []) {
+      const stats = {
+        total: rows.length,
+        staffTotal: 0,
+        workerTotal: 0,
+        staffActive: 0,
+        staffOut: 0,
+        workerActive: 0,
+        workerOut: 0,
+        staffPot1: 0,
+        staffPotMore: 0,
+        workerPot1: 0,
+        workerPotMore: 0
+      };
+      rows.forEach(row => {
+        const type = normalizeBpjsType(getColValue(row, ['STATUS']));
+        const membership = normalizeMembershipStatus(getColValue(row, STATUS_KEYS.ALL_BPJS));
+        const potongan = parsePercentValue(getColValue(row, ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN']));
+        const isOnePercent = Math.abs(potongan - 0.01) < 0.000001;
+        const isMoreOnePercent = potongan > 0.010001;
+
+        if (type === 'STAFF') {
+          stats.staffTotal += 1;
+          if (membership === 'AKTIF') stats.staffActive += 1;
+          if (membership === 'KELUAR') stats.staffOut += 1;
+          if (isOnePercent) stats.staffPot1 += 1;
+          if (isMoreOnePercent) stats.staffPotMore += 1;
+        } else {
+          stats.workerTotal += 1;
+          if (membership === 'AKTIF') stats.workerActive += 1;
+          if (membership === 'KELUAR') stats.workerOut += 1;
+          if (isOnePercent) stats.workerPot1 += 1;
+          if (isMoreOnePercent) stats.workerPotMore += 1;
+        }
+      });
+      return stats;
+    }
+
+    function renderTypeBadge(value) {
+      const type = normalizeBpjsType(value);
+      return type === 'STAFF'
+        ? `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200/70 text-[10px] md:text-xs font-bold shadow-sm">Staff</span>`
+        : `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/70 text-[10px] md:text-xs font-bold shadow-sm">Worker</span>`;
+    }
+
+    function renderMembershipBadge(value) {
+      const status = normalizeMembershipStatus(value);
+      if (status === 'AKTIF') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif</span>`;
+      if (status === 'KELUAR') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Keluar</span>`;
+      if (status === '-' || status === '') return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-500 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum diisi</span>`;
+      return `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(status)}</span>`;
+    }
+
+    function getDisplayValue(row, col) {
+      const raw = getColValue(row, col.keys);
+      if (currentSheet === 'ALL_BPJS') {
+        if (col.type === 'bpjs-type') return renderTypeBadge(raw);
+        if (col.type === 'membership-status') return renderMembershipBadge(raw);
+        if (col.type === 'date') return escapeHtml(formatDateDisplay(raw));
+        if (col.type === 'currency') return escapeHtml(formatCurrency(raw));
+        if (col.type === 'percent') return escapeHtml(formatPercentDisplay(raw));
+      }
+      if (currentSheet === 'DATA_UPAH' && col.type === 'currency') return escapeHtml(formatCurrency(raw));
+      return escapeHtml(raw || '-');
+    }
 
     function setLoading(isLoading) {
       const box = document.getElementById('loadingIndicator');
@@ -1165,24 +1443,26 @@
       setText('appSubtitleSidebar', appSettings.appSubtitle);
       setText('appNameHeaderSmall', appSettings.appName);
 
-      setText('labelNavStaff', getSheetLabel('STAFF'));
-      setText('labelNavWorker', getSheetLabel('WORKER'));
+      setText('labelNavStaff', getSheetLabel('ALL_BPJS'));
+      
       setText('labelNavUpah', getSheetLabel('DATA_UPAH'));
-      setText('metricLabelStaff', getSheetLabel('STAFF'));
-      setText('metricLabelWorker', getSheetLabel('WORKER'));
+      setText('metricLabelStaff', 'Total Staff BPJS');
+      setText('metricLabelWorker', 'Total Worker BPJS');
       setText('metricLabelUpah', getSheetLabel('DATA_UPAH'));
+      setText('metricLabelIn', 'Staff Aktif');
+      setText('metricLabelOut', 'Worker Aktif');
 
       setVal('settingAppName', appSettings.appName);
       setVal('settingAppSubtitle', appSettings.appSubtitle);
-      setVal('settingLabelStaff', getSheetLabel('STAFF'));
-      setVal('settingLabelWorker', getSheetLabel('WORKER'));
+      setVal('settingLabelStaff', getSheetLabel('ALL_BPJS'));
+      setVal('settingLabelWorker', getSheetLabel('ALL_BPJS'));
       setVal('settingLabelUpah', getSheetLabel('DATA_UPAH'));
       setVal('settingTheme', appSettings.theme || 'default');
 
       setText('brandPreviewName', appSettings.appName);
       setText('brandPreviewSubtitle', appSettings.appSubtitle);
-      setText('brandPreviewStaff', getSheetLabel('STAFF'));
-      setText('brandPreviewWorker', getSheetLabel('WORKER'));
+      setText('brandPreviewStaff', getSheetLabel('ALL_BPJS'));
+      setText('brandPreviewWorker', getSheetLabel('ALL_BPJS'));
       setText('brandPreviewUpah', getSheetLabel('DATA_UPAH'));
 
       updateLogoUI(appSettings.logoData || '');
@@ -1200,21 +1480,25 @@
       const previewImg = document.getElementById('brandPreviewImg');
       const previewIcon = document.getElementById('brandPreviewIcon');
       const settingPreview = document.getElementById('settingLogoPreview');
+
+      const show = (el) => el && el.classList.remove('hidden');
+      const hide = (el) => el && el.classList.add('hidden');
+
       if (logoData) {
-        logoImg.src = logoData;
-        previewImg.src = logoData;
-        settingPreview.src = logoData;
-        logoImg.classList.remove('hidden');
-        previewImg.classList.remove('hidden');
-        settingPreview.classList.remove('hidden');
-        logoIcon.classList.add('hidden');
-        previewIcon.classList.add('hidden');
+        if (logoImg) logoImg.src = logoData;
+        if (previewImg) previewImg.src = logoData;
+        if (settingPreview) settingPreview.src = logoData;
+        show(logoImg);
+        show(previewImg);
+        show(settingPreview);
+        hide(logoIcon);
+        hide(previewIcon);
       } else {
-        logoImg.classList.add('hidden');
-        previewImg.classList.add('hidden');
-        settingPreview.classList.add('hidden');
-        logoIcon.classList.remove('hidden');
-        previewIcon.classList.remove('hidden');
+        hide(logoImg);
+        hide(previewImg);
+        hide(settingPreview);
+        show(logoIcon);
+        show(previewIcon);
       }
     }
 
@@ -1225,21 +1509,17 @@
       const cardSource = document.getElementById('cardSource');
 
       importTarget.innerHTML = `
-        <option value="STAFF">${getSheetLabel('STAFF')}</option>
-        <option value="WORKER">${getSheetLabel('WORKER')}</option>
+        <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
         <option value="DATA_UPAH">${getSheetLabel('DATA_UPAH')}</option>
       `;
       employeeInTarget.innerHTML = `
-        <option value="STAFF">${getSheetLabel('STAFF')}</option>
-        <option value="WORKER">${getSheetLabel('WORKER')}</option>
+        <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
       `;
       employeeOutTarget.innerHTML = `
-        <option value="STAFF">${getSheetLabel('STAFF')}</option>
-        <option value="WORKER">${getSheetLabel('WORKER')}</option>
+        <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
       `;
       cardSource.innerHTML = `
-        <option value="STAFF">${getSheetLabel('STAFF')}</option>
-        <option value="WORKER">${getSheetLabel('WORKER')}</option>
+        <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
         <option value="DATA_UPAH">${getSheetLabel('DATA_UPAH')}</option>
       `;
     }
@@ -1262,8 +1542,7 @@
         theme: document.getElementById('settingTheme').value,
         logoData: tempLogoData || '',
         modules: {
-          STAFF: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.STAFF,
-          WORKER: document.getElementById('settingLabelWorker').value.trim() || DEFAULT_SETTINGS.modules.WORKER,
+          ALL_BPJS: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.ALL_BPJS,
           DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
         }
       };
@@ -1399,7 +1678,7 @@
       }
 
       let results = [];
-      ['STAFF', 'WORKER', 'DATA_UPAH'].forEach(sheet => {
+      ['ALL_BPJS', 'DATA_UPAH'].forEach(sheet => {
         const rows = database[sheet] || [];
         rows.forEach(row => {
           const id = getEmployeeId(row).toLowerCase();
@@ -1412,7 +1691,7 @@
               id: getEmployeeId(row) || '-',
               nik: String(getColValue(row, ['NIK']) || '-'),
               name: getEmployeeName(row),
-              status: String(getColValue(row, STATUS_KEYS[sheet]) || '-'),
+              status: sheet === 'ALL_BPJS' ? normalizeMembershipStatus(getColValue(row, STATUS_KEYS[sheet]) || '-') : String(getColValue(row, STATUS_KEYS[sheet]) || '-'),
               cardNo: getCardNumber(row, sheet) || '-'
             });
           }
@@ -1436,6 +1715,8 @@
         const upperStatus = item.status.toUpperCase();
         if (upperStatus === 'OK' || upperStatus === 'AKTIF') {
           statusBadge = `<span class="px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif / OK</span>`;
+        } else if (upperStatus === 'OUT' || upperStatus === 'KELUAR') {
+          statusBadge = `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Keluar</span>`;
         } else if (item.status === '-' || item.status === '') {
           statusBadge = `<span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span>`;
         } else {
@@ -1489,7 +1770,7 @@
 
       try {
         await Promise.all([
-          Promise.all(['STAFF', 'WORKER', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
+          Promise.all(['ALL_BPJS', 'DATA_UPAH'].map(sheet => safeFetchSheet(sheet).catch(() => { database[sheet] = database[sheet] || []; }))),
           loadSharedSettingsRemote().catch(() => false),
           loadSharedLogsRemote().catch(() => false)
         ]);
@@ -1513,23 +1794,22 @@
       const host = document.getElementById('chartModuleBars');
       if (!host) return;
       const compact = window.innerWidth >= 1024 && document.getElementById('tab-dashboard')?.classList.contains('dashboard-fit');
+      const stats = getBpjsStats(database.ALL_BPJS || []);
       const items = [
-        { sheet: 'STAFF', icon: 'fa-user-tie', tone: 'from-teal-500 to-cyan-500', count: database.STAFF?.length || 0 },
-        { sheet: 'WORKER', icon: 'fa-users', tone: 'from-blue-500 to-indigo-500', count: database.WORKER?.length || 0 },
-        { sheet: 'DATA_UPAH', icon: 'fa-wallet', tone: 'from-violet-500 to-fuchsia-500', count: database.DATA_UPAH?.length || 0 }
+        { label: 'Staff · Potongan 1%', count: stats.staffPot1, tone: 'from-sky-500 to-cyan-500' },
+        { label: 'Staff · > 1%', count: stats.staffPotMore, tone: 'from-teal-500 to-emerald-500' },
+        { label: 'Worker · Potongan 1%', count: stats.workerPot1, tone: 'from-indigo-500 to-blue-500' },
+        { label: 'Worker · > 1%', count: stats.workerPotMore, tone: 'from-violet-500 to-fuchsia-500' }
       ];
       const max = Math.max(...items.map(item => item.count), 1);
       host.className = compact ? 'space-y-3' : 'space-y-4';
       host.innerHTML = items.map(item => {
-        const pct = Math.max(10, Math.round((item.count / max) * 100));
+        const pct = Math.max(8, Math.round((item.count / max) * 100));
         return `
           <div class="rounded-xl md:rounded-[24px] border bg-white/70 ${compact ? 'p-3' : 'p-3 md:p-4'}" style="border-color: var(--border)">
-            <div class="flex items-center justify-between gap-3 ${compact ? '' : 'md:gap-4'}">
-              <div class="flex items-center gap-2 ${compact ? '' : 'md:gap-3'} min-w-0">
-                <div class="${compact ? 'w-10 h-10' : 'w-10 h-10 md:w-12 md:h-12'} rounded-xl md:rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0"><i class="fa-solid ${item.icon}"></i></div>
-                <div class="min-w-0">
-                  <p class="${compact ? 'text-xs' : 'text-xs md:text-sm'} font-bold text-slate-800 truncate">${escapeHtml(getSheetLabel(item.sheet))}</p>
-                </div>
+            <div class="flex items-center justify-between gap-3">
+              <div class="min-w-0">
+                <p class="${compact ? 'text-xs' : 'text-xs md:text-sm'} font-bold text-slate-800 truncate">${item.label}</p>
               </div>
               <div class="text-right shrink-0">
                 <p class="${compact ? 'text-xl' : 'text-xl md:text-2xl'} font-black">${item.count}</p>
@@ -1542,55 +1822,31 @@
       }).join('');
     }
 
-    function renderStatusSummary(ok, notOk) {
+    function renderStatusSummary(stats) {
       const host = document.getElementById('chartStatusSummary');
       if (!host) return;
       const compact = window.innerWidth >= 1024 && document.getElementById('tab-dashboard')?.classList.contains('dashboard-fit');
-      const total = ok + notOk;
-      const pct = total ? Math.round((ok / total) * 100) : 0;
-      const radius = compact ? 52 : 58;
-      const circumference = 2 * Math.PI * radius;
-      const dash = total ? (ok / total) * circumference : 0;
-      const boxSize = compact ? 150 : 180;
+      const totalAktif = stats.staffActive + stats.workerActive;
+      const totalKeluar = stats.staffOut + stats.workerOut;
       host.innerHTML = `
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 ${compact ? '' : 'md:gap-6'} items-center">
-          <div class="flex flex-col items-center justify-center relative">
-            <div class="relative" style="width:${boxSize}px;height:${boxSize}px;">
-              <svg viewBox="0 0 160 160" class="w-full h-full -rotate-90">
-                <circle cx="80" cy="80" r="${radius}" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="16"></circle>
-                <circle cx="80" cy="80" r="${radius}" fill="none" stroke="url(#statusGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${dash} ${circumference}"></circle>
-                <defs>
-                  <linearGradient id="statusGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="var(--primary)" />
-                    <stop offset="100%" stop-color="var(--secondary)" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <p class="${compact ? 'text-3xl' : 'text-3xl md:text-4xl'} font-black">${pct}%</p>
-                <p class="text-[10px] md:text-xs uppercase tracking-[0.18em] text-slate-500 font-bold mt-1">Data Valid</p>
-              </div>
-            </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 ${compact ? '' : 'md:gap-4'}">
+          <div class="rounded-xl md:rounded-2xl bg-sky-50 border border-sky-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-sky-700">Staff Aktif</p>
+            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-sky-800 mt-2">${stats.staffActive}</p>
+            <p class="text-[11px] text-sky-700 mt-1">Keluar: ${stats.staffOut}</p>
           </div>
-          <div class="space-y-3">
-            <div class="rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-              <div class="flex items-center justify-between gap-3 ${compact ? '' : 'md:gap-4'}">
-                <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">OK / Aktif</p>
-                <p class="${compact ? 'text-xl' : 'text-xl md:text-2xl'} font-black text-emerald-700">${ok}</p>
-              </div>
-            </div>
-            <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
-              <div class="flex items-center justify-between gap-3 ${compact ? '' : 'md:gap-4'}">
-                <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Perlu Cek</p>
-                <p class="${compact ? 'text-xl' : 'text-xl md:text-2xl'} font-black text-rose-700">${notOk}</p>
-              </div>
-            </div>
-            <div class="rounded-xl md:rounded-2xl bg-slate-50 border ${compact ? 'p-3' : 'p-3 md:p-4'}" style="border-color: var(--border)">
-              <div class="flex items-center justify-between gap-3">
-                <p class="text-xs uppercase tracking-[0.18em] font-bold text-slate-500">Total Data</p>
-                <p class="${compact ? 'text-xl' : 'text-xl md:text-2xl'} font-black mt-1">${total}</p>
-              </div>
-            </div>
+          <div class="rounded-xl md:rounded-2xl bg-indigo-50 border border-indigo-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-indigo-700">Worker Aktif</p>
+            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-indigo-800 mt-2">${stats.workerActive}</p>
+            <p class="text-[11px] text-indigo-700 mt-1">Keluar: ${stats.workerOut}</p>
+          </div>
+          <div class="rounded-xl md:rounded-2xl bg-emerald-50 border border-emerald-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-emerald-700">Total Aktif</p>
+            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-emerald-800 mt-2">${totalAktif}</p>
+          </div>
+          <div class="rounded-xl md:rounded-2xl bg-rose-50 border border-rose-100 ${compact ? 'p-3' : 'p-3 md:p-4'}">
+            <p class="text-xs uppercase tracking-[0.18em] font-bold text-rose-700">Total Keluar</p>
+            <p class="${compact ? 'text-2xl' : 'text-2xl md:text-3xl'} font-black text-rose-800 mt-2">${totalKeluar}</p>
           </div>
         </div>`;
     }
@@ -1656,30 +1912,15 @@
     }
 
     function updateDashboardUI() {
-      document.getElementById('metricStaff').textContent = database.STAFF?.length || 0;
-      document.getElementById('metricWorker').textContent = database.WORKER?.length || 0;
+      const stats = getBpjsStats(database.ALL_BPJS || []);
+      document.getElementById('metricStaff').textContent = stats.staffTotal;
+      document.getElementById('metricWorker').textContent = stats.workerTotal;
       document.getElementById('metricUpah').textContent = database.DATA_UPAH?.length || 0;
-
-      let total = 0;
-      let ok = 0;
-      let notOk = 0;
-      ['STAFF', 'WORKER'].forEach(sheet => {
-        (database[sheet] || []).forEach(row => {
-          total++;
-          const status = String(getColValue(row, STATUS_KEYS[sheet]) || '').trim().toUpperCase();
-          if (status === 'OK' || status === 'AKTIF') ok++;
-          else notOk++;
-        });
-      });
-
-      const monthKey = currentMonthKey();
-      const inMonth = inOutLogs.filter(log => log.type === 'IN' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + Number(item.count || 0), 0);
-      const outMonth = inOutLogs.filter(log => log.type === 'OUT' && String(log.createdAt).startsWith(monthKey)).reduce((sum, item) => sum + Number(item.count || 0), 0);
-      document.getElementById('metricInMonth').textContent = inMonth;
-      document.getElementById('metricOutMonth').textContent = outMonth;
+      document.getElementById('metricInMonth').textContent = stats.staffActive;
+      document.getElementById('metricOutMonth').textContent = stats.workerActive;
 
       renderModuleBars();
-      renderStatusSummary(ok, notOk);
+      renderStatusSummary(stats);
       renderTrendChart();
       renderActivityFeed();
     }
@@ -1711,74 +1952,200 @@
       }).join('');
     }
 
+
+    function getCurrentSheetFilters() {
+      if (!tableColumnFilters[currentSheet]) tableColumnFilters[currentSheet] = {};
+      return tableColumnFilters[currentSheet];
+    }
+
+    function getFilterableValue(row, col) {
+      const raw = getColValue(row, col.keys);
+      if (currentSheet === 'ALL_BPJS') {
+        if (col.type === 'bpjs-type') return normalizeBpjsType(raw) === 'STAFF' ? 'Staff' : 'Worker';
+        if (col.type === 'membership-status') {
+          const membership = normalizeMembershipStatus(raw);
+          if (membership === 'AKTIF') return 'Aktif';
+          if (membership === 'KELUAR') return 'Keluar';
+          return membership;
+        }
+        if (col.type === 'date') return formatDateDisplay(raw);
+        if (col.type === 'currency') return formatCurrency(raw);
+        if (col.type === 'percent') return formatPercentDisplay(raw);
+      }
+      if (currentSheet === 'DATA_UPAH' && col.type === 'currency') return formatCurrency(raw);
+      return String(raw || '').trim();
+    }
+
+    function buildSearchText(row) {
+      const cols = DISPLAY_COLS[currentSheet] || [];
+      const rawValues = Object.values(row || {}).map(value => String(value ?? ''));
+      const displayValues = cols.map(col => getFilterableValue(row, col));
+      return rawValues.concat(displayValues).join(' ').toLowerCase();
+    }
+
+    function getColumnFilterOptions(col, rows) {
+      const values = Array.from(new Set(
+        rows.map(row => String(getFilterableValue(row, col) || '').trim()).filter(Boolean)
+      ));
+      values.sort((a, b) => a.localeCompare(b, 'id', { numeric: true, sensitivity: 'base' }));
+      return values;
+    }
+
+    function shouldUseSelectFilter(col, rows) {
+      if (['bpjs-type', 'membership-status'].includes(col.type)) return true;
+      const options = getColumnFilterOptions(col, rows);
+      return options.length > 0 && options.length <= 12;
+    }
+
+    function setColumnFilter(label, value) {
+      const filters = getCurrentSheetFilters();
+      const cleaned = String(value || '').trim();
+      if (cleaned) filters[label] = cleaned;
+      else delete filters[label];
+      renderTable();
+    }
+
+    function clearTableFilters(keepSearch = false) {
+      tableColumnFilters[currentSheet] = {};
+      if (!keepSearch) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) searchInput.value = '';
+      }
+      renderTable();
+    }
+
+    function getFilteredRowsForCurrentSheet() {
+      const searchInput = document.getElementById('searchInput');
+      const q = String(searchInput?.value || '').toLowerCase().trim();
+      const filters = getCurrentSheetFilters();
+      const cols = DISPLAY_COLS[currentSheet] || [];
+      return (database[currentSheet] || []).filter(row => {
+        if (q && !buildSearchText(row).includes(q)) return false;
+        return cols.every(col => {
+          const activeFilter = String(filters[col.label] || '').trim().toLowerCase();
+          if (!activeFilter) return true;
+          const candidate = String(getFilterableValue(row, col) || '').toLowerCase();
+          return candidate.includes(activeFilter);
+        });
+      });
+    }
+
+    function getActiveColumnFilterCount() {
+      return Object.values(getCurrentSheetFilters()).filter(value => String(value || '').trim() !== '').length;
+    }
+
     function renderTable() {
       const cols = DISPLAY_COLS[currentSheet];
       const tHead = document.getElementById('tableHead');
       const tBody = document.getElementById('tableBody');
       const recapContainer = document.getElementById('dataTabRecap');
-      
+      const sourceRows = database[currentSheet] || [];
+      const activeFilters = getCurrentSheetFilters();
+      filteredData = getFilteredRowsForCurrentSheet();
+
       document.getElementById('tableTitle').textContent = getSheetLabel(currentSheet);
-      
+
       if (recapContainer) {
-        if (currentSheet === 'STAFF' || currentSheet === 'WORKER') {
-          let ok = 0;
-          let notOk = 0;
-          filteredData.forEach(row => {
-            const status = String(getColValue(row, STATUS_KEYS[currentSheet]) || '').trim().toUpperCase();
-            if (status === 'OK' || status === 'AKTIF') ok++;
-            else notOk++;
-          });
-          recapContainer.classList.remove('hidden');
+        recapContainer.classList.remove('hidden');
+        if (currentSheet === 'ALL_BPJS') {
+          const stats = getBpjsStats(filteredData);
+          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border space-y-4';
           recapContainer.innerHTML = `
-            <div class="rounded-xl bg-white border border-slate-200 p-3 shadow-sm flex flex-col justify-center">
-              <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">Total Ditemukan</p>
-              <p class="text-xl md:text-2xl font-black text-slate-800 mt-1">${filteredData.length}</p>
+            <div>
+              <p class="recap-section-title">Ringkasan Utama</p>
+              <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">Total Data</p><p class="text-2xl md:text-3xl font-black text-slate-800 mt-1">${stats.total}</p></div>
+                <div class="rounded-2xl bg-sky-50 border border-sky-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-sky-700 uppercase tracking-wide">Total Staff</p><p class="text-2xl md:text-3xl font-black text-sky-800 mt-1">${stats.staffTotal}</p></div>
+                <div class="rounded-2xl bg-indigo-50 border border-indigo-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-indigo-700 uppercase tracking-wide">Total Worker</p><p class="text-2xl md:text-3xl font-black text-indigo-800 mt-1">${stats.workerTotal}</p></div>
+                <div class="rounded-2xl bg-emerald-50 border border-emerald-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-emerald-700 uppercase tracking-wide">Total Aktif</p><p class="text-2xl md:text-3xl font-black text-emerald-800 mt-1">${stats.staffActive + stats.workerActive}</p></div>
+                <div class="rounded-2xl bg-rose-50 border border-rose-100 p-3.5 shadow-sm"><p class="text-[10px] md:text-xs font-bold text-rose-700 uppercase tracking-wide">Total Keluar</p><p class="text-2xl md:text-3xl font-black text-rose-800 mt-1">${stats.staffOut + stats.workerOut}</p></div>
+              </div>
             </div>
-            <div class="rounded-xl bg-emerald-50 border border-emerald-100 p-3 shadow-sm flex flex-col justify-center">
-              <p class="text-[10px] md:text-xs font-bold text-emerald-700 uppercase tracking-wide">Aktif / OK</p>
-              <p class="text-xl md:text-2xl font-black text-emerald-700 mt-1">${ok}</p>
-            </div>
-            <div class="rounded-xl bg-rose-50 border border-rose-100 p-3 shadow-sm flex flex-col justify-center">
-              <p class="text-[10px] md:text-xs font-bold text-rose-700 uppercase tracking-wide">Perlu Cek</p>
-              <p class="text-xl md:text-2xl font-black text-rose-700 mt-1">${notOk}</p>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              <div class="rounded-[22px] bg-white border border-slate-200 p-4 shadow-sm">
+                <p class="recap-section-title">Status Kepesertaan</p>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="rounded-xl bg-sky-50 border border-sky-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-sky-700">Staff Aktif</p><p class="text-xl font-black text-sky-800 mt-1">${stats.staffActive}</p></div>
+                  <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-indigo-700">Worker Aktif</p><p class="text-xl font-black text-indigo-800 mt-1">${stats.workerActive}</p></div>
+                  <div class="rounded-xl bg-rose-50 border border-rose-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-rose-700">Staff Keluar</p><p class="text-xl font-black text-rose-800 mt-1">${stats.staffOut}</p></div>
+                  <div class="rounded-xl bg-fuchsia-50 border border-fuchsia-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-fuchsia-700">Worker Keluar</p><p class="text-xl font-black text-fuchsia-800 mt-1">${stats.workerOut}</p></div>
+                </div>
+              </div>
+              <div class="rounded-[22px] bg-white border border-slate-200 p-4 shadow-sm">
+                <p class="recap-section-title">Ringkasan Potongan</p>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="rounded-xl bg-cyan-50 border border-cyan-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-cyan-700">Staff 1%</p><p class="text-xl font-black text-cyan-800 mt-1">${stats.staffPot1}</p></div>
+                  <div class="rounded-xl bg-teal-50 border border-teal-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-teal-700">Staff &gt; 1%</p><p class="text-xl font-black text-teal-800 mt-1">${stats.staffPotMore}</p></div>
+                  <div class="rounded-xl bg-violet-50 border border-violet-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-violet-700">Worker 1%</p><p class="text-xl font-black text-violet-800 mt-1">${stats.workerPot1}</p></div>
+                  <div class="rounded-xl bg-purple-50 border border-purple-100 p-3"><p class="text-[10px] font-bold uppercase tracking-wide text-purple-700">Worker &gt; 1%</p><p class="text-xl font-black text-purple-800 mt-1">${stats.workerPotMore}</p></div>
+                </div>
+              </div>
             </div>
           `;
         } else {
-          recapContainer.classList.remove('hidden');
+          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border';
           recapContainer.innerHTML = `
-            <div class="rounded-xl bg-white border border-slate-200 p-3 shadow-sm flex flex-col justify-center col-span-2 md:col-span-3">
+            <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
               <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">Total Data Ditemukan</p>
-              <p class="text-xl md:text-2xl font-black text-slate-800 mt-1">${filteredData.length}</p>
+              <p class="text-2xl md:text-3xl font-black text-slate-800 mt-1">${filteredData.length}</p>
             </div>
           `;
         }
       }
 
-      tHead.innerHTML = `<tr>${cols.map(col => `<th class="whitespace-nowrap">${col.label}</th>`).join('')}<th class="whitespace-nowrap text-right pr-6">Aksi</th></tr>`;
+      const isFitViewTable = currentSheet === 'ALL_BPJS';
+      const tableEl = document.getElementById('bpjsDataTable');
+      const colgroupEl = document.getElementById('tableColgroup');
+      if (tableEl) tableEl.classList.toggle('table-fit-view', isFitViewTable);
+      if (colgroupEl) {
+        if (isFitViewTable) {
+          colgroupEl.innerHTML = `
+            <col style="width:3%"><col style="width:5%"><col style="width:10%"><col style="width:7%"><col style="width:10%"><col style="width:5%"><col style="width:6%"><col style="width:4%"><col style="width:7%"><col style="width:7%"><col style="width:4%"><col style="width:6%"><col style="width:4.5%"><col style="width:6%"><col style="width:4%"><col style="width:6%"><col style="width:5.5%">`;
+        } else {
+          colgroupEl.innerHTML = '';
+        }
+      }
+
+      const headerClass = isFitViewTable ? 'whitespace-normal' : 'whitespace-nowrap';
+      const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
+      const filterRowCells = cols.map(col => {
+        const currentValue = String(activeFilters[col.label] || '');
+        const options = getColumnFilterOptions(col, sourceRows);
+        if (shouldUseSelectFilter(col, sourceRows)) {
+          return `<th><select class="filter-control" onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)"><option value="">Semua</option>${options.map(option => `<option value="${escapeHtml(option)}" ${option === currentValue ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select></th>`;
+        }
+        return `<th><input class="filter-control" value="${escapeHtml(currentValue)}" placeholder="Filter..." onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)" onkeydown="if(event.key==='Enter'){setColumnFilter(${JSON.stringify(col.label)}, this.value)}"></th>`;
+      }).join('');
+
+      tHead.innerHTML = `
+        <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
+        <tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset Kolom</button></th></tr>
+      `;
 
       if (!filteredData.length) {
-        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan.</td></tr>`;
-        document.getElementById('recordCount').textContent = 'Menampilkan 0 data';
+        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan untuk pencarian / filter yang dipakai.</td></tr>`;
+        document.getElementById('recordCount').textContent = `Menampilkan 0 dari ${sourceRows.length} data`;
         return;
       }
 
       tBody.innerHTML = filteredData.map(row => {
         const safeJson = encodeURIComponent(JSON.stringify(row));
         const cells = cols.map(col => {
-          const val = getColValue(row, col.keys) || '-';
-          if (col.label === 'Status') {
-            const upper = String(val).toUpperCase();
-            if (upper === 'OK' || upper === 'AKTIF') return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif / OK</span></td>`;
-            if (upper === '-' || upper === '') return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span></td>`;
-            return `<td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(val)}</span></td>`;
-          }
-          return `<td class="whitespace-normal leading-snug font-medium max-w-[150px] md:max-w-[250px] lg:max-w-none break-words" title="${escapeHtml(val)}">${escapeHtml(val)}</td>`;
+          const display = getDisplayValue(row, col);
+          const isBadge = ['bpjs-type', 'membership-status'].includes(col.type);
+          const alignRight = ['currency', 'number', 'percent'].includes(col.type);
+          const wrapText = ['NAMA', 'DEPARTEMENT', 'POSISI', 'KETERANGAN', 'Nama Lengkap'].includes(col.label);
+          const isFitViewCell = currentSheet === 'ALL_BPJS';
+          const baseClass = isBadge
+            ? `${isFitViewCell ? 'whitespace-normal text-center' : 'whitespace-nowrap'}`
+            : (isFitViewCell ? 'whitespace-normal break-words' : (wrapText ? 'whitespace-normal min-w-[170px] max-w-[230px]' : 'whitespace-nowrap'));
+          return `<td class="${baseClass} leading-snug font-medium ${alignRight ? 'text-right' : ''}" title="${escapeHtml(String(getFilterableValue(row, col) || ''))}">${display}</td>`;
         }).join('');
 
         return `
           <tr>
             ${cells}
-            <td class="whitespace-nowrap text-right pr-5">
+            <td class="whitespace-nowrap text-right pr-5 sticky-action-cell">
               <div class="inline-flex gap-2 justify-end">
                 <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors shadow-sm" title="Edit Data"><i class="fa-solid fa-pen text-xs"></i></button>
                 <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-rose-600 hover:bg-rose-50 transition-colors shadow-sm" title="Hapus Data"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -1786,12 +2153,16 @@
             </td>
           </tr>`;
       }).join('');
-      document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} baris data`;
+
+      const activeFilterCount = getActiveColumnFilterCount();
+      const searchValue = String(document.getElementById('searchInput')?.value || '').trim();
+      const activeSummary = [];
+      if (searchValue) activeSummary.push(`pencarian "${searchValue}"`);
+      if (activeFilterCount) activeSummary.push(`${activeFilterCount} filter kolom aktif`);
+      document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} dari ${sourceRows.length} baris data${activeSummary.length ? ' • ' + activeSummary.join(' • ') : ''}`;
     }
 
     function filterTable() {
-      const q = document.getElementById('searchInput').value.toLowerCase().trim();
-      filteredData = !q ? (database[currentSheet] || []) : (database[currentSheet] || []).filter(row => Object.values(row).some(v => String(v).toLowerCase().includes(q)));
       renderTable();
     }
 
@@ -1804,21 +2175,21 @@
       document.getElementById('modalTitle').textContent = mode === 'edit' ? `Edit Data` : `Tambah Data`;
       const form = document.getElementById('dataForm');
       form.innerHTML = '';
-      let keys = [];
-      if ((database[currentSheet] || []).length > 0) {
-        keys = Object.keys(database[currentSheet][0]).filter(k => !k.startsWith('_'));
-      } else {
-        keys = FULL_KEYS[currentSheet];
-      }
+      const keys = FULL_KEYS[currentSheet] || [];
+      const readOnlyKeys = currentSheet === 'ALL_BPJS'
+        ? ['NO', 'MASA KERJA', 'GAJI POKOK', 'TOTAL']
+        : [];
       keys.forEach(key => {
-        const value = mode === 'edit' && rowData ? (rowData[key] || '') : '';
-        const readOnly = (key === 'NEW ID NO' || key === 'NO ID' || key === 'ID_PEGAWAI') && mode === 'edit';
-        const numberField = /(UPAH|RAPEL|POTONGAN)/i.test(key);
+        const rawValue = mode === 'edit' && rowData ? (rowData[key] ?? '') : '';
+        const value = key === 'JOIN DATE' ? (parseDateValue(rawValue)?.toISOString().slice(0, 10) || '') : rawValue;
+        const readOnly = readOnlyKeys.includes(key);
+        const isDate = key === 'JOIN DATE';
+        const numberField = /(UPAH|RAPEL|POTONGAN|TOTAL|GAJI|MASA KERJA)/i.test(key) && !isDate;
         const span2 = /(NAMA|KETERANGAN)/i.test(key) ? 'md:col-span-2' : '';
         form.insertAdjacentHTML('beforeend', `
           <div class="${span2}">
             <label class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">${key}</label>
-            <input data-key="${key}" type="${numberField ? 'number' : 'text'}" value="${escapeHtml(value)}" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm focus:border-teal-400 focus:ring-2 focus:ring-teal-100 transition-all ${readOnly ? 'bg-slate-50 text-slate-400 border-slate-200' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
+            <input data-key="${key}" type="${isDate ? 'date' : (numberField ? 'number' : 'text')}" value="${escapeHtml(value)}" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm focus:border-teal-400 focus:ring-2 focus:ring-teal-100 transition-all ${readOnly ? 'bg-slate-50 text-slate-400 border-slate-200' : ''}" style="border-color: var(--border)" ${readOnly ? 'readonly' : ''}>
           </div>
         `);
       });
@@ -1831,10 +2202,14 @@
 
     async function submitDataForm() {
       const inputs = document.querySelectorAll('#dataForm input');
-      const data = {};
+      let data = {};
       inputs.forEach(input => data[input.dataset.key] = input.value);
+      if (currentSheet === 'ALL_BPJS') {
+        const existingRow = editingRowIndex !== null ? (database[currentSheet] || []).find(item => item._rowIndex === editingRowIndex) : null;
+        data = enrichBpjsRow(data, null, existingRow || null);
+      }
       const payload = { sheetName: currentSheet, action: editingRowIndex !== null ? 'edit' : 'add', rowIndex: editingRowIndex, data };
-      
+
       closeModal();
       Swal.fire({
         title: 'Menyimpan...',
@@ -1842,12 +2217,12 @@
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
-      
+
       try {
         await postAction(payload);
         await safeFetchSheet(currentSheet);
         filteredData = database[currentSheet] || [];
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database)); 
+        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
         renderTable();
         updateDashboardUI();
         Swal.fire('Berhasil', 'Data berhasil disimpan.', 'success');
@@ -1916,7 +2291,7 @@
       }
       const headers = Object.keys(rows[0]);
       head.innerHTML = `<tr>${headers.map(h => `<th class="whitespace-nowrap">${h}</th>`).join('')}</tr>`;
-      body.innerHTML = rows.slice(0, 8).map(row => `<tr>${headers.map(h => `<td class="whitespace-nowrap">${row[h] ?? ''}</td>`).join('')}</tr>`).join('');
+      body.innerHTML = rows.slice(0, 8).map(row => `<tr>${headers.map(h => `<td class="whitespace-nowrap">${escapeHtml(row[h] ?? '')}</td>`).join('')}</tr>`).join('');
       if (countId) document.getElementById(countId).textContent = rows.length;
     }
 
@@ -1924,11 +2299,14 @@
       const file = event.target.files[0];
       if (!file) return;
       document.getElementById('generalFileName').textContent = file.name;
+      const target = document.getElementById('importTarget').value;
       try {
-        pendingGeneralImportData = await parseExcelFile(file);
+        let rows = await parseExcelFile(file);
+        if (target === 'ALL_BPJS') rows = enrichBpjsRows(rows);
+        pendingGeneralImportData = rows;
         if (!pendingGeneralImportData.length) throw new Error('File kosong atau tidak terbaca');
         document.getElementById('generalPreviewWrap').classList.remove('hidden');
-        document.getElementById('generalPreviewTarget').textContent = getSheetLabel(document.getElementById('importTarget').value);
+        document.getElementById('generalPreviewTarget').textContent = getSheetLabel(target);
         renderGenericPreview('generalPreviewHead', 'generalPreviewBody', pendingGeneralImportData, 'generalPreviewCount');
       } catch (e) {
         pendingGeneralImportData = [];
@@ -1940,24 +2318,25 @@
     async function processGeneralImport() {
       if (!pendingGeneralImportData.length) return;
       const target = document.getElementById('importTarget').value;
+      const dataToSend = target === 'ALL_BPJS' ? enrichBpjsRows(pendingGeneralImportData) : pendingGeneralImportData;
       const confirm = await Swal.fire({
         title: 'Mulai import massal?',
-        text: `Akan mengimpor ${pendingGeneralImportData.length} baris ke ${getSheetLabel(target)}.`,
+        text: `Akan mengimpor ${dataToSend.length} baris ke ${getSheetLabel(target)}.`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Ya, proses'
       });
       if (!confirm.isConfirmed) return;
-      
+
       Swal.fire({
         title: 'Memproses Import...',
         text: 'Sedang menimpa/menambah data ke server',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
-      
+
       try {
-        await postAction({ sheetName: target, action: 'import', data: pendingGeneralImportData });
+        await postAction({ sheetName: target, action: 'import', data: dataToSend });
         await safeFetchSheet(target);
         filteredData = database[currentSheet] || [];
         localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
@@ -1975,7 +2354,8 @@
       if (!file) return;
       const target = document.getElementById('employeeInTarget').value;
       try {
-        const rows = await parseExcelFile(file);
+        let rows = await parseExcelFile(file);
+        if (target === 'ALL_BPJS') rows = enrichBpjsRows(rows);
         const existingIds = new Set((database[target] || []).map(getEmployeeId).filter(Boolean));
         const ready = [];
         const duplicates = [];
@@ -2002,10 +2382,15 @@
         ];
         document.getElementById('employeeInBody').innerHTML = previewRows.slice(0, 50).map(item => `
           <tr>
-            <td class="whitespace-nowrap font-bold">${getEmployeeId(item.row) || '-'}</td>
-            <td class="whitespace-normal min-w-[200px] leading-snug">${getEmployeeName(item.row)}</td>
+            <td class="whitespace-nowrap font-bold">${escapeHtml(getEmployeeId(item.row) || '-')}</td>
+            <td class="whitespace-normal min-w-[200px] leading-snug">${escapeHtml(getEmployeeName(item.row))}</td>
+            <td class="whitespace-nowrap">${item.row.STATUS ? renderTypeBadge(item.row.STATUS) : '<span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-[10px] md:text-xs font-bold">-</span>'}</td>
             <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-[10px] md:text-xs font-bold">${item.status}</span></td>
           </tr>`).join('');
+          const thead = document.querySelector('#employeeInBody').parentElement.querySelector('thead tr');
+          if (thead && !thead.innerHTML.includes('Status Worker/Staff')) {
+            thead.innerHTML = '<th class="whitespace-nowrap">NOMOR ID</th><th class="whitespace-nowrap">Nama Lengkap</th><th class="whitespace-nowrap">Status Worker/Staff</th><th class="whitespace-nowrap">Status Preview</th>';
+          }
       } catch (e) {
         resetEmployeeIn();
         Swal.fire('File gagal dibaca', e.message, 'warning');
@@ -2033,20 +2418,23 @@
         confirmButtonText: 'Ya, proses'
       });
       if (!confirm.isConfirmed) return;
-      
+
       Swal.fire({
         title: 'Memproses...',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
-      
+
       try {
-        await postAction({ sheetName: target, action: 'import', data: pendingEmployeeIn.rows });
+        const rowsToSend = target === 'ALL_BPJS'
+          ? pendingEmployeeIn.rows.map((row, idx) => enrichBpjsRow(row, (database[target]?.length || 0) + idx))
+          : pendingEmployeeIn.rows;
+        await postAction({ sheetName: target, action: 'import', data: rowsToSend });
         await safeFetchSheet(target);
         await appendLog({
           type: 'IN',
           sheet: target,
-          count: pendingEmployeeIn.rows.length,
+          count: rowsToSend.length,
           fileName: pendingEmployeeIn.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
@@ -2071,7 +2459,7 @@
         const missing = [];
         const seen = new Set();
         rows.forEach(row => {
-          const id = getEmployeeId(row);
+          const id = String(getColValue(row, ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI']) || '').trim();
           if (!id || seen.has(id)) return;
           seen.add(id);
           if (map.has(id)) matches.push(map.get(id));
@@ -2088,10 +2476,15 @@
         ];
         document.getElementById('employeeOutBody').innerHTML = preview.slice(0, 50).map(item => `
           <tr>
-            <td class="whitespace-nowrap font-bold">${getEmployeeId(item.row) || '-'}</td>
-            <td class="whitespace-normal min-w-[200px] leading-snug">${getEmployeeName(item.row)}</td>
+            <td class="whitespace-nowrap font-bold">${escapeHtml(getEmployeeId(item.row) || '-')}</td>
+            <td class="whitespace-normal min-w-[200px] leading-snug">${escapeHtml(getEmployeeName(item.row))}</td>
+            <td class="whitespace-nowrap">${item.row.STATUS ? renderTypeBadge(item.row.STATUS) : '<span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-[10px] md:text-xs font-bold">-</span>'}</td>
             <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 text-[10px] md:text-xs font-bold">${item.status}</span></td>
           </tr>`).join('');
+          const thead = document.querySelector('#employeeOutBody').parentElement.querySelector('thead tr');
+          if (thead && !thead.innerHTML.includes('Status Worker/Staff')) {
+            thead.innerHTML = '<th class="whitespace-nowrap">NOMOR ID</th><th class="whitespace-nowrap">Nama Lengkap</th><th class="whitespace-nowrap">Status Worker/Staff</th><th class="whitespace-nowrap">Status Preview</th>';
+          }
       } catch (e) {
         resetEmployeeOut();
         Swal.fire('File gagal dibaca', e.message, 'warning');
@@ -2232,7 +2625,7 @@
         return;
       }
       badge.textContent = item.id || 'Terpilih';
-      const cardDataText = `ID Pegawai / No ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`;
+      const cardDataText = `NOMOR ID: ${item.id}\nNIK: ${item.nik}\nNama Lengkap: ${item.name}\nNomor Kartu: ${item.cardNumber}`;
       const domId = 'selected-card-template';
       panel.innerHTML = `
         <div id="${domId}" class="card-template ${template} rounded-[20px] md:rounded-[26px] p-4 md:p-5 flex flex-col justify-between shadow-inner">
@@ -2249,7 +2642,7 @@
           </div>
           <div class="relative z-10 mt-4 md:mt-5 space-y-2 md:space-y-3 text-xs md:text-sm">
             <div class="rounded-xl md:rounded-2xl bg-white/10 border border-white/10 p-2.5 md:p-3 shadow-sm backdrop-blur-sm">
-              <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">ID Pegawai / No ID</div>
+              <div class="text-white/70 text-[9px] md:text-[11px] uppercase tracking-[0.18em] font-bold">NOMOR ID</div>
               <div class="mt-1 font-black text-sm md:text-base break-words">${escapeHtml(item.id)}</div>
             </div>
             <div class="grid grid-cols-2 gap-2 md:gap-3">
@@ -2288,7 +2681,7 @@
     }
 
     function renderCardPrint() {
-      const source = document.getElementById('cardSource').value || 'STAFF';
+      const source = document.getElementById('cardSource').value || 'ALL_BPJS';
       const template = document.getElementById('cardTemplate').value;
       const query = (document.getElementById('cardSearch').value || '').toLowerCase().trim();
       const rows = makeCardRows(source).filter(r => {
@@ -2316,7 +2709,7 @@
           <div onclick="selectCardRow('${item.key}')" class="cursor-pointer rounded-2xl border p-3 md:p-4 transition-all shadow-sm ${isActive ? 'border-teal-300 bg-teal-50 ring-2 ring-teal-100' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}">
             <div class="grid grid-cols-1 md:grid-cols-[140px_170px_minmax(0,1fr)_180px] gap-3 md:gap-4 items-start md:items-center">
               <div>
-                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">ID Pegawai</p>
+                <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">NOMOR ID</p>
                 <p class="mt-1 font-black text-slate-800 break-words">${escapeHtml(item.id)}</p>
               </div>
               <div>
@@ -2341,37 +2734,68 @@
       renderCardPreview(rows.find(item => item.key === selectedCardKey), template);
     }
 
+    function getTemplateDefinition(fileName) {
+      const bpjsHeaders = ['NO', 'NOMOR ID', 'NAMA', 'DEPARTEMENT', 'POSISI', 'STATUS', 'JOIN DATE', 'MASA KERJA', 'GAJI POKOK', 'STATUS KEPESERTAAN', 'POTONGAN', 'TOTAL', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'];
+      const bpjsExample = enrichBpjsRow({
+        'NOMOR ID': 'WK000001',
+        NAMA: 'CONTOH NAMA',
+        DEPARTEMENT: 'SEWING',
+        POSISI: 'OPERATOR',
+        STATUS: 'WORKER',
+        'JOIN DATE': new Date().toISOString().slice(0, 10),
+        'STATUS KEPESERTAAN': 'OK',
+        POTONGAN: 0.01,
+        KETERANGAN: '-',
+        'NOMOR KARTU': '0000000000000',
+        'NO HP': '081234567890',
+        NIK: '3200000000000001'
+      }, 0);
+      const sippHeaders = ['NIK', 'ID_PEGAWAI', 'KPJ', 'KODE_TK', 'NAMA_LENGKAP', 'TGL_LAHIR', 'UPAH', 'RAPEL', 'BLTH', 'NPP'];
+      const sippExample = {
+        NIK: '3200000000000001',
+        ID_PEGAWAI: 'WK000001',
+        KPJ: '1122334455667',
+        KODE_TK: 'TK01',
+        NAMA_LENGKAP: 'CONTOH NAMA',
+        TGL_LAHIR: '1995-01-01',
+        UPAH: 2990088,
+        RAPEL: 0,
+        BLTH: '202604',
+        NPP: 'NPP001'
+      };
+      const karyawanBaruHeaders = ['NOMOR ID', 'NAMA', 'DEPARTEMENT', 'POSISI', 'STATUS', 'JOIN DATE', 'STATUS KEPESERTAAN', 'POTONGAN', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'];
+      const karyawanKeluarHeaders = ['NOMOR ID', 'NAMA', 'STATUS', 'KETERANGAN'];
+
+      const definitions = {
+        'template-import-massal-all-bpjs.xlsx': { sheetName: 'ALL_BPJS', headers: bpjsHeaders, rows: [bpjsHeaders.map(key => bpjsExample[key] ?? '')] },
+        'template-import-massal-data-upah.xlsx': { sheetName: 'DATA_UPAH', headers: sippHeaders, rows: [sippHeaders.map(key => sippExample[key] ?? '')] },
+        'template-karyawan-baru-all-bpjs.xlsx': { sheetName: 'KARYAWAN_BARU_BPJS', headers: karyawanBaruHeaders, rows: [karyawanBaruHeaders.map(key => bpjsExample[key] ?? '')] },
+        'template-karyawan-keluar-all-bpjs.xlsx': { sheetName: 'KARYAWAN_KELUAR_BPJS', headers: karyawanKeluarHeaders, rows: [[bpjsExample['NOMOR ID'], bpjsExample['NAMA'], bpjsExample['STATUS'], 'OUT / resign']] }
+      };
+      return definitions[fileName] || null;
+    }
+
     async function downloadTemplateFile(fileName) {
       const safeName = String(fileName || '').split('/').pop();
       if (!safeName) return;
-      try {
-        const response = await fetch(safeName, { cache: 'no-store' });
-        if (!response.ok) throw new Error('File template tidak ditemukan');
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = safeName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-      } catch (err) {
-        const a = document.createElement('a');
-        a.href = safeName;
-        a.download = safeName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          timer: 2200,
-          showConfirmButton: false,
-          icon: 'info',
-          title: 'Download template dimulai'
+      if (safeName === 'template-upload-bpjs-pack.zip') {
+        ['template-import-massal-all-bpjs.xlsx', 'template-import-massal-data-upah.xlsx', 'template-karyawan-baru-all-bpjs.xlsx', 'template-karyawan-keluar-all-bpjs.xlsx'].forEach((name, index) => {
+          setTimeout(() => downloadTemplateFile(name), index * 250);
         });
+        Swal.fire({ toast: true, position: 'top-end', timer: 2200, showConfirmButton: false, icon: 'success', title: 'Semua template sedang diunduh' });
+        return;
       }
+      const definition = getTemplateDefinition(safeName);
+      if (!definition) {
+        Swal.fire('Template tidak tersedia', 'File template tidak ditemukan.', 'warning');
+        return;
+      }
+      const workbook = XLSX.utils.book_new();
+      const aoa = [definition.headers, ...definition.rows];
+      const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+      worksheet['!cols'] = definition.headers.map(header => ({ wch: Math.max(header.length + 2, 14) }));
+      XLSX.utils.book_append_sheet(workbook, worksheet, definition.sheetName);
+      XLSX.writeFile(workbook, safeName);
     }
 
     function copyText(text, successMessage = 'Berhasil dicopy') {
@@ -2395,7 +2819,7 @@
 
     function downloadCardRowsExcel() {
       const rows = visibleCardRows.map(item => ({
-        'ID Pegawai / No ID': item.id,
+        'NOMOR ID': item.id,
         NIK: item.nik,
         'Nama Lengkap': item.name,
         'Nomor Kartu': item.cardNumber,
