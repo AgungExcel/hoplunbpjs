@@ -483,6 +483,853 @@
       color: #64748b;
       margin-bottom: 0.75rem;
     }
+
+    @media (max-width: 1366px) and (min-width: 1024px), (max-height: 820px) and (min-width: 1024px) {
+      #sidebar {
+        width: 17.5rem !important;
+        max-width: 17.5rem !important;
+      }
+      header {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+      }
+      #mainScrollContainer {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1.5rem !important;
+      }
+      .glass, .glass-strong {
+        backdrop-filter: blur(12px);
+      }
+      #tab-dashboard {
+        gap: 0.75rem !important;
+      }
+      #tab-dashboard .dashboard-metrics {
+        gap: 0.75rem !important;
+      }
+      #tab-dashboard .dashboard-metric {
+        padding: 0.8rem 0.9rem !important;
+      }
+      #tab-dashboard .dashboard-metric p.text-2xl,
+      #tab-dashboard .dashboard-metric p.text-3xl,
+      #tab-dashboard .dashboard-metric p.md\:text-3xl,
+      #tab-dashboard .dashboard-metric p.md\:text-4xl {
+        font-size: 2rem !important;
+        line-height: 1 !important;
+      }
+      #tab-dashboard .dashboard-row-top,
+      #tab-dashboard .dashboard-row-bottom {
+        gap: 0.75rem !important;
+      }
+      #tab-dashboard .dashboard-panel-card {
+        padding: 0.9rem 1rem !important;
+      }
+      #tab-dashboard .dashboard-panel-card h3 {
+        font-size: 1rem !important;
+        line-height: 1.2 !important;
+      }
+      .bpjs-summary-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.75rem !important;
+      }
+      .bpjs-summary-card {
+        padding: 0.85rem !important;
+      }
+      .bpjs-summary-total {
+        font-size: 1.4rem !important;
+      }
+      .bpjs-summary-meta {
+        gap: 0.35rem 0.45rem !important;
+      }
+      .bpjs-summary-pill {
+        font-size: 0.66rem !important;
+        padding: 0.38rem 0.5rem !important;
+      }
+      .table-modern thead th {
+        padding: 0.8rem 0.75rem !important;
+        font-size: 0.6rem !important;
+      }
+      .table-modern tbody td {
+        padding: 0.75rem 0.75rem !important;
+        font-size: 0.8rem !important;
+      }
+      #tab-card-print .xl\:col-span-2,
+      #tab-card-print .xl\:col-span-1 {
+        grid-column: span 1 / span 1 !important;
+      }
+      #tab-card-print .sticky {
+        position: static !important;
+      }
+    }
+    @media (max-width: 1180px) and (min-width: 768px) {
+      #sidebar {
+        width: 15.5rem !important;
+        max-width: 15.5rem !important;
+      }
+      #tab-dashboard .dashboard-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+      .bpjs-summary-strip {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 1536px) {
+      #tab-card-print .grid.xl\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+      }
+      #tab-card-print .xl\:col-span-2,
+      #tab-card-print .xl\:col-span-1 {
+        grid-column: span 1 / span 1 !important;
+      }
+      #tab-card-print .sticky {
+        position: static !important;
+        top: auto !important;
+      }
+      #cardTableBody {
+        max-height: 24rem !important;
+      }
+      #cardPreviewPanel .card-template {
+        max-width: 24rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (max-width: 1400px) {
+      .bpjs-summary-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.55rem !important;
+      }
+      .bpjs-summary-card {
+        padding: 0.7rem 0.75rem !important;
+        border-radius: 1rem !important;
+      }
+      .bpjs-summary-card h4 {
+        font-size: 0.6rem !important;
+        margin-bottom: 0.35rem !important;
+        letter-spacing: 0.1em !important;
+      }
+      .bpjs-summary-total {
+        font-size: 1.2rem !important;
+      }
+      .bpjs-summary-meta {
+        gap: 0.28rem 0.35rem !important;
+        margin-top: 0.45rem !important;
+      }
+      .bpjs-summary-pill {
+        padding: 0.28rem 0.38rem !important;
+        font-size: 0.6rem !important;
+        border-radius: 0.72rem !important;
+      }
+      .bpjs-summary-pill span:last-child {
+        font-size: 0.7rem !important;
+      }
+      #bpjsDataTable.table-fit-view thead th {
+        font-size: 0.46rem !important;
+        padding: 0.5rem 0.2rem !important;
+        letter-spacing: 0.05em !important;
+      }
+      #bpjsDataTable.table-fit-view thead tr.table-filter-row th {
+        top: 31px !important;
+        padding: 0.35rem 0.15rem !important;
+      }
+      #bpjsDataTable.table-fit-view tbody td {
+        font-size: 0.66rem !important;
+        padding: 0.58rem 0.2rem !important;
+        line-height: 1.15 !important;
+      }
+      #bpjsDataTable.table-fit-view .filter-control {
+        min-width: 0 !important;
+        padding: 0.28rem 0.34rem !important;
+        font-size: 0.6rem !important;
+        border-radius: 0.65rem !important;
+      }
+      #bpjsDataTable.table-fit-view .bpjs-inline-badge,
+      #bpjsDataTable.table-fit-view .membership-badge {
+        font-size: 0.5rem !important;
+        padding: 0.2rem 0.14rem !important;
+      }
+      #bpjsDataTable.table-fit-view .copy-inline-btn {
+        width: 1rem !important;
+        height: 1rem !important;
+      }
+      .table-note-chip {
+        font-size: 0.62rem !important;
+        padding: 0.35rem 0.55rem !important;
+      }
+    }
+
+    @media (max-width: 1280px) and (min-width: 768px) {
+      #tab-dashboard .dashboard-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+      #tab-dashboard .dashboard-row-top,
+      #tab-dashboard .dashboard-row-bottom {
+        grid-template-columns: 1fr !important;
+      }
+      .dashboard-percent-card {
+        padding: 0.8rem !important;
+      }
+      .dashboard-percent-card .percent-big {
+        font-size: 1.5rem !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .bpjs-summary-strip {
+        grid-template-columns: 1fr !important;
+      }
+      #tab-card-print .grid.xl\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+      }
+      #cardPreviewPanel .card-template {
+        max-width: 100%;
+      }
+    }
+
+  
+    /* responsive compact overrides */
+    #tab-dashboard .dashboard-metrics { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+    #tab-dashboard .dashboard-metric { padding: 0.85rem 1rem; border-radius: 20px; }
+    #tab-dashboard .dashboard-metric p.text-2xl,
+    #tab-dashboard .dashboard-metric p.text-3xl,
+    #tab-dashboard .dashboard-metric p.md\:text-3xl,
+    #tab-dashboard .dashboard-metric p.md\:text-4xl { font-size: 1.25rem !important; line-height: 1.05 !important; }
+    #tab-dashboard .dashboard-metric .w-10, #tab-dashboard .dashboard-metric .w-12 { width: 2.5rem !important; height: 2.5rem !important; }
+    #tab-dashboard .dashboard-row-top, #tab-dashboard .dashboard-row-bottom { gap: 0.75rem; align-items: start; }
+    #tab-dashboard .dashboard-panel-card { padding: 0.9rem 1rem; }
+    #tab-dashboard .dashboard-panel-card h3 { font-size: 0.95rem !important; line-height: 1.2 !important; }
+    .dashboard-percent-card { padding: 0.8rem !important; border-radius: 18px !important; }
+    .dashboard-percent-card .percent-big { font-size: 1.8rem !important; line-height: 1 !important; }
+    .dashboard-percent-card .percent-label, .dashboard-percent-card .percent-meta { font-size: 0.72rem !important; }
+    .bpjs-summary-strip.compact { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+    .bpjs-summary-strip.compact .bpjs-summary-card { padding: 0.7rem 0.8rem; border-radius: 16px; }
+    .bpjs-summary-strip.compact .bpjs-summary-card h4 { font-size: 0.64rem; margin-bottom: 0.2rem; }
+    .bpjs-summary-strip.compact .bpjs-summary-total { font-size: 1.15rem; }
+    .bpjs-summary-strip.compact .bpjs-summary-meta { margin-top: 0.35rem; gap: 0.3rem; }
+    .bpjs-summary-strip.compact .bpjs-summary-pill { padding: 0.24rem 0.34rem; font-size: 0.58rem; border-radius: 999px; }
+    .bpjs-summary-strip.compact .bpjs-summary-pill span:last-child { font-size: 0.68rem; }
+    .table-note-chip { font-size: 0.62rem !important; padding: 0.3rem 0.5rem !important; }
+    #bpjsDataTable.table-fit-view thead th { font-size: 0.52rem !important; padding: 0.42rem 0.18rem !important; }
+    #bpjsDataTable.table-fit-view thead tr.table-filter-row th { top: 29px !important; padding: 0.3rem 0.12rem !important; }
+    #bpjsDataTable.table-fit-view tbody td { font-size: 0.68rem !important; padding: 0.48rem 0.18rem !important; line-height: 1.12 !important; }
+    #bpjsDataTable.table-fit-view .filter-control { min-width: 0 !important; padding: 0.24rem 0.28rem !important; font-size: 0.58rem !important; border-radius: 0.6rem !important; }
+    #bpjsDataTable.table-fit-view .bpjs-inline-badge, #bpjsDataTable.table-fit-view .membership-badge { font-size: 0.48rem !important; padding: 0.18rem 0.12rem !important; }
+    #bpjsDataTable.table-fit-view .copy-inline-btn { width: 0.95rem !important; height: 0.95rem !important; }
+    #tab-card-print .grid.xl\:grid-cols-3 { grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.85fr) !important; }
+    #tab-card-print .xl\:col-span-2 { grid-column: auto !important; }
+    #tab-card-print .xl\:col-span-1 { grid-column: auto !important; }
+    #tab-card-print .sticky { position: sticky !important; top: 1rem !important; }
+    #cardTableBody { max-height: 31rem !important; }
+    #cardPreviewPanel .card-template { max-width: 100%; }
+    #tab-settings .max-w-5xl { max-width: 72rem !important; }
+    #tab-settings .grid.md\:grid-cols-2 { gap: 0.9rem !important; }
+    #tab-settings input, #tab-settings select { padding-top: 0.7rem !important; padding-bottom: 0.7rem !important; }
+    #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 { flex-wrap: wrap; }
+    @media (max-width: 1490px) {
+      #sidebar { width: 15rem !important; max-width: 15rem !important; }
+      #mainScrollContainer { padding-left: 0.85rem !important; padding-right: 0.85rem !important; }
+      #tab-dashboard .dashboard-metrics { grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); }
+      #tab-dashboard .dashboard-row-top, #tab-dashboard .dashboard-row-bottom { grid-template-columns: 1fr 1fr !important; }
+      .dashboard-percent-card .percent-big { font-size: 1.55rem !important; }
+      .bpjs-summary-strip.compact { gap: 0.5rem; }
+      #tab-card-print .grid.xl\:grid-cols-3 { grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.9fr) !important; gap: 0.8rem !important; }
+      #tab-card-print .glass-strong { padding: 0.9rem !important; }
+    }
+    @media (max-width: 1280px) {
+      #tab-dashboard .dashboard-row-top, #tab-dashboard .dashboard-row-bottom { grid-template-columns: 1fr !important; }
+      .bpjs-summary-strip.compact { grid-template-columns: 1fr !important; }
+      #tab-card-print .grid.xl\:grid-cols-3 { grid-template-columns: 1fr !important; }
+      #tab-card-print .sticky { position: static !important; top: auto !important; }
+      #cardPreviewPanel .card-template { max-width: 22rem; margin: 0 auto; }
+    }
+    @media (max-width: 1024px) {
+      #sidebar { width: 15rem !important; max-width: 85vw !important; }
+      #tab-dashboard .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      #tab-dashboard .dashboard-metrics { grid-template-columns: 1fr; }
+      .bpjs-summary-strip.compact { grid-template-columns: 1fr; }
+      #bpjsDataTable.table-fit-view thead th, #bpjsDataTable.table-fit-view tbody td { font-size: 0.7rem !important; }
+      #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 button { width: 100%; }
+    }
+
+  
+
+    /* === precise responsive override v4 === */
+    #mainScrollContainer.dashboard-fit,
+    #tab-dashboard.dashboard-fit {
+      overflow-y: visible !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    #mainScrollContainer {
+      padding-left: clamp(0.75rem, 1.2vw, 1.25rem) !important;
+      padding-right: clamp(0.75rem, 1.2vw, 1.25rem) !important;
+      padding-top: clamp(0.75rem, 1.2vw, 1rem) !important;
+      padding-bottom: 1rem !important;
+    }
+    #sidebar {
+      width: clamp(14.5rem, 16vw, 16.5rem) !important;
+      max-width: min(85vw, 16.5rem) !important;
+    }
+    header {
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+      padding-left: clamp(0.75rem, 1.4vw, 1.25rem) !important;
+      padding-right: clamp(0.75rem, 1.4vw, 1.25rem) !important;
+    }
+    #pageTitle { font-size: clamp(1.35rem, 2vw, 1.8rem) !important; }
+
+    /* Dashboard */
+    #tab-dashboard { gap: 0.85rem !important; }
+    #tab-dashboard .dashboard-metrics {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+      gap: 0.7rem !important;
+    }
+    #tab-dashboard .dashboard-metric {
+      padding: 0.75rem 0.85rem !important;
+      border-radius: 18px !important;
+      min-height: 0 !important;
+    }
+    #tab-dashboard .dashboard-metric p.text-2xl,
+    #tab-dashboard .dashboard-metric p.text-3xl,
+    #tab-dashboard .dashboard-metric p.md\:text-3xl,
+    #tab-dashboard .dashboard-metric p.md\:text-4xl {
+      font-size: clamp(1.05rem, 2.1vw, 1.8rem) !important;
+      line-height: 1 !important;
+      margin-top: 0.4rem !important;
+    }
+    #tab-dashboard .dashboard-metric .w-10,
+    #tab-dashboard .dashboard-metric .w-12 {
+      width: 2.3rem !important;
+      height: 2.3rem !important;
+      border-radius: 0.9rem !important;
+    }
+    #tab-dashboard .dashboard-row-top,
+    #tab-dashboard .dashboard-row-bottom {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+      gap: 0.8rem !important;
+      align-items: start !important;
+    }
+    #tab-dashboard .dashboard-row-bottom { grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr) !important; }
+    #tab-dashboard .dashboard-panel-card {
+      padding: 0.85rem 0.95rem !important;
+      border-radius: 20px !important;
+      min-width: 0 !important;
+    }
+    #tab-dashboard .dashboard-panel-card h3 {
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem) !important;
+      line-height: 1.2 !important;
+    }
+    #tab-dashboard .dashboard-panel-card .mb-5 { margin-bottom: 0.75rem !important; }
+    .dashboard-percent-card {
+      padding: 0.8rem !important;
+      border-radius: 16px !important;
+    }
+    .dashboard-percent-card .percent-big { font-size: clamp(1.35rem, 2vw, 1.9rem) !important; }
+    .dashboard-percent-card .percent-meta,
+    .dashboard-percent-card .percent-label { font-size: 0.72rem !important; }
+    .mini-progress-track { height: 0.44rem !important; }
+    #chartModuleBars { gap: 0.65rem !important; }
+    #chartModuleBars > div,
+    #chartStatusSummary .rounded-xl,
+    #chartStatusSummary .rounded-2xl,
+    #activityFeed > div {
+      border-radius: 16px !important;
+    }
+    #activityFeed { max-height: 18.5rem !important; overflow-y: auto; }
+
+    /* BPJS & SIPP tables */
+    #tab-data .p-4.md\:p-6.border-b,
+    #tab-data .p-4.md\:px-6.bg-slate-50\/50,
+    #tab-data .p-4.md\:px-6.border-t { padding-left: 0.9rem !important; padding-right: 0.9rem !important; }
+    #tableIntroText.hidden,
+    #tableHelpBar.hidden,
+    #dataResetFilterBtn.hidden { display: none !important; }
+    #tableHelpBar { padding-top: 0.45rem !important; padding-bottom: 0.45rem !important; }
+    .table-note-chip {
+      padding: 0.32rem 0.55rem !important;
+      font-size: 0.64rem !important;
+      border-radius: 999px !important;
+    }
+    .bpjs-summary-strip.compact {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 0.6rem !important;
+      align-items: stretch !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-card {
+      padding: 0.7rem 0.75rem !important;
+      border-radius: 16px !important;
+      min-width: 0 !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-card h4 {
+      font-size: 0.62rem !important;
+      letter-spacing: 0.12em !important;
+      margin-bottom: 0.18rem !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-total {
+      font-size: clamp(1rem, 1.8vw, 1.35rem) !important;
+      line-height: 1 !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-meta {
+      gap: 0.28rem !important;
+      margin-top: 0.45rem !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-pill {
+      padding: 0.22rem 0.38rem !important;
+      font-size: 0.58rem !important;
+      border-radius: 999px !important;
+    }
+    .bpjs-summary-strip.compact .bpjs-summary-pill span:last-child { font-size: 0.67rem !important; }
+    #tableWrap {
+      max-height: calc(100dvh - 18rem) !important;
+      min-height: 18rem !important;
+    }
+    #bpjsDataTable.table-fit-view { table-layout: fixed !important; }
+    #bpjsDataTable.table-fit-view thead th {
+      font-size: 0.54rem !important;
+      padding: 0.42rem 0.18rem !important;
+      letter-spacing: 0.07em !important;
+      line-height: 1.15 !important;
+    }
+    #bpjsDataTable.table-fit-view thead tr.table-filter-row th {
+      top: 31px !important;
+      padding: 0.3rem 0.14rem !important;
+      background: rgba(255,255,255,0.98) !important;
+    }
+    #bpjsDataTable.table-fit-view tbody td {
+      font-size: 0.69rem !important;
+      padding: 0.52rem 0.18rem !important;
+      line-height: 1.16 !important;
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    #bpjsDataTable.table-fit-view td.copyable-cell { white-space: nowrap !important; }
+    #bpjsDataTable.table-fit-view .filter-control {
+      min-width: 0 !important;
+      padding: 0.24rem 0.32rem !important;
+      font-size: 0.6rem !important;
+      border-radius: 0.6rem !important;
+    }
+    #bpjsDataTable.table-fit-view .bpjs-inline-badge,
+    #bpjsDataTable.table-fit-view .membership-badge {
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      padding: 0.18rem 0.28rem !important;
+      font-size: 0.54rem !important;
+      border-radius: 999px !important;
+      display: inline-flex !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline {
+      gap: 0.22rem !important;
+      justify-content: flex-start !important;
+      max-width: 100% !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-text {
+      font-size: 0.68rem !important;
+      line-height: 1.1 !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-btn {
+      width: 1.05rem !important;
+      height: 1.05rem !important;
+      border-radius: 0.45rem !important;
+      flex-shrink: 0 !important;
+    }
+    #bpjsDataTable.table-fit-view .sticky-action-header,
+    #bpjsDataTable.table-fit-view .sticky-action-cell {
+      position: static !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    /* Card print */
+    #tab-card-print .grid.xl\:grid-cols-3 {
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.82fr) !important;
+      gap: 0.85rem !important;
+      align-items: start !important;
+    }
+    #tab-card-print .glass-strong {
+      padding: 0.9rem !important;
+      border-radius: 20px !important;
+    }
+    #tab-card-print .sticky {
+      position: sticky !important;
+      top: 0.9rem !important;
+      align-self: start !important;
+    }
+    #cardTableBody { max-height: min(65dvh, 34rem) !important; }
+    #cardPreviewPanel .card-template {
+      max-width: 21rem !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      min-height: 0 !important;
+    }
+
+    /* Settings */
+    #tab-settings .max-w-5xl {
+      max-width: min(64rem, 100%) !important;
+    }
+    #tab-settings .glass {
+      padding: 1rem !important;
+      border-radius: 20px !important;
+    }
+    #tab-settings .grid.md\:grid-cols-2 { gap: 0.75rem !important; }
+    #tab-settings input,
+    #tab-settings select {
+      padding-top: 0.65rem !important;
+      padding-bottom: 0.65rem !important;
+      font-size: 0.92rem !important;
+    }
+    #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 {
+      flex-wrap: wrap !important;
+      gap: 0.65rem !important;
+    }
+    #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 > button {
+      min-width: 12rem;
+    }
+
+    @media (max-width: 1366px) {
+      #sidebar { width: 14.5rem !important; max-width: 14.5rem !important; }
+      #tab-dashboard .dashboard-row-top,
+      #tab-dashboard .dashboard-row-bottom { grid-template-columns: 1fr !important; }
+      #tableWrap { max-height: calc(100dvh - 17rem) !important; }
+      #tab-card-print .grid.xl\:grid-cols-3 { grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr) !important; }
+    }
+    @media (max-width: 1180px) {
+      #sidebar { width: 14rem !important; max-width: 14rem !important; }
+      #tab-dashboard .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .bpjs-summary-strip.compact { grid-template-columns: 1fr !important; }
+      #tab-card-print .grid.xl\:grid-cols-3 { grid-template-columns: 1fr !important; }
+      #tab-card-print .sticky { position: static !important; top: auto !important; }
+      #cardPreviewPanel .card-template { max-width: 19.5rem !important; }
+    }
+    @media (max-width: 980px) {
+      #mainScrollContainer { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      #tab-dashboard .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      #tableWrap { max-height: calc(100dvh - 15rem) !important; }
+      #bpjsDataTable.table-fit-view,
+      #bpjsDataTable.table-fit-view thead,
+      #bpjsDataTable.table-fit-view tbody,
+      #bpjsDataTable.table-fit-view tr,
+      #bpjsDataTable.table-fit-view th,
+      #bpjsDataTable.table-fit-view td { font-size: 0.68rem !important; }
+      #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 > button { min-width: 0; }
+    }
+    @media (max-width: 768px) {
+      #sidebar { width: 15rem !important; max-width: 85vw !important; }
+      #tab-dashboard .dashboard-metrics { grid-template-columns: 1fr !important; }
+      #tab-dashboard .dashboard-row-top,
+      #tab-dashboard .dashboard-row-bottom { grid-template-columns: 1fr !important; }
+      #tableWrap { max-height: calc(100dvh - 13rem) !important; }
+      #tab-settings .flex.flex-col.sm\:flex-row.justify-end.gap-3 > button { width: 100%; }
+    }
+
+  
+
+    /* === precise responsive override v5 === */
+    #tableHelpBar,
+    #tableIntroText {
+      display: none !important;
+    }
+    .card-print-note {
+      display: none !important;
+    }
+    #tab-data .p-4.md\:p-6.border-b {
+      padding-top: 0.85rem !important;
+      padding-bottom: 0.85rem !important;
+    }
+    #tab-data #dataTabRecap {
+      padding-top: 0.6rem !important;
+      padding-bottom: 0.6rem !important;
+    }
+    #tab-data .bpjs-summary-strip.compact {
+      grid-template-columns: 1.1fr 1fr 1fr !important;
+      gap: 0.45rem !important;
+    }
+    #tab-data .bpjs-summary-strip.compact .bpjs-summary-card {
+      padding: 0.55rem 0.65rem !important;
+      border-radius: 14px !important;
+    }
+    #tab-data .bpjs-summary-strip.compact .bpjs-summary-card h4 {
+      font-size: 0.58rem !important;
+      margin-bottom: 0.15rem !important;
+    }
+    #tab-data .bpjs-summary-strip.compact .bpjs-summary-total {
+      font-size: 1.05rem !important;
+    }
+    #tab-data .bpjs-summary-strip.compact .bpjs-summary-meta {
+      gap: 0.22rem !important;
+      margin-top: 0.32rem !important;
+    }
+    #tab-data .bpjs-summary-strip.compact .bpjs-summary-pill {
+      padding: 0.18rem 0.32rem !important;
+      font-size: 0.54rem !important;
+    }
+    #tableWrap {
+      max-height: calc(100dvh - 13.8rem) !important;
+      min-height: 14rem !important;
+    }
+    #bpjsDataTable.table-fit-view thead th {
+      font-size: 0.5rem !important;
+      padding: 0.38rem 0.14rem !important;
+    }
+    #bpjsDataTable.table-fit-view thead tr.table-filter-row th {
+      top: 28px !important;
+      padding: 0.24rem 0.1rem !important;
+    }
+    #bpjsDataTable.table-fit-view tbody td {
+      font-size: 0.66rem !important;
+      padding: 0.42rem 0.16rem !important;
+    }
+    #bpjsDataTable.table-fit-view .filter-control {
+      padding: 0.22rem 0.28rem !important;
+      font-size: 0.56rem !important;
+      border-radius: 0.55rem !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-text {
+      font-size: 0.64rem !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-btn {
+      width: 0.92rem !important;
+      height: 0.92rem !important;
+    }
+    #tab-card-print .grid.xl\:grid-cols-3 {
+      grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.8fr) !important;
+      gap: 0.75rem !important;
+    }
+    #tab-card-print .glass-strong {
+      padding: 0.75rem !important;
+    }
+    #tab-card-print .px-4.py-4.md\:px-6.md\:py-5.border-b.bg-white\/80 {
+      padding: 0.75rem 0.9rem !important;
+    }
+    #cardTableBody {
+      max-height: min(56dvh, 29rem) !important;
+      padding: 0.75rem !important;
+      gap: 0.6rem !important;
+    }
+    .card-row-item {
+      border-radius: 18px !important;
+      padding: 0.8rem !important;
+    }
+    .card-row-grid {
+      display: grid;
+      grid-template-columns: 105px 135px minmax(0,1fr) 145px;
+      gap: 0.65rem;
+      align-items: start;
+    }
+    .card-row-grid p {
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+    .card-row-name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    #cardPreviewPanel .card-template {
+      max-width: 18.6rem !important;
+    }
+    #tab-settings.settings-fit {
+      height: calc(100dvh - 7.5rem) !important;
+      overflow: hidden !important;
+    }
+    #mainScrollContainer.settings-fit {
+      overflow: hidden !important;
+      padding-top: 0.7rem !important;
+      padding-bottom: 0.7rem !important;
+    }
+    #tab-settings.settings-fit .glass {
+      padding: 0.85rem !important;
+      border-radius: 18px !important;
+      max-width: min(62rem, 100%) !important;
+    }
+    #tab-settings.settings-fit .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 0.75rem !important;
+    }
+    #tab-settings.settings-fit .grid.md\:grid-cols-2 {
+      gap: 0.55rem !important;
+    }
+    #tab-settings.settings-fit label {
+      margin-bottom: 0.3rem !important;
+      font-size: 0.72rem !important;
+    }
+    #tab-settings.settings-fit input,
+    #tab-settings.settings-fit select {
+      padding-top: 0.56rem !important;
+      padding-bottom: 0.56rem !important;
+      font-size: 0.85rem !important;
+    }
+    #tab-settings.settings-fit .mt-4 {
+      margin-top: 0.45rem !important;
+    }
+    #tab-settings.settings-fit .pt-4 {
+      padding-top: 0.65rem !important;
+    }
+    #tab-settings.settings-fit .flex.flex-col.sm\:flex-row.justify-end.gap-3 > button {
+      min-width: 10rem !important;
+      padding-top: 0.7rem !important;
+      padding-bottom: 0.7rem !important;
+    }
+
+    @media (min-width: 1024px) {
+      #mainScrollContainer.dashboard-fit {
+        overflow: hidden !important;
+        padding-top: 0.65rem !important;
+        padding-bottom: 0.65rem !important;
+      }
+      #tab-dashboard.dashboard-fit {
+        display: grid !important;
+        grid-template-rows: auto auto auto;
+        gap: 0.6rem !important;
+        min-height: calc(100dvh - 7.2rem);
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metrics {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        gap: 0.55rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metric {
+        padding: 0.65rem 0.75rem !important;
+        border-radius: 18px !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metric p.text-2xl,
+      #tab-dashboard.dashboard-fit .dashboard-metric p.text-3xl,
+      #tab-dashboard.dashboard-fit .dashboard-metric p.md\:text-3xl,
+      #tab-dashboard.dashboard-fit .dashboard-metric p.md\:text-4xl {
+        font-size: 1rem !important;
+        line-height: 1 !important;
+        margin-top: 0.28rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metric p.text-\[10px\],
+      #tab-dashboard.dashboard-fit .dashboard-metric p.text-xs,
+      #tab-dashboard.dashboard-fit .dashboard-metric p.md\:text-xs {
+        font-size: 0.52rem !important;
+        letter-spacing: 0.12em !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metric .w-10,
+      #tab-dashboard.dashboard-fit .dashboard-metric .w-12 {
+        width: 2rem !important;
+        height: 2rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-row-top {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.6rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-row-bottom {
+        grid-template-columns: 1.1fr 0.9fr !important;
+        gap: 0.6rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-panel-card {
+        padding: 0.7rem 0.8rem !important;
+        border-radius: 18px !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-panel-card h3 {
+        font-size: 0.9rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-panel-card .mb-5 {
+        margin-bottom: 0.45rem !important;
+      }
+      #tab-dashboard.dashboard-fit #chartModuleBars {
+        gap: 0.45rem !important;
+      }
+      #tab-dashboard.dashboard-fit #chartModuleBars > div {
+        padding: 0.55rem 0.65rem !important;
+        border-radius: 14px !important;
+      }
+      #tab-dashboard.dashboard-fit #chartModuleBars p.text-\[11px\] {
+        font-size: 0.6rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-percent-card {
+        padding: 0.65rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-percent-card .percent-big {
+        font-size: 1.35rem !important;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-percent-card .percent-meta,
+      #tab-dashboard.dashboard-fit #chartStatusSummary .text-\[11px\] {
+        font-size: 0.62rem !important;
+        line-height: 1.25 !important;
+      }
+      #tab-dashboard.dashboard-fit .mini-progress-track {
+        margin-top: 0.5rem !important;
+        height: 0.35rem !important;
+      }
+      #tab-dashboard.dashboard-fit #chartTrend .rounded-\[20px\],
+      #tab-dashboard.dashboard-fit #chartTrend .rounded-\[24px\] {
+        padding: 0.4rem !important;
+      }
+      #tab-dashboard.dashboard-fit #chartTrend svg {
+        max-height: 112px !important;
+      }
+      #tab-dashboard.dashboard-fit #activityFeed {
+        max-height: 112px !important;
+        overflow: hidden !important;
+      }
+      #tab-dashboard.dashboard-fit #activityFeed > div {
+        padding: 0.45rem 0.55rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+    }
+
+    @media (max-height: 860px) and (min-width: 1024px) {
+      #tab-dashboard.dashboard-fit .dashboard-row-bottom {
+        display: none !important;
+      }
+      #tab-dashboard.dashboard-fit {
+        grid-template-rows: auto auto !important;
+      }
+      #tableWrap {
+        max-height: calc(100dvh - 13rem) !important;
+      }
+    }
+
+    @media (max-width: 1440px) {
+      .card-row-grid {
+        grid-template-columns: 100px 124px minmax(0,1fr) 136px;
+      }
+      #tab-card-print .grid.xl\:grid-cols-3 {
+        grid-template-columns: minmax(0, 1.35fr) minmax(285px, 0.82fr) !important;
+      }
+    }
+
+    @media (max-width: 1280px) {
+      #tab-data .bpjs-summary-strip.compact {
+        grid-template-columns: 1fr !important;
+      }
+      #tableWrap {
+        max-height: calc(100dvh - 12.8rem) !important;
+      }
+      #tab-card-print .grid.xl\:grid-cols-3 {
+        grid-template-columns: 1fr !important;
+      }
+      #tab-card-print .sticky {
+        position: static !important;
+      }
+      #cardPreviewPanel .card-template {
+        max-width: 20rem !important;
+      }
+      .card-row-grid {
+        grid-template-columns: 98px 118px minmax(0,1fr) 126px;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .card-row-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.55rem !important;
+      }
+      #cardTableBody {
+        max-height: 22rem !important;
+      }
+    }
+
   </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
@@ -697,16 +1544,19 @@
         <section id="tab-data" class="tab-panel">
           <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden shadow-sm">
             <div class="p-4 md:p-6 border-b flex flex-col xl:flex-row xl:items-center justify-between gap-4 surface-border">
-              <div>
-                <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
-                <p class="text-xs md:text-sm text-slate-500 mt-1">Semua kolom bisa difilter seperti Excel. Rekap di bawah ikut berubah saat pencarian atau filter kolom dipakai.</p>
+              <div class="min-w-0">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
+                  <span id="tableTitleCountBadge" class="hidden px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold border border-slate-200">0 Data</span>
+                </div>
+                <p id="tableIntroText" class="hidden text-xs md:text-sm text-slate-500 mt-1"></p>
               </div>
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto">
                 <div class="relative min-w-0 sm:w-72 md:w-96">
                   <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                   <input id="searchInput" oninput="filterTable()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari cepat data BPJS..." />
                 </div>
-                <button onclick="clearTableFilters()" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm text-sm md:text-base hover:bg-slate-50 transition-colors">
+                <button id="dataResetFilterBtn" onclick="clearTableFilters()" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm text-sm md:text-base hover:bg-slate-50 transition-colors">
                   <i class="fa-solid fa-filter-circle-xmark mr-2 text-slate-500"></i>Reset Filter
                 </button>
                 <button onclick="openModal('add')" class="px-4 py-2.5 md:px-5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold shadow-lg text-sm md:text-base hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
@@ -715,9 +1565,8 @@
               </div>
             </div>
             <div id="dataTabRecap" class="p-4 md:px-6 bg-slate-50/50 border-b surface-border hidden"></div>
-            <div class="px-4 md:px-6 py-3 bg-white/70 border-b surface-border flex flex-wrap gap-2 items-center">
-              <span class="table-note-chip"><i class="fa-solid fa-table-columns"></i> Filter per kolom ada di bawah judul kolom</span>
-              <span class="table-note-chip"><i class="fa-solid fa-bolt"></i> Pencarian dibuat lebih ringan dan kolom penting ditampilkan penuh</span>
+            <div id="tableHelpBar" class="px-4 md:px-6 py-2.5 bg-white/70 border-b surface-border flex flex-wrap gap-2 items-center">
+              <span class="table-note-chip"><i class="fa-solid fa-table-columns"></i> Filter kolom aktif</span>
             </div>
             <div id="tableWrap" class="overflow-auto min-h-[300px] max-h-[calc(100dvh-21rem)] w-full">
               <table id="bpjsDataTable" class="table-modern w-full">
@@ -951,16 +1800,16 @@
                 <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
             </div>
-            <div class="rounded-[18px] border border-teal-100 bg-teal-50 p-3 md:p-4 mb-5">
-              <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Perbaikan Tampilan</p>
-              <p class="text-sm text-teal-900 mt-1">Daftar pada menu Cetak Kartu kini tampil utuh tanpa scroll horizontal. Data disusun responsif agar ID, NIK, Nama, dan No Kartu langsung terlihat di layar.</p>
+            <div class="card-print-note rounded-[18px] border border-teal-100 bg-teal-50 p-3 md:p-4 mb-5">
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700"></p>
+              <p class="text-sm text-teal-900 mt-1"></p>
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 items-start flex-col-reverse xl:flex-row">
               <div class="xl:col-span-2 glass-strong rounded-[20px] md:rounded-[26px] overflow-hidden order-2 xl:order-1 shadow-sm">
                 <div class="px-4 py-4 md:px-6 md:py-5 border-b bg-white/80" style="border-color: var(--border)">
                   <div class="flex items-center justify-between gap-2">
-                    <div><h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3><p class="text-xs text-slate-500 mt-1">Semua data tampil utuh tanpa geser kanan-kiri. Klik salah satu baris untuk menampilkan preview kartu.</p></div>
+                    <div><h3 class="text-base md:text-lg font-black text-slate-800">Daftar Karyawan</h3><p class="text-xs text-slate-500 mt-1">Klik baris untuk preview kartu.</p></div>
                     <div class="flex gap-2 items-center">
                        <span class="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg"><span id="cardCount">0</span> Data</span>
                       <button onclick="downloadCardRowsExcel()" class="px-3 py-1.5 rounded-lg bg-white border font-bold text-xs text-slate-600 hover:bg-slate-50 hover:text-emerald-700 transition-colors" style="border-color: var(--border)" title="Export Excel"><i class="fa-solid fa-file-excel text-emerald-600"></i></button>
@@ -1081,21 +1930,21 @@
         { label: 'NO', keys: ['NO'], type: 'number' },
         { label: 'NOMOR ID', keys: ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI'], type: 'text' },
         { label: 'NAMA', keys: ['NAMA', 'NAMA_LENGKAP'], type: 'text' },
-        { label: 'DEPARTEMENT', keys: ['DEPARTEMENT', 'SECTION'], type: 'text' },
+        { label: 'DEPT', keys: ['DEPARTEMENT', 'SECTION'], type: 'text' },
         { label: 'STATUS', keys: ['STATUS'], type: 'bpjs-type' },
-        { label: 'JOIN DATE', keys: ['JOIN DATE'], type: 'date' },
-        { label: 'STATUS KEPESERTAAN', keys: ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'], type: 'membership-status' },
+        { label: 'JOIN', keys: ['JOIN DATE'], type: 'date' },
+        { label: 'KEPESERTAAN', keys: ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'], type: 'membership-status' },
         { label: 'POTONGAN', keys: ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN'], type: 'percent' },
         { label: 'TOTAL', keys: ['TOTAL', 'TOTAL POTONGAN'], type: 'currency' },
-        { label: 'NOMOR KARTU', keys: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'], type: 'copyable', copyMessage: 'Nomor kartu berhasil dicopy' },
+        { label: 'NO KARTU', keys: ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'], type: 'copyable', copyMessage: 'Nomor kartu berhasil dicopy' },
         { label: 'NO HP', keys: ['NO HP'], type: 'copyable', copyMessage: 'No HP berhasil dicopy' },
         { label: 'NIK', keys: ['NIK'], type: 'copyable', copyMessage: 'NIK berhasil dicopy' }
       ],
       DATA_UPAH: [
-        { label: 'ID Pegawai', keys: ['ID_PEGAWAI', 'NOMOR ID', 'NEW ID NO', 'NO ID'], type: 'text' },
+        { label: 'NOMOR ID', keys: ['ID_PEGAWAI', 'NOMOR ID', 'NEW ID NO', 'NO ID'], type: 'text' },
         { label: 'NIK', keys: ['NIK'], type: 'text' },
-        { label: 'Nama Lengkap', keys: ['NAMA_LENGKAP', 'NAMA'], type: 'text' },
-        { label: 'KPJ / Kartu', keys: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU'], type: 'text' },
+        { label: 'NAMA', keys: ['NAMA_LENGKAP', 'NAMA'], type: 'text' },
+        { label: 'KPJ', keys: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU'], type: 'text' },
         { label: 'Upah', keys: ['UPAH'], type: 'currency' },
         { label: 'BLTH', keys: ['BLTH'], type: 'text' }
       ]
@@ -1821,9 +2670,16 @@
     function setDashboardViewportMode(tabId = document.querySelector('.tab-panel.active')?.id?.replace('tab-', '')) {
       const mainScroll = document.getElementById('mainScrollContainer');
       const dashboard = document.getElementById('tab-dashboard');
-      const enableFit = tabId === 'dashboard' && window.innerWidth >= 1024;
-      if (mainScroll) mainScroll.classList.toggle('dashboard-fit', enableFit);
-      if (dashboard) dashboard.classList.toggle('dashboard-fit', enableFit);
+      const settings = document.getElementById('tab-settings');
+      const desktop = window.innerWidth >= 1024;
+      const dashboardFit = tabId === 'dashboard' && desktop;
+      const settingsFit = tabId === 'settings' && desktop;
+      if (mainScroll) {
+        mainScroll.classList.toggle('dashboard-fit', dashboardFit);
+        mainScroll.classList.toggle('settings-fit', settingsFit);
+      }
+      if (dashboard) dashboard.classList.toggle('dashboard-fit', dashboardFit);
+      if (settings) settings.classList.toggle('settings-fit', settingsFit);
     }
 
     function switchTab(tabId, sheet = null) {
@@ -2357,20 +3213,39 @@
       filteredData = getFilteredRowsForCurrentSheet();
 
       document.getElementById('tableTitle').textContent = getSheetLabel(currentSheet);
+      const searchInputEl = document.getElementById('searchInput');
+      const introTextEl = document.getElementById('tableIntroText');
+      const helpBarEl = document.getElementById('tableHelpBar');
+      const resetBtnEl = document.getElementById('dataResetFilterBtn');
+      const titleCountBadgeEl = document.getElementById('tableTitleCountBadge');
+      if (currentSheet === 'ALL_BPJS') {
+        if (searchInputEl) searchInputEl.placeholder = 'Cari data BPJS...';
+        if (introTextEl) { introTextEl.textContent = ''; introTextEl.classList.add('hidden'); }
+        if (helpBarEl) helpBarEl.classList.add('hidden');
+        if (resetBtnEl) resetBtnEl.classList.remove('hidden');
+        if (titleCountBadgeEl) { titleCountBadgeEl.textContent = ''; titleCountBadgeEl.classList.add('hidden'); }
+      } else {
+        if (searchInputEl) searchInputEl.placeholder = 'Cari data SIPP...';
+        if (introTextEl) { introTextEl.textContent = ''; introTextEl.classList.add('hidden'); }
+        if (helpBarEl) helpBarEl.classList.add('hidden');
+        if (resetBtnEl) resetBtnEl.classList.add('hidden');
+        if (titleCountBadgeEl) {
+          titleCountBadgeEl.textContent = `${filteredData.length} Data`;
+          titleCountBadgeEl.classList.remove('hidden');
+        }
+      }
 
       if (recapContainer) {
         recapContainer.classList.remove('hidden');
         if (currentSheet === 'ALL_BPJS') {
           const stats = getBpjsStats(filteredData);
-          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border';
+          recapContainer.className = 'p-3 md:px-4 bg-slate-50/50 border-b surface-border';
           recapContainer.innerHTML = `
-            <div class="bpjs-summary-strip">
+            <div class="bpjs-summary-strip compact">
               <div class="bpjs-summary-card">
                 <h4>Total BPJS</h4>
                 <p class="bpjs-summary-total">${stats.total}</p>
                 <div class="bpjs-summary-meta">
-                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>Staff</span><span>${stats.staffTotal}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>Worker</span><span>${stats.workerTotal}</span></div>
                   <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive + stats.workerActive}</span></div>
                   <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.staffOut + stats.workerOut}</span></div>
                 </div>
@@ -2380,9 +3255,8 @@
                 <p class="bpjs-summary-total text-sky-800">${stats.staffTotal}</p>
                 <div class="bpjs-summary-meta">
                   <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.staffOut}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>Pot. 1%</span><span>${stats.staffPot1}</span></div>
-                  <div class="bpjs-summary-pill"><span>Pot. >1%</span><span>${stats.staffPotMore}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>1%</span><span>${stats.staffPot1}</span></div>
+                  <div class="bpjs-summary-pill"><span>>1%</span><span>${stats.staffPotMore}</span></div>
                 </div>
               </div>
               <div class="bpjs-summary-card">
@@ -2390,21 +3264,15 @@
                 <p class="bpjs-summary-total text-indigo-800">${stats.workerTotal}</p>
                 <div class="bpjs-summary-meta">
                   <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.workerActive}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.workerOut}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>Pot. 1%</span><span>${stats.workerPot1}</span></div>
-                  <div class="bpjs-summary-pill"><span>Pot. >1%</span><span>${stats.workerPotMore}</span></div>
+                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>1%</span><span>${stats.workerPot1}</span></div>
+                  <div class="bpjs-summary-pill"><span>>1%</span><span>${stats.workerPotMore}</span></div>
                 </div>
               </div>
             </div>
           `;
         } else {
-          recapContainer.className = 'p-4 md:px-6 bg-slate-50/60 border-b surface-border';
-          recapContainer.innerHTML = `
-            <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-              <p class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">Total Data Ditemukan</p>
-              <p class="text-2xl md:text-3xl font-black text-slate-800 mt-1">${filteredData.length}</p>
-            </div>
-          `;
+          recapContainer.classList.add('hidden');
+          recapContainer.innerHTML = '';
         }
       }
 
@@ -2418,7 +3286,7 @@
         if (colgroupEl) {
           if (isFitViewTable) {
             colgroupEl.innerHTML = `
-              <col style="width:3.2%"><col style="width:7.8%"><col style="width:13.9%"><col style="width:8.4%"><col style="width:5.3%"><col style="width:7.2%"><col style="width:6.1%"><col style="width:4.6%"><col style="width:6.2%"><col style="width:9.7%"><col style="width:8.5%"><col style="width:12.0%"><col style="width:7.1%">`;
+              <col style="width:3.5%"><col style="width:8%"><col style="width:13%"><col style="width:8.5%"><col style="width:5%"><col style="width:7.5%"><col style="width:6.5%"><col style="width:5.5%"><col style="width:7%"><col style="width:12%"><col style="width:9%"><col style="width:10.5%"><col style="width:4.5%">`;
           } else {
             colgroupEl.innerHTML = '';
           }
@@ -2426,18 +3294,22 @@
 
         const headerClass = isFitViewTable ? 'whitespace-normal' : 'whitespace-nowrap';
         const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
-        const filterRowCells = cols.map(col => {
-          const currentValue = String(activeFilters[col.label] || '');
-          const options = getColumnFilterOptions(col, sourceRows);
-          if (shouldUseSelectFilter(col, sourceRows)) {
-            return `<th><select class="filter-control" onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)"><option value="">Semua</option>${options.map(option => `<option value="${escapeHtml(option)}" ${option === currentValue ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select></th>`;
-          }
-          return `<th><input class="filter-control" value="${escapeHtml(currentValue)}" placeholder="Filter..." onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)" onkeydown="if(event.key==='Enter'){setColumnFilter(${JSON.stringify(col.label)}, this.value)}"></th>`;
-        }).join('');
+        let filterRowMarkup = '';
+        if (currentSheet === 'ALL_BPJS') {
+          const filterRowCells = cols.map(col => {
+            const currentValue = String(activeFilters[col.label] || '');
+            const options = getColumnFilterOptions(col, sourceRows);
+            if (shouldUseSelectFilter(col, sourceRows)) {
+              return `<th><select class="filter-control" onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)"><option value="">Semua</option>${options.map(option => `<option value="${escapeHtml(option)}" ${option === currentValue ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}</select></th>`;
+            }
+            return `<th><input class="filter-control" value="${escapeHtml(currentValue)}" placeholder="Filter..." onchange="setColumnFilter(${JSON.stringify(col.label)}, this.value)" onkeydown="if(event.key==='Enter'){setColumnFilter(${JSON.stringify(col.label)}, this.value)}"></th>`;
+          }).join('');
+          filterRowMarkup = `<tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset</button></th></tr>`;
+        }
 
         tHead.innerHTML = `
           <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
-          <tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset Kolom</button></th></tr>
+          ${filterRowMarkup}
         `;
         tableRenderState.headerKey = headerKey;
       }
@@ -3049,12 +3921,12 @@
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">Nama Lengkap</p>
-                <p class="mt-1 font-semibold text-slate-800 break-words leading-snug">${escapeHtml(item.name)}</p>
+                <p class="card-row-name mt-1 font-semibold text-slate-800 leading-snug">${escapeHtml(item.name)}</p>
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">No Kartu</p>
                 <div class="mt-1 flex items-center gap-2 group" onclick="event.stopPropagation(); copyText('${item.cardNumber}', 'Nomor kartu berhasil dicopy')">
-                  <span class="font-bold text-slate-800 break-all">${escapeHtml(item.cardNumber)}</span>
+                  <span class="font-bold text-slate-800 break-words">${escapeHtml(item.cardNumber)}</span>
                   <button class="w-7 h-7 rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
                 </div>
                 <p class="mt-2 text-[11px] text-slate-400">Klik baris untuk preview kartu.</p>
