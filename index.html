@@ -83,11 +83,84 @@
       border-right: 1px solid rgba(148,163,184,.12);
       box-shadow: 16px 0 36px rgba(2,6,23,.18);
     }
-    .nav-link.active {
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 24%, transparent), color-mix(in srgb, var(--secondary) 18%, transparent));
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.12);
+    .nav-link {
+      position: relative;
+      border: 1px solid transparent;
+      color: rgba(226,232,240,.9);
+      overflow: hidden;
     }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), transparent 60%);
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+    .nav-link:hover {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border-color: rgba(255,255,255,.1);
+      transform: translateX(4px);
+      box-shadow: 0 12px 24px rgba(2,6,23,.18);
+    }
+    .nav-link:hover::after { opacity: 1; }
+    .nav-link i {
+      width: 2.35rem;
+      height: 2.35rem;
+      min-width: 2.35rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      transition: all .24s ease;
+    }
+    .nav-link span {
+      position: relative;
+      z-index: 1;
+      font-weight: 700;
+    }
+    .nav-link.active {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 78%, white 10%), color-mix(in srgb, var(--secondary) 84%, white 10%));
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 18px 32px rgba(15,23,42,.28), inset 0 1px 0 rgba(255,255,255,.16);
+      transform: translateX(6px);
+    }
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: .55rem;
+      top: .55rem;
+      bottom: .55rem;
+      width: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 0 12px rgba(255,255,255,.45);
+    }
+    .nav-link.active::after { opacity: .16; }
+    .nav-link.active i {
+      background: rgba(255,255,255,.18);
+      color: #fff;
+      border-color: rgba(255,255,255,.2);
+      box-shadow: 0 12px 22px rgba(15,23,42,.22), inset 0 1px 0 rgba(255,255,255,.18);
+      transform: scale(1.05);
+    }
+    .nav-link[data-tab="dashboard"] i { color: #22d3ee; background: rgba(34,211,238,.14); border-color: rgba(34,211,238,.24); }
+    .nav-link[data-tab="global-search"] i { color: #60a5fa; background: rgba(96,165,250,.14); border-color: rgba(96,165,250,.24); }
+    .nav-link[data-tab="data"][data-sheet="STAFF"] i { color: #2dd4bf; background: rgba(45,212,191,.14); border-color: rgba(45,212,191,.24); }
+    .nav-link[data-tab="data"][data-sheet="WORKER"] i { color: #38bdf8; background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.24); }
+    .nav-link[data-tab="data"][data-sheet="DATA_UPAH"] i { color: #c084fc; background: rgba(192,132,252,.14); border-color: rgba(192,132,252,.24); }
+    .nav-link[data-tab="import"] i { color: #60a5fa; background: rgba(96,165,250,.14); border-color: rgba(96,165,250,.24); }
+    .nav-link[data-tab="employee-in"] i { color: #34d399; background: rgba(52,211,153,.14); border-color: rgba(52,211,153,.24); }
+    .nav-link[data-tab="employee-out"] i { color: #fb7185; background: rgba(251,113,133,.14); border-color: rgba(251,113,133,.24); }
+    .nav-link[data-tab="report"] i { color: #f59e0b; background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.24); }
+    .nav-link[data-tab="card-print"] i { color: #f472b6; background: rgba(244,114,182,.14); border-color: rgba(244,114,182,.24); }
+    .nav-link[data-tab="settings"] i { color: #eab308; background: rgba(234,179,8,.14); border-color: rgba(234,179,8,.24); }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; animation: rise .24s ease; }
     @keyframes rise {
@@ -151,43 +224,58 @@
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 999px; }
     ::-webkit-scrollbar-track { background: transparent; }
+    
 
     @media (min-width: 1024px) {
       #mainScrollContainer.dashboard-fit {
         overflow-y: hidden;
-        padding-top: 0.75rem;
-        padding-bottom: 0.5rem;
+        padding-top: 0.45rem;
+        padding-bottom: 0.35rem;
       }
       #tab-dashboard.dashboard-fit {
-        gap: 0.875rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        min-height: calc(100dvh - 118px);
       }
       #tab-dashboard.dashboard-fit .dashboard-metrics {
-        gap: 0.75rem;
+        gap: 0.55rem;
       }
       #tab-dashboard.dashboard-fit .dashboard-metric {
-        padding: 0.875rem 1rem;
+        padding: 0.7rem 0.85rem;
+        min-height: auto;
+      }
+      #tab-dashboard.dashboard-fit .dashboard-metric p[id^="metric"],
+      #tab-dashboard.dashboard-fit #metricInMonth,
+      #tab-dashboard.dashboard-fit #metricOutMonth {
+        font-size: 1.65rem;
+        line-height: 1;
+        margin-top: 0.45rem;
       }
       #tab-dashboard.dashboard-fit .dashboard-panel-card {
-        padding: 1rem 1.125rem;
+        padding: 0.85rem 1rem;
       }
       #tab-dashboard.dashboard-fit .dashboard-row-top,
       #tab-dashboard.dashboard-fit .dashboard-row-bottom {
-        gap: 0.875rem;
+        gap: 0.7rem;
       }
       #tab-dashboard.dashboard-fit .dashboard-panel-card h3 {
-        font-size: 1.35rem;
+        font-size: 1.2rem;
         line-height: 1.2;
       }
+      #tab-dashboard.dashboard-fit .dashboard-panel-card .mb-5 {
+        margin-bottom: 0.65rem !important;
+      }
       #tab-dashboard.dashboard-fit #chartTrend svg {
-        max-height: 220px;
+        max-height: 170px;
       }
       #tab-dashboard.dashboard-fit #activityFeed {
-        max-height: 220px;
+        max-height: 170px;
         overflow-y: auto;
-        padding-right: 0.25rem;
+        padding-right: 0.15rem;
       }
     }
-    
+
     /* Global Table Styling Elements */
     .table-modern { width: 100%; text-align: left; border-collapse: separate; border-spacing: 0; }
     .table-modern thead th { 
@@ -780,34 +868,6 @@
               <button onclick="saveSettings()" class="w-full sm:w-auto px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base hover:opacity-90 transition-opacity shadow-lg" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">Simpan Pengaturan</button>
             </div>
           </div>
-          
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
-            <h3 class="text-lg md:text-xl font-black tracking-tight">Preview Tampilan</h3>
-            <div class="mt-4 md:mt-5 rounded-[24px] md:rounded-[28px] p-4 md:p-6 text-white relative overflow-hidden shadow-inner" style="background: linear-gradient(135deg, var(--sidebar-a), var(--sidebar-b));">
-              <div class="absolute inset-0 soft-grid opacity-10"></div>
-              <div class="relative flex items-center gap-3 md:gap-4">
-                <div class="w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-[18px] md:rounded-3xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/5 shadow-sm">
-                  <img id="brandPreviewImg" class="hidden w-full h-full object-cover" alt="Preview logo">
-                  <i id="brandPreviewIcon" class="fa-solid fa-shield-heart text-xl md:text-2xl text-white/90"></i>
-                </div>
-                <div class="min-w-0">
-                  <p id="brandPreviewName" class="font-black text-base md:text-xl truncate tracking-tight">BPJS Control Center</p>
-                  <p id="brandPreviewSubtitle" class="text-white/60 text-[10px] md:text-sm truncate font-medium mt-0.5">BPJS KS Staff / Worker + SIPP Worker</p>
-                </div>
-              </div>
-              <div class="mt-6 space-y-2.5 text-xs md:text-sm">
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 1: <span id="brandPreviewStaff" class="ml-1 text-white">BPJS KS Staff</span></p>
-                </div>
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 2: <span id="brandPreviewWorker" class="ml-1 text-white">BPJS KS Worker</span></p>
-                </div>
-                <div class="rounded-xl bg-white/5 border border-white/10 p-3 md:p-3.5 truncate shadow-sm backdrop-blur-sm">
-                  <p class="font-bold text-white/90">Menu 3: <span id="brandPreviewUpah" class="ml-1 text-white">SIPP Worker</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
       </div>
     </main>
@@ -1181,20 +1241,26 @@
       const previewIcon = document.getElementById('brandPreviewIcon');
       const settingPreview = document.getElementById('settingLogoPreview');
       if (logoData) {
-        logoImg.src = logoData;
-        previewImg.src = logoData;
-        settingPreview.src = logoData;
-        logoImg.classList.remove('hidden');
-        previewImg.classList.remove('hidden');
-        settingPreview.classList.remove('hidden');
-        logoIcon.classList.add('hidden');
-        previewIcon.classList.add('hidden');
+        if (logoImg) {
+          logoImg.src = logoData;
+          logoImg.classList.remove('hidden');
+        }
+        if (previewImg) {
+          previewImg.src = logoData;
+          previewImg.classList.remove('hidden');
+        }
+        if (settingPreview) {
+          settingPreview.src = logoData;
+          settingPreview.classList.remove('hidden');
+        }
+        if (logoIcon) logoIcon.classList.add('hidden');
+        if (previewIcon) previewIcon.classList.add('hidden');
       } else {
-        logoImg.classList.add('hidden');
-        previewImg.classList.add('hidden');
-        settingPreview.classList.add('hidden');
-        logoIcon.classList.remove('hidden');
-        previewIcon.classList.remove('hidden');
+        if (logoImg) logoImg.classList.add('hidden');
+        if (previewImg) previewImg.classList.add('hidden');
+        if (settingPreview) settingPreview.classList.add('hidden');
+        if (logoIcon) logoIcon.classList.remove('hidden');
+        if (previewIcon) previewIcon.classList.remove('hidden');
       }
     }
 
@@ -1266,8 +1332,23 @@
     }
 
     async function resetSettings() {
+      const confirmReset = await Swal.fire({
+        title: 'Kembalikan ke default?',
+        text: 'Nama aplikasi, subtitle, nama modul, tema, dan logo akan dikembalikan ke pengaturan awal.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, kembalikan',
+        cancelButtonText: 'Tidak',
+        reverseButtons: true,
+        confirmButtonColor: '#0f766e',
+        cancelButtonColor: '#64748b'
+      });
+      if (!confirmReset.isConfirmed) return;
+
       appSettings = structuredClone(DEFAULT_SETTINGS);
       tempLogoData = '';
+      const logoInput = document.getElementById('settingLogoInput');
+      if (logoInput) logoInput.value = '';
       saveSettingsStorage();
       applySettingsToUI();
       
@@ -1337,8 +1418,8 @@
       if (tabId === 'global-search') performGlobalSearch();
       if (tabId === 'report') renderReport();
       if (tabId === 'card-print') renderCardPrint();
-      updatePageTitleForCurrentTab(tabId, sheet || currentSheet);
       setDashboardViewportMode(tabId);
+      updatePageTitleForCurrentTab(tabId, sheet || currentSheet);
       closeNav();
     }
 
@@ -1519,7 +1600,7 @@
       const compact = window.innerWidth >= 1024 && document.getElementById('tab-dashboard')?.classList.contains('dashboard-fit');
       const total = ok + notOk;
       const pct = total ? Math.round((ok / total) * 100) : 0;
-      const radius = compact ? 52 : 58;
+      const radius = compact ? 48 : 58;
       const circumference = 2 * Math.PI * radius;
       const dash = total ? (ok / total) * circumference : 0;
       const boxSize = compact ? 150 : 180;
@@ -1588,9 +1669,9 @@
       const outValues = months.map(month => inOutLogs.filter(log => log.type === 'OUT' && String(log.createdAt).startsWith(month.key)).reduce((sum, item) => sum + Number(item.count || 0), 0));
       const maxVal = Math.max(...inValues, ...outValues, 1);
       const width = 520;
-      const height = compact ? 185 : 240;
+      const height = compact ? 165 : 240;
       const padX = 34;
-      const padY = compact ? 18 : 24;
+      const padY = compact ? 16 : 24;
       const innerW = width - padX * 2;
       const innerH = height - padY * 2 - 24;
       const xAt = idx => padX + ((innerW) / Math.max(months.length - 1, 1)) * idx;
