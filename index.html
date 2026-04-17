@@ -1551,7 +1551,36 @@
       .card-preview-actions { grid-template-columns: 1fr; }
     }
 
-</style>
+
+    .menu-title-with-icon {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      min-width: 0;
+    }
+    .menu-title-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: .75rem;
+      object-fit: contain;
+      background: #ffffff;
+      border: 1px solid rgba(148,163,184,.18);
+      box-shadow: 0 6px 18px rgba(15,23,42,.08);
+      padding: .25rem;
+      flex: 0 0 auto;
+      display: none;
+    }
+    .menu-title-icon.show { display: block; }
+    @media (max-width: 768px) {
+      .menu-title-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: .65rem;
+        padding: .2rem;
+      }
+    }
+
+  </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
   <div class="flex h-full w-full overflow-hidden">
@@ -1632,7 +1661,7 @@
             <button id="openSidebar" class="md:hidden w-11 h-11 shrink-0 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
             <div class="min-w-0 flex-1">
               <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500 truncate">BPJS Control Center</p>
-              <h1 id="pageTitle" class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1>
+              <div class="menu-title-with-icon"><img id="pageTitleIcon" class="menu-title-icon" alt=""><h1 id="pageTitle" class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1></div>
             </div>
           </div>
           <div class="flex items-center gap-2 md:gap-3 flex-wrap justify-start md:justify-end">
@@ -1762,7 +1791,7 @@
             <div class="p-4 md:p-6 border-b flex flex-col xl:flex-row xl:items-center justify-between gap-4 surface-border">
               <div class="min-w-0">
                 <div class="flex items-center gap-3 flex-wrap">
-                  <h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2>
+                  <div class="menu-title-with-icon"><img id="tableTitleIcon" class="menu-title-icon" alt=""><h2 id="tableTitle" class="text-xl md:text-2xl font-black tracking-tight">Data Modul</h2></div>
                   <span id="tableTitleCountBadge" class="hidden px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold border border-slate-200">0 Data</span>
                 </div>
                 <p id="tableIntroText" class="hidden text-xs md:text-sm text-slate-500 mt-1"></p>
@@ -3049,6 +3078,30 @@ function applyDashboardSnapshot(snapshot) {
         : 'Pengaturan dikembalikan ke default di browser ini.', 'success');
     }
 
+    function getTitleIconConfig(sheet) {
+      const normalized = String(sheet || '').toUpperCase();
+      if (normalized === 'ALL_BPJS') return { src: 'bpjsks.png', alt: 'BPJS Kesehatan' };
+      if (normalized === 'DATA_UPAH') return { src: 'bpjstk.png', alt: 'SIPP Worker' };
+      return null;
+    }
+
+    function applyTitleIconState(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
+      const config = tab === 'data' ? getTitleIconConfig(sheet) : null;
+      ['pageTitleIcon', 'tableTitleIcon'].forEach(id => {
+        const img = document.getElementById(id);
+        if (!img) return;
+        if (config) {
+          img.src = config.src;
+          img.alt = config.alt;
+          img.classList.add('show');
+        } else {
+          img.removeAttribute('src');
+          img.alt = '';
+          img.classList.remove('show');
+        }
+      });
+    }
+
     function updatePageTitleForCurrentTab(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
       const map = {
         dashboard: 'Dashboard',
@@ -3065,6 +3118,7 @@ function applyDashboardSnapshot(snapshot) {
       } else {
         document.getElementById('pageTitle').textContent = map[tab] || 'Dashboard';
       }
+      applyTitleIconState(tab, sheet);
     }
 
     function bindNavigation() {
@@ -3660,6 +3714,7 @@ function applyDashboardSnapshot(snapshot) {
       if (currentSheet === 'ALL_BPJS' && sourceRows.length) { saveBpjsRowsSnapshot(sourceRows); saveDashboardSnapshot(getBpjsStats(sourceRows)); }
 
       document.getElementById('tableTitle').textContent = getSheetLabel(currentSheet);
+      applyTitleIconState('data', currentSheet);
       const searchInputEl = document.getElementById('searchInput');
       const introTextEl = document.getElementById('tableIntroText');
       const helpBarEl = document.getElementById('tableHelpBar');
@@ -4084,7 +4139,8 @@ function applyDashboardSnapshot(snapshot) {
       if (!file) return;
       const target = document.getElementById('employeeInTarget').value;
       try {
-        let rows = await parseExcelFile(file);
+        const parsed = await parseExcelFile(file, { preferredSheetNames: target === 'ALL_BPJS' ? ['ALL_BPJS', 'all_bpjs', 'BPJS', 'bpjs'] : [] });
+        let rows = Array.isArray(parsed?.rows) ? parsed.rows : [];
         if (target === 'ALL_BPJS') rows = enrichBpjsRows(rows);
         const existingIds = new Set((database[target] || []).map(getEmployeeId).filter(Boolean));
         const ready = [];
@@ -4183,7 +4239,8 @@ function applyDashboardSnapshot(snapshot) {
       if (!file) return;
       const target = document.getElementById('employeeOutTarget').value;
       try {
-        const rows = await parseExcelFile(file);
+        const parsed = await parseExcelFile(file, { preferredSheetNames: target === 'ALL_BPJS' ? ['ALL_BPJS', 'all_bpjs', 'BPJS', 'bpjs'] : [] });
+        const rows = Array.isArray(parsed?.rows) ? parsed.rows : [];
         const map = new Map((database[target] || []).map(row => [getEmployeeId(row), row]));
         const matches = [];
         const missing = [];
@@ -4464,7 +4521,10 @@ Nomor Kartu: ${item.cardNumber}`;
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">NIK</p>
-                <p class="card-row-nik mt-1 font-semibold text-slate-700 leading-tight" title="${escapeHtml(item.nik)}">${escapeHtml(item.nik)}</p>
+                <div class="mt-1 flex items-center gap-2 group" onclick="event.stopPropagation(); copyText('${item.nik}', 'NIK berhasil dicopy')">
+                  <span class="card-row-nik font-semibold text-slate-700 leading-tight" title="${escapeHtml(item.nik)}">${escapeHtml(item.nik)}</span>
+                  <button class="copy-inline-btn rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy NIK"><i class="fa-regular fa-copy text-[10px]"></i></button>
+                </div>
               </div>
               <div class="card-row-card-wrap">
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">No Kartu</p>
@@ -4513,9 +4573,50 @@ Nomor Kartu: ${item.cardNumber}`;
 
       const definitions = {
         'template-import-massal-all-bpjs.xlsx': { sheetName: 'ALL_BPJS', headers: bpjsHeaders, rows: [bpjsHeaders.map(key => bpjsExample[key] ?? '')] },
-        'template-import-massal-data-upah.xlsx': { sheetName: 'data_upah', headers: sippHeaders, rows: [sippHeaders.map(key => sippExample[key] ?? '')], includeInstructionSheet: true },
-        'template-karyawan-baru-all-bpjs.xlsx': { sheetName: 'KARYAWAN_BARU_BPJS', headers: karyawanBaruHeaders, rows: [karyawanBaruHeaders.map(key => bpjsExample[key] ?? '')] },
-        'template-karyawan-keluar-all-bpjs.xlsx': { sheetName: 'KARYAWAN_KELUAR_BPJS', headers: karyawanKeluarHeaders, rows: [[bpjsExample['NOMOR ID'], bpjsExample['NAMA'], bpjsExample['STATUS'], 'OUT / resign']] }
+        'template-import-massal-data-upah.xlsx': {
+          sheetName: 'data_upah',
+          headers: sippHeaders,
+          rows: [sippHeaders.map(key => sippExample[key] ?? '')],
+          includeInstructionSheet: true,
+          instructionRows: [
+            ['PETUNJUK PENGISIAN TEMPLATE SIPP'],
+            ['1. Isi data mulai baris ke-2 pada sheet data_upah.'],
+            ['2. Jangan ubah nama sheet: data_upah.'],
+            ['3. Jangan ubah nama kolom/header pada baris pertama.'],
+            ['4. Format TGL_LAHIR gunakan teks seperti 17-06-2003 atau sesuai sumber Anda.'],
+            ['5. Format BLTH gunakan teks seperti 01-04-2026 sesuai template perusahaan.'],
+            ['6. Kolom RAPEL diisi 0 jika tidak ada rapel.']
+          ]
+        },
+        'template-karyawan-baru-all-bpjs.xlsx': {
+          sheetName: 'karyawan_baru_bpjs',
+          headers: karyawanBaruHeaders,
+          rows: [karyawanBaruHeaders.map(key => bpjsExample[key] ?? '')],
+          includeInstructionSheet: true,
+          instructionRows: [
+            ['PETUNJUK TEMPLATE KARYAWAN BARU BPJS'],
+            ['1. Isi data mulai baris ke-2 pada sheet karyawan_baru_bpjs.'],
+            ['2. Wajib isi minimal NOMOR ID, NAMA, STATUS, JOIN DATE, STATUS KEPESERTAAN, POTONGAN, NIK, NOMOR KARTU, dan NO HP bila tersedia.'],
+            ['3. STATUS diisi STAFF atau WORKER.'],
+            ['4. STATUS KEPESERTAAN gunakan OK untuk aktif.'],
+            ['5. POTONGAN bisa diisi 1% atau 2% / 3% / 4% sesuai data karyawan.'],
+            ['6. Jangan ubah nama kolom/header pada baris pertama.']
+          ]
+        },
+        'template-karyawan-keluar-all-bpjs.xlsx': {
+          sheetName: 'karyawan_keluar_bpjs',
+          headers: karyawanKeluarHeaders,
+          rows: [[bpjsExample['NOMOR ID'], bpjsExample['NAMA'], bpjsExample['STATUS'], 'OUT / resign']],
+          includeInstructionSheet: true,
+          instructionRows: [
+            ['PETUNJUK TEMPLATE KARYAWAN KELUAR BPJS'],
+            ['1. Isi data mulai baris ke-2 pada sheet karyawan_keluar_bpjs.'],
+            ['2. Minimal isi NOMOR ID. Kolom lain membantu proses validasi.'],
+            ['3. STATUS tetap diisi STAFF atau WORKER sesuai data awal.'],
+            ['4. KETERANGAN dapat diisi OUT / resign / mutasi / nonaktif.'],
+            ['5. Jangan ubah nama kolom/header pada baris pertama.']
+          ]
+        }
       };
       return definitions[fileName] || null;
     }
@@ -4537,15 +4638,13 @@ Nomor Kartu: ${item.cardNumber}`;
       }
       const workbook = XLSX.utils.book_new();
       if (definition.includeInstructionSheet) {
-        const instructionRows = [
-          ['PETUNJUK PENGISIAN TEMPLATE SIPP'],
-          ['1. Isi data mulai baris ke-2 pada sheet data_upah.'],
-          ['2. Jangan ubah nama sheet: data_upah.'],
-          ['3. Jangan ubah nama kolom/header pada baris pertama.'],
-          ['4. Format TGL_LAHIR gunakan teks seperti 17-06-2003 atau sesuai sumber Anda.'],
-          ['5. Format BLTH gunakan teks seperti 01-04-2026 sesuai template perusahaan.'],
-          ['6. Kolom RAPEL diisi 0 jika tidak ada rapel.']
-        ];
+        const instructionRows = Array.isArray(definition.instructionRows) && definition.instructionRows.length
+          ? definition.instructionRows
+          : [
+              ['PETUNJUK PENGISIAN TEMPLATE'],
+              ['1. Isi data mulai baris ke-2 pada sheet utama.'],
+              ['2. Jangan ubah nama kolom/header pada baris pertama.']
+            ];
         const instructionSheet = XLSX.utils.aoa_to_sheet(instructionRows);
         instructionSheet['!cols'] = [{ wch: 78 }];
         XLSX.utils.book_append_sheet(workbook, instructionSheet, 'Petunjuk Pengisian');
@@ -4559,12 +4658,25 @@ Nomor Kartu: ${item.cardNumber}`;
 
     function copyPreviewData() {
       const panel = document.getElementById('cardPreviewPanel');
-      copyText(panel?.dataset?.copyText || '', 'Data kartu berhasil dicopy');
+      let value = panel?.dataset?.copyText || '';
+      if (!value && visibleCardRows?.length) {
+        const selected = visibleCardRows.find(item => item.key === selectedCardKey) || visibleCardRows[0];
+        if (selected) value = `NOMOR ID: ${selected.id}
+Nama Lengkap: ${selected.name}
+NIK: ${selected.nik}
+Nomor Kartu: ${selected.cardNumber}`;
+      }
+      copyText(value, 'Data kartu berhasil dicopy');
     }
 
     function copyPreviewCardNumber() {
       const panel = document.getElementById('cardPreviewPanel');
-      copyText(panel?.dataset?.copyCardNumber || '', 'Nomor kartu berhasil dicopy');
+      let value = panel?.dataset?.copyCardNumber || '';
+      if (!value && visibleCardRows?.length) {
+        const selected = visibleCardRows.find(item => item.key === selectedCardKey) || visibleCardRows[0];
+        value = selected?.cardNumber || '';
+      }
+      copyText(value, 'Nomor kartu berhasil dicopy');
     }
 
     async function copyText(text, successMessage = 'Berhasil dicopy') {
