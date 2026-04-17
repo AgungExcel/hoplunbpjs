@@ -1528,9 +1528,9 @@
 
   
     /* v15 card visibility and compact template */
-    .card-row-grid { grid-template-columns: 110px minmax(160px,1fr) 190px 170px !important; gap: 0.9rem !important; align-items: start !important; }
+    .card-row-grid { grid-template-columns: 112px minmax(170px,1fr) 220px 190px !important; gap: 0.9rem !important; align-items: start !important; }
     .card-row-grid .card-row-nik,
-    .card-row-grid .card-row-card { font-size: 0.95rem; line-height: 1.2; white-space: nowrap; overflow: visible; text-overflow: clip; letter-spacing: 0; }
+    .card-row-grid .card-row-card { font-size: 0.88rem; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: clip; letter-spacing: 0; word-break: break-all; }
     .card-row-grid .card-row-card-wrap { min-width: 0; }
     .card-row-grid .card-row-card-wrap .copy-inline-btn { width: 1.9rem; height: 1.9rem; }
     .card-row-grid .card-row-name { white-space: normal; overflow-wrap: anywhere; }
@@ -1539,9 +1539,9 @@
     .card-preview-actions { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
     .card-preview-actions button { min-height: 3rem; }
     @media (max-width: 1280px) {
-      .card-row-grid { grid-template-columns: 100px minmax(150px,1fr) 170px 150px !important; gap: 0.7rem !important; }
+      .card-row-grid { grid-template-columns: 100px minmax(145px,1fr) 160px 150px !important; gap: 0.65rem !important; }
       .card-row-grid .card-row-nik,
-      .card-row-grid .card-row-card { font-size: 0.88rem; }
+      .card-row-grid .card-row-card { font-size: 0.8rem; }
       .card-preview-line-value.nowrap-tight { font-size: 0.74rem; }
     }
     @media (max-width: 1100px) {
@@ -2220,11 +2220,37 @@
     }
 
     function saveLogs() {
-      localStorage.setItem('bpjsInOutLogsV2', JSON.stringify(inOutLogs));
+      try { localStorage.setItem('bpjsInOutLogsV2', JSON.stringify(inOutLogs.slice(0, 500))); } catch (e) {}
     }
 
     function saveSettingsStorage() {
-      localStorage.setItem('bpjsUiSettingsV2', JSON.stringify(appSettings));
+      try { localStorage.setItem('bpjsUiSettingsV2', JSON.stringify(appSettings)); } catch (e) {}
+    }
+
+    function safeStorageSet(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        console.warn('Storage quota / cache skipped for', key, e);
+        return false;
+      }
+    }
+
+    function buildCompactDatabaseCache() {
+      return {
+        ALL_BPJS: Array.isArray(database.ALL_BPJS) ? database.ALL_BPJS.slice(0, 180) : [],
+        DATA_UPAH: Array.isArray(database.DATA_UPAH) ? database.DATA_UPAH.slice(0, 180) : [],
+        savedAt: new Date().toISOString()
+      };
+    }
+
+    function saveDatabaseCache() {
+      const payload = buildCompactDatabaseCache();
+      const serialized = JSON.stringify(payload);
+      if (!safeStorageSet(CACHE_KEY_DB, serialized)) {
+        try { localStorage.removeItem(CACHE_KEY_DB); } catch (e) {}
+      }
     }
 
     function pickAny(row, keys = []) {
@@ -2504,7 +2530,7 @@
 
     function saveDashboardSnapshot(stats) {
       try {
-        localStorage.setItem(CACHE_KEY_DASHBOARD, JSON.stringify({
+        safeStorageSet(CACHE_KEY_DASHBOARD, JSON.stringify({
           stats,
           sippCount: database.DATA_UPAH?.length || 0,
           savedAt: new Date().toISOString()
@@ -2526,7 +2552,8 @@
     function saveBpjsRowsSnapshot(rows = []) {
       try {
         if (!Array.isArray(rows) || !rows.length) return;
-        localStorage.setItem(CACHE_KEY_BPJS_ROWS, JSON.stringify(rows.slice(0, 10000)));
+        safeStorageSet(CACHE_KEY_BPJS_ROWS, JSON.stringify(rows.slice(0, 350)));
+
       } catch (e) {}
     }
 
@@ -2543,7 +2570,8 @@
     function saveSippRowsSnapshot(rows = []) {
       try {
         if (!Array.isArray(rows) || !rows.length) return;
-        localStorage.setItem(CACHE_KEY_SIPP_ROWS, JSON.stringify(rows.slice(0, 10000)));
+        safeStorageSet(CACHE_KEY_SIPP_ROWS, JSON.stringify(rows.slice(0, 350)));
+
       } catch (e) {}
     }
 
@@ -3228,7 +3256,7 @@ function applyDashboardSnapshot(snapshot) {
           safeFetchSheet('ALL_BPJS').catch(() => { database.ALL_BPJS = database.ALL_BPJS || []; primeSheetCaches('ALL_BPJS'); }),
           safeFetchSheet('DATA_UPAH').catch(() => { const sippSnapshotRows = loadSippRowsSnapshot(); database.DATA_UPAH = sippSnapshotRows.length ? sippSnapshotRows : (database.DATA_UPAH || []); primeSheetCaches('DATA_UPAH'); })
         ]);
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         filteredData = database[currentSheet] || [];
         applySettingsToUI();
         refreshDashboardWithRows(database.ALL_BPJS || [], true) || syncDashboardFromAvailableData() || updateDashboardUI();
@@ -3240,7 +3268,7 @@ function applyDashboardSnapshot(snapshot) {
           loadSharedLogsRemote().catch(() => false)
         ]);
 
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         filteredData = database[currentSheet] || [];
         applySettingsToUI();
         refreshDashboardWithRows(database.ALL_BPJS || [], true) || syncDashboardFromAvailableData() || updateDashboardUI();
@@ -3849,7 +3877,7 @@ function applyDashboardSnapshot(snapshot) {
         await postAction(payload);
         await safeFetchSheet(currentSheet);
         filteredData = database[currentSheet] || [];
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         renderTable();
         updateDashboardUI();
         Swal.fire('Berhasil', 'Data berhasil disimpan.', 'success');
@@ -3878,7 +3906,7 @@ function applyDashboardSnapshot(snapshot) {
         await postAction({ sheetName: currentSheet, action: 'delete', rowIndex });
         await safeFetchSheet(currentSheet);
         filteredData = database[currentSheet] || [];
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         renderTable();
         updateDashboardUI();
         Swal.fire('Terhapus', 'Data berhasil dihapus.', 'success');
@@ -3944,6 +3972,29 @@ function applyDashboardSnapshot(snapshot) {
       if (countId) document.getElementById(countId).textContent = rows.length;
     }
 
+
+    function showImportProgress(totalRows, processedRows, labelText = '') {
+      const percent = totalRows > 0 ? Math.min(100, Math.round((processedRows / totalRows) * 100)) : 0;
+      const bar = document.getElementById('importProgressBarFill');
+      const label = document.getElementById('importProgressLabel');
+      const value = document.getElementById('importProgressPercent');
+      if (bar) bar.style.width = `${percent}%`;
+      if (label) label.textContent = labelText || `Memproses ${processedRows} dari ${totalRows} baris...`;
+      if (value) value.textContent = `${percent}%`;
+    }
+
+    async function postActionChunked(sheetName, rows, onProgress) {
+      const totalRows = Array.isArray(rows) ? rows.length : 0;
+      const chunkSize = sheetName === 'DATA_UPAH' ? 200 : 150;
+      let processed = 0;
+      for (let start = 0; start < totalRows; start += chunkSize) {
+        const chunk = rows.slice(start, start + chunkSize);
+        await postAction({ sheetName, action: 'import', data: chunk });
+        processed += chunk.length;
+        if (typeof onProgress === 'function') onProgress(processed, totalRows);
+      }
+    }
+
     async function handleGeneralImportFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -3982,25 +4033,42 @@ function applyDashboardSnapshot(snapshot) {
       });
       if (!confirm.isConfirmed) return;
 
-      Swal.fire({
-        title: 'Memproses Import...',
-        text: 'Sedang menimpa/menambah data ke server',
+      await Swal.fire({
+        title: 'Import sedang diproses',
+        html: `
+          <div class="text-left mt-2">
+            <div class="flex items-center justify-between text-sm font-semibold text-slate-600 mb-2">
+              <span id="importProgressLabel">Menyiapkan data...</span>
+              <span id="importProgressPercent">0%</span>
+            </div>
+            <div class="w-full h-3 rounded-full bg-slate-200 overflow-hidden">
+              <div id="importProgressBarFill" class="h-full rounded-full" style="width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .25s ease;"></div>
+            </div>
+            <p class="mt-3 text-xs text-slate-500">Data dikirim bertahap agar lebih stabil dan tidak berat.</p>
+          </div>`,
         allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
+        showConfirmButton: false,
+        didOpen: async () => {
+          try {
+            showImportProgress(dataToSend.length, 0, 'Mengirim data ke server...');
+            await postActionChunked(target, dataToSend, (processed, total) => {
+              showImportProgress(total, processed, `Memproses ${processed} dari ${total} baris...`);
+            });
+            showImportProgress(dataToSend.length, dataToSend.length, 'Sinkronisasi data terbaru...');
+            await safeFetchSheet(target);
+            filteredData = database[currentSheet] || [];
+            saveDatabaseCache();
+            renderTable();
+            updateDashboardUI();
+            renderCardPrint();
+            Swal.close();
+            Swal.fire('Import selesai', `Data berhasil diproses ke ${getSheetLabel(target)}.`, 'success');
+          } catch (e) {
+            Swal.close();
+            Swal.fire('Import gagal', e.message, 'error');
+          }
+        }
       });
-
-      try {
-        await postAction({ sheetName: target, action: 'import', data: dataToSend });
-        await safeFetchSheet(target);
-        filteredData = database[currentSheet] || [];
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
-        renderTable();
-        updateDashboardUI();
-        renderCardPrint();
-        Swal.fire('Import selesai', `Data berhasil diproses ke ${getSheetLabel(target)}.`, 'success');
-      } catch (e) {
-        Swal.fire('Import gagal', e.message, 'error');
-      }
     }
 
     async function handleEmployeeInFile(event) {
@@ -4092,7 +4160,7 @@ function applyDashboardSnapshot(snapshot) {
           fileName: pendingEmployeeIn.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         resetEmployeeIn();
         updateDashboardUI();
         renderReport();
@@ -4186,7 +4254,7 @@ function applyDashboardSnapshot(snapshot) {
           fileName: pendingEmployeeOut.fileName,
           createdAt: new Date().toISOString().slice(0, 16)
         });
-        localStorage.setItem(CACHE_KEY_DB, JSON.stringify(database));
+        saveDatabaseCache();
         resetEmployeeOut();
         updateDashboardUI();
         renderReport();
@@ -4380,12 +4448,12 @@ Nomor Kartu: ${item.cardNumber}`;
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">NIK</p>
-                <p class="card-row-nik mt-1 font-semibold text-slate-700" title="${escapeHtml(item.nik)}">${escapeHtml(item.nik)}</p>
+                <p class="card-row-nik mt-1 font-semibold text-slate-700 leading-tight" title="${escapeHtml(item.nik)}">${escapeHtml(item.nik)}</p>
               </div>
               <div class="card-row-card-wrap">
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">No Kartu</p>
                 <div class="mt-1 flex items-center gap-2 group" onclick="event.stopPropagation(); copyText('${item.cardNumber}', 'Nomor kartu berhasil dicopy')">
-                  <span class="card-row-card font-bold text-slate-800" title="${escapeHtml(item.cardNumber)}">${escapeHtml(item.cardNumber)}</span>
+                  <span class="card-row-card font-bold text-slate-800 leading-tight" title="${escapeHtml(item.cardNumber)}">${escapeHtml(item.cardNumber)}</span>
                   <button class="copy-inline-btn rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
                 </div>
               </div>
