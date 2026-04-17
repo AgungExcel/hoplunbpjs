@@ -1526,7 +1526,32 @@
       #tab-data .bpjs-summary-strip.compact { grid-template-columns: 1fr !important; }
     }
 
-  </style>
+  
+    /* v15 card visibility and compact template */
+    .card-row-grid { grid-template-columns: 110px minmax(160px,1fr) 190px 170px !important; gap: 0.9rem !important; align-items: start !important; }
+    .card-row-grid .card-row-nik,
+    .card-row-grid .card-row-card { font-size: 0.95rem; line-height: 1.2; white-space: nowrap; overflow: visible; text-overflow: clip; letter-spacing: 0; }
+    .card-row-grid .card-row-card-wrap { min-width: 0; }
+    .card-row-grid .card-row-card-wrap .copy-inline-btn { width: 1.9rem; height: 1.9rem; }
+    .card-row-grid .card-row-name { white-space: normal; overflow-wrap: anywhere; }
+    .card-preview-line-value.nowrap-tight { white-space: nowrap; overflow: visible; text-overflow: clip; font-size: 0.78rem; letter-spacing: 0; line-height: 1.25; }
+    .card-preview-line-value.id-tight { white-space: nowrap; overflow: visible; text-overflow: clip; font-size: 0.88rem; letter-spacing: 0; }
+    .card-preview-actions { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
+    .card-preview-actions button { min-height: 3rem; }
+    @media (max-width: 1280px) {
+      .card-row-grid { grid-template-columns: 100px minmax(150px,1fr) 170px 150px !important; gap: 0.7rem !important; }
+      .card-row-grid .card-row-nik,
+      .card-row-grid .card-row-card { font-size: 0.88rem; }
+      .card-preview-line-value.nowrap-tight { font-size: 0.74rem; }
+    }
+    @media (max-width: 1100px) {
+      .card-row-grid { grid-template-columns: 100px minmax(0,1fr) 1fr 1fr !important; }
+      .card-row-grid .card-row-nik,
+      .card-row-grid .card-row-card { white-space: normal; word-break: break-all; }
+      .card-preview-actions { grid-template-columns: 1fr; }
+    }
+
+</style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
   <div class="flex h-full w-full overflow-hidden">
@@ -3280,14 +3305,6 @@ function applyDashboardSnapshot(snapshot) {
             <div class="status-mini-bottom"><span>Aktif ${totalActive}</span><span>Keluar ${totalOut}</span></div>
           </div>
         </div>`;
-      const copyDataBtn = panel.querySelector('#copyPreviewDataBtn');
-      const copyCardBtn = panel.querySelector('#copyPreviewCardNumberBtn');
-      const copyCardTopBtn = panel.querySelector('#copyPreviewCardNumberTopBtn');
-      const downloadBtn = panel.querySelector('#downloadCardImageBtn');
-      if (copyDataBtn) copyDataBtn.addEventListener('click', () => copyPreviewData());
-      if (copyCardBtn) copyCardBtn.addEventListener('click', () => copyPreviewCardNumber());
-      if (copyCardTopBtn) copyCardTopBtn.addEventListener('click', () => copyPreviewCardNumber());
-      if (downloadBtn) downloadBtn.addEventListener('click', () => downloadCardImage(domId, item.id || 'kartu'));
     }
 
     function getRecentMonthSeries(count = 6) {
@@ -3870,17 +3887,39 @@ function applyDashboardSnapshot(snapshot) {
       }
     }
 
-    function parseExcelFile(file) {
+    function parseExcelFile(file, options = {}) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = e => {
           try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
+            const preferredSheetNames = Array.isArray(options.preferredSheetNames) ? options.preferredSheetNames : [];
+            const normalizedNames = workbook.SheetNames.map(name => ({ original: name, normalized: String(name || '').trim().toLowerCase() }));
+
+            let selectedSheetName = '';
+            for (const preferred of preferredSheetNames) {
+              const preferredName = String(preferred || '').trim().toLowerCase();
+              const exact = normalizedNames.find(item => item.normalized === preferredName);
+              if (exact) {
+                selectedSheetName = exact.original;
+                break;
+              }
+            }
+
+            if (!selectedSheetName) {
+              const excludedNames = ['petunjuk pengisian', 'petunjuk', 'instruction', 'instructions', 'readme', 'panduan'];
+              const firstDataSheet = normalizedNames.find(item => !excludedNames.includes(item.normalized));
+              selectedSheetName = firstDataSheet ? firstDataSheet.original : workbook.SheetNames[0];
+            }
+
+            const worksheet = workbook.Sheets[selectedSheetName];
             const json = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-            resolve(json);
+            resolve({
+              rows: json,
+              sheetName: selectedSheetName,
+              workbookSheetNames: workbook.SheetNames
+            });
           } catch (err) {
             reject(err);
           }
@@ -3911,12 +3950,17 @@ function applyDashboardSnapshot(snapshot) {
       document.getElementById('generalFileName').textContent = file.name;
       const target = document.getElementById('importTarget').value;
       try {
-        let rows = await parseExcelFile(file);
+        const preferredSheetNames = target === 'DATA_UPAH'
+          ? ['data_upah', 'DATA_UPAH', 'Data_Upah', 'Data Upah']
+          : ['ALL_BPJS', 'all_bpjs', 'All_BPJS', 'BPJS', 'bpjs'];
+        const parsed = await parseExcelFile(file, { preferredSheetNames });
+        let rows = Array.isArray(parsed?.rows) ? parsed.rows : [];
         if (target === 'ALL_BPJS') rows = enrichBpjsRows(rows);
         pendingGeneralImportData = rows;
-        if (!pendingGeneralImportData.length) throw new Error('File kosong atau tidak terbaca');
+        if (!pendingGeneralImportData.length) throw new Error(`Sheet ${parsed?.sheetName || '(tidak diketahui)'} kosong atau tidak terbaca`);
         document.getElementById('generalPreviewWrap').classList.remove('hidden');
-        document.getElementById('generalPreviewTarget').textContent = getSheetLabel(target);
+        const sheetInfo = parsed?.sheetName ? ` • Sheet: ${parsed.sheetName}` : '';
+        document.getElementById('generalPreviewTarget').textContent = `${getSheetLabel(target)}${sheetInfo}`;
         renderGenericPreview('generalPreviewHead', 'generalPreviewBody', pendingGeneralImportData, 'generalPreviewCount');
       } catch (e) {
         pendingGeneralImportData = [];
@@ -4259,7 +4303,7 @@ Nomor Kartu: ${item.cardNumber}`;
           <div class="relative z-10 mt-4 space-y-2.5 text-xs md:text-sm">
             <div class="card-preview-line">
               <div class="card-preview-line-label">NOMOR ID</div>
-              <div class="card-preview-line-value nowrap">${escapeHtml(item.id)}</div>
+              <div class="card-preview-line-value id-tight">${escapeHtml(item.id)}</div>
             </div>
             <div class="card-preview-line">
               <div class="card-preview-line-label">NAMA</div>
@@ -4267,14 +4311,11 @@ Nomor Kartu: ${item.cardNumber}`;
             </div>
             <div class="card-preview-line">
               <div class="card-preview-line-label">NIK</div>
-              <div class="card-preview-line-value nowrap">${escapeHtml(item.nik)}</div>
+              <div class="card-preview-line-value nowrap-tight">${escapeHtml(item.nik)}</div>
             </div>
             <div class="card-preview-line">
-              <div class="flex items-center justify-between gap-2 card-preview-line-label">
-                <span>NOMOR KARTU</span>
-                <button type="button" id="copyPreviewCardNumberTopBtn" class="text-white hover:opacity-75 transition-opacity"><i class="fa-regular fa-copy"></i></button>
-              </div>
-              <div class="card-preview-line-value nowrap">${escapeHtml(item.cardNumber)}</div>
+              <div class="card-preview-line-label">NOMOR KARTU</div>
+              <div class="card-preview-line-value nowrap-tight">${escapeHtml(item.cardNumber)}</div>
             </div>
           </div>
           <div class="relative z-10 mt-4 flex items-center justify-between text-[10px] md:text-xs text-white/75 font-medium">
@@ -4282,11 +4323,18 @@ Nomor Kartu: ${item.cardNumber}`;
             <span class="shrink-0 font-bold tracking-wider">${item.cardNumber !== '-' ? 'READY' : 'NO CARD'}</span>
           </div>
         </div>
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div class="card-preview-actions">
           <button type="button" id="copyPreviewDataBtn" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)"><i class="fa-solid fa-copy mr-2"></i>Copy Data</button>
           <button type="button" id="copyPreviewCardNumberBtn" class="px-3 py-2 md:py-2.5 rounded-xl bg-white border font-bold text-xs md:text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm" style="border-color: var(--border)"><i class="fa-regular fa-copy mr-2"></i>No Kartu</button>
           <button type="button" id="downloadCardImageBtn" class="px-3 py-2 md:py-2.5 rounded-xl text-white font-bold text-xs md:text-sm shadow-md hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));"><i class="fa-solid fa-image mr-2"></i>Download PNG</button>
         </div>`;
+
+      const copyDataBtn = panel.querySelector('#copyPreviewDataBtn');
+      const copyCardBtn = panel.querySelector('#copyPreviewCardNumberBtn');
+      const downloadBtn = panel.querySelector('#downloadCardImageBtn');
+      if (copyDataBtn) copyDataBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); copyPreviewData(); };
+      if (copyCardBtn) copyCardBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); copyPreviewCardNumber(); };
+      if (downloadBtn) downloadBtn.onclick = (ev) => { ev.preventDefault(); ev.stopPropagation(); downloadCardImage(domId, item.id || 'kartu'); };
     }
 
     function selectCardRow(key) {
@@ -4332,13 +4380,13 @@ Nomor Kartu: ${item.cardNumber}`;
               </div>
               <div>
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">NIK</p>
-                <p class="mt-1 font-semibold text-slate-700 whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(item.nik)}</p>
+                <p class="card-row-nik mt-1 font-semibold text-slate-700" title="${escapeHtml(item.nik)}">${escapeHtml(item.nik)}</p>
               </div>
-              <div>
+              <div class="card-row-card-wrap">
                 <p class="text-[10px] uppercase tracking-[0.18em] font-bold text-slate-500">No Kartu</p>
                 <div class="mt-1 flex items-center gap-2 group" onclick="event.stopPropagation(); copyText('${item.cardNumber}', 'Nomor kartu berhasil dicopy')">
-                  <span class="font-bold text-slate-800 whitespace-nowrap overflow-hidden text-ellipsis">${escapeHtml(item.cardNumber)}</span>
-                  <button class="w-7 h-7 rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
+                  <span class="card-row-card font-bold text-slate-800" title="${escapeHtml(item.cardNumber)}">${escapeHtml(item.cardNumber)}</span>
+                  <button class="copy-inline-btn rounded-lg bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors shrink-0" title="Copy Kartu"><i class="fa-regular fa-copy text-[10px]"></i></button>
                 </div>
               </div>
             </div>
@@ -4366,22 +4414,22 @@ Nomor Kartu: ${item.cardNumber}`;
       const sippHeaders = ['NIK', 'ID_PEGAWAI', 'KPJ', 'KODE_TK', 'NAMA_LENGKAP', 'TGL_LAHIR', 'UPAH', 'RAPEL', 'BLTH', 'NPP'];
       const sippExample = {
         NIK: '3200000000000001',
-        ID_PEGAWAI: 'WK000001',
-        KPJ: '1122334455667',
-        KODE_TK: 'TK01',
+        ID_PEGAWAI: 'SR000001',
+        KPJ: '26012192469',
+        KODE_TK: '900000000000000',
         NAMA_LENGKAP: 'CONTOH NAMA',
-        TGL_LAHIR: '1995-01-01',
-        UPAH: 2990088,
+        TGL_LAHIR: '17-06-2003',
+        UPAH: 2940088,
         RAPEL: 0,
-        BLTH: '202604',
-        NPP: 'NPP001'
+        BLTH: '01-04-2026',
+        NPP: 'LL100759'
       };
       const karyawanBaruHeaders = ['NOMOR ID', 'NAMA', 'DEPARTEMENT', 'POSISI', 'STATUS', 'JOIN DATE', 'STATUS KEPESERTAAN', 'POTONGAN', 'KETERANGAN', 'NOMOR KARTU', 'NO HP', 'NIK'];
       const karyawanKeluarHeaders = ['NOMOR ID', 'NAMA', 'STATUS', 'KETERANGAN'];
 
       const definitions = {
         'template-import-massal-all-bpjs.xlsx': { sheetName: 'ALL_BPJS', headers: bpjsHeaders, rows: [bpjsHeaders.map(key => bpjsExample[key] ?? '')] },
-        'template-import-massal-data-upah.xlsx': { sheetName: 'DATA_UPAH', headers: sippHeaders, rows: [sippHeaders.map(key => sippExample[key] ?? '')] },
+        'template-import-massal-data-upah.xlsx': { sheetName: 'data_upah', headers: sippHeaders, rows: [sippHeaders.map(key => sippExample[key] ?? '')], includeInstructionSheet: true },
         'template-karyawan-baru-all-bpjs.xlsx': { sheetName: 'KARYAWAN_BARU_BPJS', headers: karyawanBaruHeaders, rows: [karyawanBaruHeaders.map(key => bpjsExample[key] ?? '')] },
         'template-karyawan-keluar-all-bpjs.xlsx': { sheetName: 'KARYAWAN_KELUAR_BPJS', headers: karyawanKeluarHeaders, rows: [[bpjsExample['NOMOR ID'], bpjsExample['NAMA'], bpjsExample['STATUS'], 'OUT / resign']] }
       };
@@ -4404,6 +4452,20 @@ Nomor Kartu: ${item.cardNumber}`;
         return;
       }
       const workbook = XLSX.utils.book_new();
+      if (definition.includeInstructionSheet) {
+        const instructionRows = [
+          ['PETUNJUK PENGISIAN TEMPLATE SIPP'],
+          ['1. Isi data mulai baris ke-2 pada sheet data_upah.'],
+          ['2. Jangan ubah nama sheet: data_upah.'],
+          ['3. Jangan ubah nama kolom/header pada baris pertama.'],
+          ['4. Format TGL_LAHIR gunakan teks seperti 17-06-2003 atau sesuai sumber Anda.'],
+          ['5. Format BLTH gunakan teks seperti 01-04-2026 sesuai template perusahaan.'],
+          ['6. Kolom RAPEL diisi 0 jika tidak ada rapel.']
+        ];
+        const instructionSheet = XLSX.utils.aoa_to_sheet(instructionRows);
+        instructionSheet['!cols'] = [{ wch: 78 }];
+        XLSX.utils.book_append_sheet(workbook, instructionSheet, 'Petunjuk Pengisian');
+      }
       const aoa = [definition.headers, ...definition.rows];
       const worksheet = XLSX.utils.aoa_to_sheet(aoa);
       worksheet['!cols'] = definition.headers.map(header => ({ wch: Math.max(header.length + 2, 14) }));
