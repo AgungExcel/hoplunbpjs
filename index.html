@@ -1676,7 +1676,7 @@
           <i class="fa-solid fa-chart-pie w-5 text-center"></i><span>Dashboard</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="global-search">
-          <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Semua Data</span>
+          <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Cepat</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="ALL_BPJS">
           <img src="bpjsks.png" class="nav-menu-img" alt="BPJS Kesehatan"><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
@@ -1822,7 +1822,7 @@
             <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
               <div>
                 <div class="flex items-center gap-3">
-                  <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Semua Data</h2>
+                  <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Cepat</h2>
                   <span id="globalSearchBadge" class="hidden px-3 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-bold border border-teal-200">0 Data</span>
                 </div>
                 <p class="text-xs md:text-sm text-slate-500 mt-1">Cari berdasarkan Nama, ID Pegawai, atau NIK di seluruh modul.</p>
@@ -3189,7 +3189,7 @@ function applyDashboardSnapshot(snapshot) {
     function updatePageTitleForCurrentTab(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
       const map = {
         dashboard: 'Dashboard',
-        'global-search': 'Pencarian Semua Data',
+        'global-search': 'Pencarian Cepat',
         import: 'Import Massal',
         'employee-in': 'Karyawan Baru',
         'employee-out': 'Karyawan Keluar',
