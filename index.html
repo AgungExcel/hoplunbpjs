@@ -1528,9 +1528,9 @@
 
   
     /* v15 card visibility and compact template */
-    .card-row-grid { grid-template-columns: 112px minmax(170px,1fr) 220px 190px !important; gap: 0.9rem !important; align-items: start !important; }
+    .card-row-grid { grid-template-columns: 110px minmax(170px,1fr) 250px 220px !important; gap: 0.9rem !important; align-items: start !important; }
     .card-row-grid .card-row-nik,
-    .card-row-grid .card-row-card { font-size: 0.88rem; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: clip; letter-spacing: 0; word-break: break-all; }
+    .card-row-grid .card-row-card { font-size: 0.82rem; line-height: 1.25; white-space: nowrap; overflow: visible; text-overflow: clip; letter-spacing: 0; word-break: normal; }
     .card-row-grid .card-row-card-wrap { min-width: 0; }
     .card-row-grid .card-row-card-wrap .copy-inline-btn { width: 1.9rem; height: 1.9rem; }
     .card-row-grid .card-row-name { white-space: normal; overflow-wrap: anywhere; }
@@ -1539,9 +1539,9 @@
     .card-preview-actions { margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.55rem; }
     .card-preview-actions button { min-height: 3rem; }
     @media (max-width: 1280px) {
-      .card-row-grid { grid-template-columns: 100px minmax(145px,1fr) 160px 150px !important; gap: 0.65rem !important; }
+      .card-row-grid { grid-template-columns: 100px minmax(145px,1fr) 200px 180px !important; gap: 0.65rem !important; }
       .card-row-grid .card-row-nik,
-      .card-row-grid .card-row-card { font-size: 0.8rem; }
+      .card-row-grid .card-row-card { font-size: 0.76rem; }
       .card-preview-line-value.nowrap-tight { font-size: 0.74rem; }
     }
     @media (max-width: 1100px) {
@@ -1552,6 +1552,17 @@
     }
 
 
+
+    .nav-menu-img {
+      width: 1.32rem;
+      height: 1.32rem;
+      object-fit: contain;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 0 0 rgba(255,255,255,0));
+    }
+    .nav-link.active .nav-menu-img {
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.45));
+    }
     .menu-title-with-icon {
       display: flex;
       align-items: center;
@@ -1610,10 +1621,10 @@
           <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Semua Data</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="ALL_BPJS">
-          <i class="fa-solid fa-users-line w-5 text-center"></i><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
+          <img src="bpjsks.png" class="nav-menu-img" alt="BPJS Kesehatan"><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH">
-          <i class="fa-solid fa-wallet w-5 text-center"></i><span id="labelNavUpah">SIPP Worker</span>
+          <img src="bpjstk.png" class="nav-menu-img" alt="SIPP Worker"><span id="labelNavUpah">SIPP Worker</span>
         </button>
 
         <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Operasional</div>
@@ -2510,6 +2521,19 @@
       return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
     }
 
+    function formatDateForSheet(value) {
+      const date = parseDateValue(value);
+      if (!date) return '';
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      return `${String(date.getDate()).padStart(2, '0')}-${months[date.getMonth()]}-${date.getFullYear()}`;
+    }
+
+    function cleanTextNumber(value) {
+      const raw = String(value ?? '').trim();
+      if (!raw) return '';
+      return raw.replace(/\.0+$/, '');
+    }
+
     function parseNumberValue(value) {
       if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
       const raw = String(value ?? '').trim();
@@ -2694,9 +2718,11 @@ function applyDashboardSnapshot(snapshot) {
 
     function normalizeMembershipStatus(value) {
       const upper = normalizeUpper(value);
-      if (!upper) return '-';
+      if (!upper) return 'BELUM TERDAFTAR';
       if (['OK', 'AKTIF', 'ACTIVE'].includes(upper)) return 'AKTIF';
-      if (['OUT', 'KELUAR', 'NON AKTIF', 'NONAKTIF'].includes(upper)) return 'KELUAR';
+      if (['OUT', 'KELUAR'].includes(upper)) return 'OUT';
+      if (['TIDAK AKTIF', 'NON AKTIF', 'NONAKTIF', 'INACTIVE'].includes(upper)) return 'TIDAK AKTIF';
+      if (['BELUM TERDAFTAR', 'BELUMDAFTAR', 'BELUM DAFTAR', 'NOT REGISTERED', 'UNREGISTERED'].includes(upper)) return 'BELUM TERDAFTAR';
       return upper;
     }
 
@@ -2742,16 +2768,16 @@ function applyDashboardSnapshot(snapshot) {
         DEPARTEMENT: String(getColValue(source, ['DEPARTEMENT', 'DEPARTMENT', 'SECTION']) || '').trim(),
         POSISI: String(getColValue(source, ['POSISI', 'POSITION']) || '').trim(),
         STATUS: type,
-        'JOIN DATE': joinDate ? joinDate.toISOString().slice(0, 10) : '',
+        'JOIN DATE': formatDateForSheet(joinDate || joinDateRaw),
         'MASA KERJA': masaKerja,
         'GAJI POKOK': gajiPokok,
         'STATUS KEPESERTAAN': normalizeMembershipStatus(getColValue(source, ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN'])),
         POTONGAN: potongan,
         TOTAL: total,
         KETERANGAN: String(getColValue(source, ['KETERANGAN']) || '-').trim() || '-',
-        'NOMOR KARTU': String(getColValue(source, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU']) || '').trim(),
-        'NO HP': String(getColValue(source, ['NO HP', 'HP', 'NOHP']) || '').trim(),
-        NIK: String(getColValue(source, ['NIK']) || '').trim()
+        'NOMOR KARTU': cleanTextNumber(getColValue(source, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'])),
+        'NO HP': cleanTextNumber(getColValue(source, ['NO HP', 'HP', 'NOHP'])),
+        NIK: cleanTextNumber(getColValue(source, ['NIK']))
       };
     }
 
@@ -3997,7 +4023,7 @@ function applyDashboardSnapshot(snapshot) {
             }
 
             const worksheet = workbook.Sheets[selectedSheetName];
-            const json = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+            const json = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false, dateNF: 'dd-mmm-yyyy' });
             resolve({
               rows: json,
               sheetName: selectedSheetName,
@@ -4040,7 +4066,7 @@ function applyDashboardSnapshot(snapshot) {
 
     async function postActionChunked(sheetName, rows, onProgress) {
       const totalRows = Array.isArray(rows) ? rows.length : 0;
-      const chunkSize = sheetName === 'DATA_UPAH' ? 200 : 150;
+      const chunkSize = sheetName === 'DATA_UPAH' ? 280 : 220;
       let processed = 0;
       for (let start = 0; start < totalRows; start += chunkSize) {
         const chunk = rows.slice(start, start + chunkSize);
@@ -4048,6 +4074,26 @@ function applyDashboardSnapshot(snapshot) {
         processed += chunk.length;
         if (typeof onProgress === 'function') onProgress(processed, totalRows);
       }
+    }
+
+    async function deleteRowsChunked(sheetName, rows, onProgress) {
+      const totalRows = Array.isArray(rows) ? rows.length : 0;
+      let processed = 0;
+      const sorted = [...rows].sort((a, b) => (b._rowIndex || 0) - (a._rowIndex || 0));
+      for (const row of sorted) {
+        await postAction({ sheetName, action: 'delete', rowIndex: row._rowIndex });
+        processed += 1;
+        if (typeof onProgress === 'function') onProgress(processed, totalRows);
+      }
+    }
+
+    function getNextBpjsNoSeed() {
+      const rows = Array.isArray(database.ALL_BPJS) ? database.ALL_BPJS : [];
+      const maxNo = rows.reduce((max, row) => {
+        const current = parseNumberValue(row?.NO);
+        return current > max ? current : max;
+      }, 0);
+      return maxNo + 1;
     }
 
     async function handleGeneralImportFile(event) {
@@ -4205,33 +4251,53 @@ function applyDashboardSnapshot(snapshot) {
       });
       if (!confirm.isConfirmed) return;
 
-      Swal.fire({
-        title: 'Memproses...',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
+      const baseNo = getNextBpjsNoSeed();
+      const rowsToSend = target === 'ALL_BPJS'
+        ? pendingEmployeeIn.rows.map((row, idx) => enrichBpjsRow({ ...row, NO: baseNo + idx }))
+        : pendingEmployeeIn.rows;
 
-      try {
-        const rowsToSend = target === 'ALL_BPJS'
-          ? pendingEmployeeIn.rows.map((row, idx) => enrichBpjsRow(row, (database[target]?.length || 0) + idx))
-          : pendingEmployeeIn.rows;
-        await postAction({ sheetName: target, action: 'import', data: rowsToSend });
-        await safeFetchSheet(target);
-        await appendLog({
-          type: 'IN',
-          sheet: target,
-          count: rowsToSend.length,
-          fileName: pendingEmployeeIn.fileName,
-          createdAt: new Date().toISOString().slice(0, 16)
-        });
-        saveDatabaseCache();
-        resetEmployeeIn();
-        updateDashboardUI();
-        renderReport();
-        Swal.fire('Berhasil', 'Karyawan baru berhasil diproses.', 'success');
-      } catch (e) {
-        Swal.fire('Gagal', e.message, 'error');
-      }
+      await Swal.fire({
+        title: 'Upload karyawan baru',
+        html: `
+          <div class="text-left mt-2">
+            <div class="flex items-center justify-between text-sm font-semibold text-slate-600 mb-2">
+              <span id="importProgressLabel">Menyiapkan data...</span>
+              <span id="importProgressPercent">0%</span>
+            </div>
+            <div class="h-3 rounded-full bg-slate-100 overflow-hidden">
+              <div id="importProgressBarFill" class="h-full rounded-full" style="width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .25s ease;"></div>
+            </div>
+            <p class="mt-3 text-xs text-slate-500">Upload diproses bertahap agar lebih cepat dan stabil.</p>
+          </div>`,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: async () => {
+          try {
+            showImportProgress(rowsToSend.length, 0, 'Mengirim data karyawan baru...');
+            await postActionChunked(target, rowsToSend, (processed, total) => {
+              showImportProgress(total, processed, `Memproses ${processed} dari ${total} baris...`);
+            });
+            showImportProgress(rowsToSend.length, rowsToSend.length, 'Sinkronisasi data terbaru...');
+            await safeFetchSheet(target);
+            await appendLog({
+              type: 'IN',
+              sheet: target,
+              count: rowsToSend.length,
+              fileName: pendingEmployeeIn.fileName,
+              createdAt: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            });
+            saveDatabaseCache();
+            resetEmployeeIn();
+            updateDashboardUI();
+            renderReport();
+            Swal.close();
+            Swal.fire('Berhasil', 'Karyawan baru berhasil diproses.', 'success');
+          } catch (e) {
+            Swal.close();
+            Swal.fire('Gagal', e.message, 'error');
+          }
+        }
+      });
     }
 
     async function handleEmployeeOutFile(event) {
@@ -4299,34 +4365,49 @@ function applyDashboardSnapshot(snapshot) {
         confirmButtonText: 'Ya, hapus'
       });
       if (!confirm.isConfirmed) return;
-      
-      Swal.fire({
-        title: 'Memproses...',
+
+      await Swal.fire({
+        title: 'Proses karyawan keluar',
+        html: `
+          <div class="text-left mt-2">
+            <div class="flex items-center justify-between text-sm font-semibold text-slate-600 mb-2">
+              <span id="importProgressLabel">Menyiapkan penghapusan...</span>
+              <span id="importProgressPercent">0%</span>
+            </div>
+            <div class="h-3 rounded-full bg-slate-100 overflow-hidden">
+              <div id="importProgressBarFill" class="h-full rounded-full" style="width:0%;background:linear-gradient(90deg,var(--danger),#7c3aed);transition:width .25s ease;"></div>
+            </div>
+            <p class="mt-3 text-xs text-slate-500">Penghapusan diproses bertahap agar lebih aman.</p>
+          </div>`,
         allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
-      
-      try {
-        const sorted = [...pendingEmployeeOut.matches].sort((a, b) => (b._rowIndex || 0) - (a._rowIndex || 0));
-        for (const row of sorted) {
-          await postAction({ sheetName: target, action: 'delete', rowIndex: row._rowIndex });
+        showConfirmButton: false,
+        didOpen: async () => {
+          try {
+            showImportProgress(pendingEmployeeOut.matches.length, 0, 'Menghapus data dari database...');
+            await deleteRowsChunked(target, pendingEmployeeOut.matches, (processed, total) => {
+              showImportProgress(total, processed, `Menghapus ${processed} dari ${total} baris...`);
+            });
+            showImportProgress(pendingEmployeeOut.matches.length, pendingEmployeeOut.matches.length, 'Sinkronisasi data terbaru...');
+            await safeFetchSheet(target);
+            await appendLog({
+              type: 'OUT',
+              sheet: target,
+              count: pendingEmployeeOut.matches.length,
+              fileName: pendingEmployeeOut.fileName,
+              createdAt: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            });
+            saveDatabaseCache();
+            resetEmployeeOut();
+            updateDashboardUI();
+            renderReport();
+            Swal.close();
+            Swal.fire('Berhasil', 'Karyawan keluar berhasil diproses.', 'success');
+          } catch (e) {
+            Swal.close();
+            Swal.fire('Gagal', e.message, 'error');
+          }
         }
-        await safeFetchSheet(target);
-        await appendLog({
-          type: 'OUT',
-          sheet: target,
-          count: pendingEmployeeOut.matches.length,
-          fileName: pendingEmployeeOut.fileName,
-          createdAt: new Date().toISOString().slice(0, 16)
-        });
-        saveDatabaseCache();
-        resetEmployeeOut();
-        updateDashboardUI();
-        renderReport();
-        Swal.fire('Berhasil', 'Karyawan keluar berhasil diproses.', 'success');
-      } catch (e) {
-        Swal.fire('Gagal', e.message, 'error');
-      }
+      });
     }
 
     function renderReport() {
@@ -4547,9 +4628,9 @@ Nomor Kartu: ${item.cardNumber}`;
         DEPARTEMENT: 'SEWING',
         POSISI: 'OPERATOR',
         STATUS: 'WORKER',
-        'JOIN DATE': new Date().toISOString().slice(0, 10),
+        'JOIN DATE': '19-Sep-2011',
         'STATUS KEPESERTAAN': 'OK',
-        POTONGAN: 0.01,
+        POTONGAN: '1%',
         KETERANGAN: '-',
         'NOMOR KARTU': '0000000000000',
         'NO HP': '081234567890',
@@ -4598,9 +4679,11 @@ Nomor Kartu: ${item.cardNumber}`;
             ['1. Isi data mulai baris ke-2 pada sheet karyawan_baru_bpjs.'],
             ['2. Wajib isi minimal NOMOR ID, NAMA, STATUS, JOIN DATE, STATUS KEPESERTAAN, POTONGAN, NIK, NOMOR KARTU, dan NO HP bila tersedia.'],
             ['3. STATUS diisi STAFF atau WORKER.'],
-            ['4. STATUS KEPESERTAAN gunakan OK untuk aktif.'],
-            ['5. POTONGAN bisa diisi 1% atau 2% / 3% / 4% sesuai data karyawan.'],
-            ['6. Jangan ubah nama kolom/header pada baris pertama.']
+            ['4. JOIN DATE gunakan format tanggal tampilan dd-mmm-yyyy, contoh 19-Sep-2011.'],
+            ['5. STATUS KEPESERTAAN gunakan OK untuk aktif. Selain itu gunakan OUT / TIDAK AKTIF / BELUM TERDAFTAR.'],
+            ['6. POTONGAN bisa diisi 1% atau 2% / 3% / 4% sesuai data karyawan.'],
+            ['7. Kolom NIK, NO HP, dan NOMOR KARTU wajib diperlakukan sebagai TEXT agar nol di depan tidak hilang.'],
+            ['8. Jangan ubah nama kolom/header pada baris pertama.']
           ]
         },
         'template-karyawan-keluar-all-bpjs.xlsx': {
