@@ -4056,11 +4056,19 @@ function applyDashboardSnapshot(snapshot) {
             });
             showImportProgress(dataToSend.length, dataToSend.length, 'Sinkronisasi data terbaru...');
             await safeFetchSheet(target);
+            await appendLog({
+              type: 'IMPORT',
+              sheet: target,
+              count: dataToSend.length,
+              fileName: document.getElementById('generalFileName')?.textContent || 'Import Massal',
+              createdAt: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            });
             filteredData = database[currentSheet] || [];
             saveDatabaseCache();
             renderTable();
             updateDashboardUI();
             renderCardPrint();
+            renderReport();
             Swal.close();
             Swal.fire('Import selesai', `Data berhasil diproses ke ${getSheetLabel(target)}.`, 'success');
           } catch (e) {
@@ -4270,14 +4278,22 @@ function applyDashboardSnapshot(snapshot) {
         body.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500 font-medium">Belum ada laporan.</td></tr>';
         return;
       }
-      body.innerHTML = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => `
+      body.innerHTML = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => {
+        const typeLabel = log.type === 'IN' ? 'Karyawan Baru' : log.type === 'OUT' ? 'Karyawan Keluar' : 'Import Massal';
+        const typeClass = log.type === 'IN'
+          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
+          : log.type === 'OUT'
+            ? 'bg-rose-50 text-rose-700 border border-rose-200/60'
+            : 'bg-blue-50 text-blue-700 border border-blue-200/60';
+        return `
         <tr>
           <td class="whitespace-nowrap font-medium">${fmtDateTime(log.createdAt)}</td>
-          <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md ${log.type === 'IN' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-rose-50 text-rose-700 border border-rose-200/60'} text-[10px] font-bold shadow-sm">${log.type === 'IN' ? 'Karyawan Baru' : 'Karyawan Keluar'}</span></td>
+          <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md ${typeClass} text-[10px] font-bold shadow-sm">${typeLabel}</span></td>
           <td class="whitespace-nowrap font-bold text-slate-600">${getSheetLabel(log.sheet)}</td>
           <td class="whitespace-nowrap text-center font-black text-lg text-slate-800">${log.count}</td>
           <td class="whitespace-nowrap max-w-[200px] truncate" title="${escapeHtml(log.fileName || '-')}">${escapeHtml(log.fileName || '-')}</td>
-        </tr>`).join('');
+        </tr>`;
+      }).join('');
     }
 
     function exportToExcel(filename, rows, sheetName = 'Sheet1') {
@@ -4294,7 +4310,7 @@ function applyDashboardSnapshot(snapshot) {
     function exportReportExcel() {
       const rows = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => ({
         Tanggal: fmtDateTime(log.createdAt),
-        Tipe: log.type === 'IN' ? 'Karyawan Baru' : 'Karyawan Keluar',
+        Tipe: log.type === 'IN' ? 'Karyawan Baru' : log.type === 'OUT' ? 'Karyawan Keluar' : 'Import Massal',
         Modul: getSheetLabel(log.sheet),
         Jumlah: log.count,
         File: log.fileName || '-'
