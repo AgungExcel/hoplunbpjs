@@ -1684,6 +1684,9 @@
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH">
           <img src="bpjstk.png" class="nav-menu-img" alt="SIPP Worker"><span id="labelNavUpah">SIPP Worker</span>
         </button>
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="card-print">
+          <i class="fa-solid fa-id-card w-5 text-center"></i><span>Cetak Kartu</span>
+        </button>
 
         <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Operasional</div>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="import">
@@ -1697,9 +1700,6 @@
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="report">
           <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center"></i><span>Laporan In / Out</span>
-        </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="card-print">
-          <i class="fa-solid fa-id-card w-5 text-center"></i><span>Cetak Kartu</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="settings">
           <i class="fa-solid fa-gear w-5 text-center"></i><span>Pengaturan</span>
@@ -1889,8 +1889,17 @@
                 <tbody id="tableBody"></tbody>
               </table>
             </div>
-            <div class="p-4 md:px-6 border-t flex items-center justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
+            <div class="p-4 md:px-6 border-t flex flex-col gap-3 md:flex-row md:items-center md:justify-between text-xs md:text-sm text-slate-500 bg-white/60 surface-border">
               <span id="recordCount">Menampilkan 0 data</span>
+              <div id="tablePaginationWrap" class="hidden flex items-center gap-2 self-end md:self-auto">
+                <button id="tablePrevPageBtn" onclick="changeTablePage(-1)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <span id="tablePageInfo" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Hal 1 / 1</span>
+                <button id="tableNextPageBtn" onclick="changeTablePage(1)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -2111,7 +2120,7 @@
                   <option value="template-emerald">Template Emerald</option>
                   <option value="template-sunset">Template Sunset</option>
                 </select>
-                <input id="cardSearch" oninput="renderCardPrint()" placeholder="Cari ID / NIK" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
+                <input id="cardSearch" oninput="debouncedRenderCardPrint()" placeholder="Cari ID / NIK / Nama" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
             </div>
             <div class="card-print-note rounded-[18px] border border-teal-100 bg-teal-50 p-3 md:p-4 mb-5">
@@ -2131,6 +2140,7 @@
                   </div>
                 </div>
                 <div id="cardTableBody" class="min-h-[300px] max-h-[620px] overflow-y-auto bg-white p-3 md:p-4 space-y-3"></div>
+                <div id="cardListFooter" class="px-4 pb-4 text-xs text-slate-500"></div>
               </div>
               <div class="xl:col-span-1 glass-strong rounded-[20px] md:rounded-[26px] p-4 md:p-6 sticky top-20 md:top-24 order-1 xl:order-2 shadow-sm">
                 <div class="flex items-center justify-between gap-3 mb-4 md:mb-5">
@@ -2225,6 +2235,13 @@
     const CACHE_KEY_DASHBOARD = 'bpjs_dashboard_snapshot_v14';
     const CACHE_KEY_BPJS_ROWS = 'bpjs_bpjs_rows_snapshot_v14';
     const CACHE_KEY_SIPP_ROWS = 'bpjs_sipp_rows_snapshot_v14';
+    const CARD_RENDER_BATCH = 80;
+    const CARD_SEARCH_RENDER_LIMIT = 240;
+    const TABLE_INITIAL_RENDER_LIMIT = 100;
+    const TABLE_PAGE_SIZE = 100;
+    const TABLE_SEARCH_RESULT_LIMIT = 500;
+    const TABLE_SEARCH_DEBOUNCE_MS = 180;
+
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
@@ -2297,6 +2314,9 @@
 
     let visibleCardRows = [];
     let selectedCardKey = '';
+    let cardRenderTimer = null;
+    const cardRowsCache = {};
+    const cardRenderState = { source: 'ALL_BPJS', query: '', template: 'template-default', rows: [], limit: CARD_RENDER_BATCH };
     let tempLogoData = appSettings.logoData || '';
     let tableColumnFilters = { ALL_BPJS: {}, DATA_UPAH: {} };
 
@@ -3241,6 +3261,7 @@ function applyDashboardSnapshot(snapshot) {
 
       if (tabId === 'data' && sheet) {
         currentSheet = sheet;
+        resetCurrentTablePage();
         filteredData = database[currentSheet] || [];
         renderTable();
         if (!Array.isArray(database[currentSheet]) || !database[currentSheet].length) {
@@ -3683,12 +3704,13 @@ function applyDashboardSnapshot(snapshot) {
       const cleaned = String(value || '');
       if (cleaned.trim()) filters[label] = cleaned;
       else delete filters[label];
+      resetCurrentTablePage();
       clearTimeout(columnFilterTimer);
       if (immediate) {
         renderTable(false);
         return;
       }
-      columnFilterTimer = setTimeout(() => renderTable(false), 120);
+      columnFilterTimer = setTimeout(() => renderTable(false), TABLE_SEARCH_DEBOUNCE_MS);
     }
 
     function clearTableFilters(keepSearch = false) {
@@ -3697,6 +3719,7 @@ function applyDashboardSnapshot(snapshot) {
         const searchInput = document.getElementById('searchInput');
         if (searchInput) searchInput.value = '';
       }
+      resetCurrentTablePage();
       renderTable(false);
     }
 
@@ -3777,6 +3800,17 @@ function applyDashboardSnapshot(snapshot) {
 
     function getActiveColumnFilterCount() {
       return Object.values(getCurrentSheetFilters()).filter(value => String(value || '').trim() !== '').length;
+    }
+
+    function hasActiveTableSearchOrFilters() {
+      const searchValue = String(document.getElementById('searchInput')?.value || '').trim();
+      return Boolean(searchValue) || getActiveColumnFilterCount() > 0;
+    }
+
+    function getVisibleTableRows(rows) {
+      if (!Array.isArray(rows) || !rows.length) return [];
+      if (!hasActiveTableSearchOrFilters()) return rows.slice(0, TABLE_INITIAL_RENDER_LIMIT);
+      return rows.slice(0, TABLE_SEARCH_RESULT_LIMIT);
     }
 
     function renderTable(forceHeader = false) {
@@ -3907,10 +3941,17 @@ function applyDashboardSnapshot(snapshot) {
       if (!filteredData.length) {
         tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan untuk pencarian / filter yang dipakai.</td></tr>`;
         document.getElementById('recordCount').textContent = `Menampilkan 0 dari ${sourceRows.length} data`;
+        updateTablePaginationControls(null, { enabled: false });
         return;
       }
 
-      tBody.innerHTML = filteredData.map(row => {
+      const activeSearchMode = hasActiveTableSearchOrFilters();
+      const visibleRows = getVisibleTableRows(filteredData);
+      const isInitialLimitedView = !activeSearchMode && visibleRows.length < filteredData.length;
+      const searchResultsLimited = activeSearchMode && visibleRows.length < filteredData.length;
+      const paginationMeta = getPaginatedTableRows(visibleRows);
+
+      tBody.innerHTML = paginationMeta.rows.map(row => {
         const safeJson = encodeURIComponent(JSON.stringify(row));
         const cells = cols.map(col => {
           const display = getDisplayValue(row, col);
@@ -3942,13 +3983,71 @@ function applyDashboardSnapshot(snapshot) {
       const activeSummary = [];
       if (searchValue) activeSummary.push(`pencarian "${searchValue}"`);
       if (activeFilterCount) activeSummary.push(`${activeFilterCount} filter kolom aktif`);
-      document.getElementById('recordCount').textContent = `Menampilkan ${filteredData.length} dari ${sourceRows.length} baris data${activeSummary.length ? ' • ' + activeSummary.join(' • ') : ''}`;
+      if (isInitialLimitedView) activeSummary.push(`default hanya ${TABLE_INITIAL_RENDER_LIMIT} data pertama untuk percepat loading`);
+      if (searchResultsLimited) activeSummary.push(`hasil pencarian dibatasi ${TABLE_SEARCH_RESULT_LIMIT} data pertama`);
+      document.getElementById('recordCount').textContent = `Menampilkan ${paginationMeta.start}-${paginationMeta.end} dari ${visibleRows.length} data tampil${filteredData.length !== visibleRows.length ? ` • ${filteredData.length} hasil cocok` : ''}${sourceRows.length !== filteredData.length ? ` • total data ${sourceRows.length}` : ''}${activeSummary.length ? ' • ' + activeSummary.join(' • ') : ''}`;
+      updateTablePaginationControls(paginationMeta, { enabled: true });
       if (currentSheet === 'ALL_BPJS' && sourceRows.length) refreshDashboardWithRows(sourceRows);
     }
 
     let tableSearchTimer = null;
     const sheetSearchState = {};
     const tableRenderState = { headerKey: '', lastRowsCount: -1 };
+    const tablePagingState = {};
+
+    function getCurrentTablePage() {
+      const page = Number(tablePagingState[currentSheet] || 1);
+      return page > 0 ? page : 1;
+    }
+
+    function setCurrentTablePage(page) {
+      const safePage = Number(page || 1);
+      tablePagingState[currentSheet] = safePage > 0 ? safePage : 1;
+    }
+
+    function resetCurrentTablePage() {
+      setCurrentTablePage(1);
+    }
+
+    function getPaginatedTableRows(rows) {
+      const totalRows = Array.isArray(rows) ? rows.length : 0;
+      const pageSize = TABLE_PAGE_SIZE;
+      const totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
+      const currentPage = Math.min(getCurrentTablePage(), totalPages);
+      setCurrentTablePage(currentPage);
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      return {
+        rows: rows.slice(start, end),
+        currentPage,
+        totalPages,
+        totalRows,
+        start: totalRows ? start + 1 : 0,
+        end: Math.min(end, totalRows)
+      };
+    }
+
+    function updateTablePaginationControls(meta, options = {}) {
+      const wrap = document.getElementById('tablePaginationWrap');
+      const info = document.getElementById('tablePageInfo');
+      const prevBtn = document.getElementById('tablePrevPageBtn');
+      const nextBtn = document.getElementById('tableNextPageBtn');
+      if (!wrap || !info || !prevBtn || !nextBtn) return;
+      const enabled = Boolean(options.enabled && meta && meta.totalPages > 1);
+      wrap.classList.toggle('hidden', !enabled);
+      if (!enabled) return;
+      info.textContent = `Hal ${meta.currentPage} / ${meta.totalPages}`;
+      prevBtn.disabled = meta.currentPage <= 1;
+      nextBtn.disabled = meta.currentPage >= meta.totalPages;
+    }
+
+    function changeTablePage(delta) {
+      const nextPage = getCurrentTablePage() + Number(delta || 0);
+      setCurrentTablePage(nextPage);
+      renderTable();
+      const tableWrap = document.getElementById('tableWrap');
+      if (tableWrap) tableWrap.scrollTop = 0;
+    }
 
     function filterTable(force = false) {
       if (force) {
@@ -3957,7 +4056,7 @@ function applyDashboardSnapshot(snapshot) {
         return;
       }
       clearTimeout(tableSearchTimer);
-      tableSearchTimer = setTimeout(() => renderTable(), 40);
+      tableSearchTimer = setTimeout(() => renderTable(), TABLE_SEARCH_DEBOUNCE_MS);
     }
 
     function openModal(mode, encodedRow = null) {
@@ -4530,15 +4629,24 @@ function applyDashboardSnapshot(snapshot) {
     }
 
     function makeCardRows(sheet) {
-      return (database[sheet] || []).map((row, index) => ({
+      const signature = `${sheet}:${(database[sheet] || []).length}`;
+      if (cardRowsCache[sheet] && cardRowsCache[sheet].signature === signature) {
+        return cardRowsCache[sheet].rows;
+      }
+      const rows = (database[sheet] || []).map((row, index) => ({
         sheet,
         id: getEmployeeId(row) || '-',
         nik: String(getColValue(row, ['NIK']) || '-').trim() || '-',
         name: getEmployeeName(row),
         cardNumber: getCardNumber(row, sheet) || '-',
         raw: row,
+        searchText: [getEmployeeId(row) || '-', String(getColValue(row, ['NIK']) || '-').trim() || '-', getEmployeeName(row), getCardNumber(row, sheet) || '-']
+          .join(' ')
+          .toLowerCase(),
         key: `${sheet}-${getEmployeeId(row) || 'noid'}-${getCardNumber(row, sheet) || 'nocard'}-${row._rowIndex ?? index}`
       }));
+      cardRowsCache[sheet] = { signature, rows };
+      return rows;
     }
 
     function escapeHtml(value) {
@@ -4621,31 +4729,18 @@ Nomor Kartu: ${item.cardNumber}`;
       selectedCardKey = key;
       renderCardPrint();
     }
+    function debouncedRenderCardPrint() {
+      clearTimeout(cardRenderTimer);
+      cardRenderTimer = setTimeout(() => renderCardPrint(), 180);
+    }
 
-    function renderCardPrint() {
-      const source = document.getElementById('cardSource').value || 'ALL_BPJS';
-      const template = document.getElementById('cardTemplate').value;
-      const query = (document.getElementById('cardSearch').value || '').toLowerCase().trim();
-      const rows = makeCardRows(source).filter(r => {
-        if (!query) return true;
-        return [r.id, r.nik, r.name, r.cardNumber].some(v => String(v).toLowerCase().includes(query));
-      });
-      visibleCardRows = rows;
-
-      const cardCountEl = document.getElementById('cardCount');
-      if (cardCountEl) cardCountEl.textContent = rows.length;
-
+    function appendCardRows() {
       const listBody = document.getElementById('cardTableBody');
-      if (!rows.length) {
-        selectedCardKey = '';
-        listBody.innerHTML = '<div class="px-4 py-10 text-center text-slate-500 font-medium rounded-2xl border border-dashed border-slate-300 bg-slate-50">Tidak ada data kartu ditemukan.</div>';
-        renderCardPreview(null, template);
-        return;
-      }
-      if (!rows.some(item => item.key === selectedCardKey)) {
-        selectedCardKey = rows[0].key;
-      }
-      listBody.innerHTML = rows.map(item => {
+      const footer = document.getElementById('cardListFooter');
+      if (!listBody) return;
+      const rows = cardRenderState.rows || [];
+      const visibleRows = rows.slice(0, cardRenderState.limit);
+      listBody.innerHTML = visibleRows.map(item => {
         const isActive = item.key === selectedCardKey;
         return `
           <div onclick="selectCardRow('${item.key}')" class="card-row-item cursor-pointer rounded-2xl border p-3 md:p-4 transition-all shadow-sm ${isActive ? 'border-teal-300 bg-teal-50 ring-2 ring-teal-100' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}">
@@ -4675,7 +4770,59 @@ Nomor Kartu: ${item.cardNumber}`;
             </div>
           </div>`;
       }).join('');
-      renderCardPreview(rows.find(item => item.key === selectedCardKey), template);
+      if (footer) {
+        const isSearching = !!cardRenderState.query;
+        const hasMore = visibleRows.length < rows.length;
+        const capped = isSearching && rows.length >= CARD_SEARCH_RENDER_LIMIT;
+        footer.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-slate-200 pt-3">
+            <div>
+              <div class="font-semibold text-slate-600">Menampilkan ${visibleRows.length} dari ${rows.length} data${capped ? ' (hasil pencarian dibatasi)' : ''}</div>
+              <div class="mt-1 text-[11px] text-slate-400">${isSearching ? 'Pencarian kartu dirender bertahap agar tetap ringan.' : 'Daftar kartu ditampilkan bertahap per batch agar buka menu lebih cepat.'}</div>
+            </div>
+            ${hasMore ? `<button type="button" onclick="loadMoreCardRows()" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors"><i class="fa-solid fa-angles-down mr-2"></i>Tampilkan Lagi</button>` : ''}
+          </div>`;
+      }
+    }
+
+    function loadMoreCardRows() {
+      cardRenderState.limit += CARD_RENDER_BATCH;
+      appendCardRows();
+    }
+
+    function renderCardPrint() {
+      const source = document.getElementById('cardSource').value || 'ALL_BPJS';
+      const template = document.getElementById('cardTemplate').value;
+      const query = (document.getElementById('cardSearch').value || '').toLowerCase().trim();
+      const baseRows = makeCardRows(source);
+      const filteredRows = query
+        ? baseRows.filter(r => r.searchText.includes(query)).slice(0, CARD_SEARCH_RENDER_LIMIT)
+        : baseRows;
+      const resetLimit = cardRenderState.source !== source || cardRenderState.query !== query;
+      cardRenderState.source = source;
+      cardRenderState.query = query;
+      cardRenderState.template = template;
+      cardRenderState.rows = filteredRows;
+      if (resetLimit) cardRenderState.limit = CARD_RENDER_BATCH;
+      visibleCardRows = filteredRows;
+
+      const cardCountEl = document.getElementById('cardCount');
+      if (cardCountEl) cardCountEl.textContent = filteredRows.length;
+
+      const listBody = document.getElementById('cardTableBody');
+      const footer = document.getElementById('cardListFooter');
+      if (!filteredRows.length) {
+        selectedCardKey = '';
+        listBody.innerHTML = '<div class="px-4 py-10 text-center text-slate-500 font-medium rounded-2xl border border-dashed border-slate-300 bg-slate-50">Tidak ada data kartu ditemukan.</div>';
+        if (footer) footer.innerHTML = '';
+        renderCardPreview(null, template);
+        return;
+      }
+      if (!filteredRows.some(item => item.key === selectedCardKey)) {
+        selectedCardKey = filteredRows[0].key;
+      }
+      appendCardRows();
+      renderCardPreview(filteredRows.find(item => item.key === selectedCardKey), template);
     }
 
     function getTemplateDefinition(fileName) {
