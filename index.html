@@ -1722,7 +1722,7 @@
             </div>
             <div class="min-w-0">
               <p id="appNameSidebar" class="text-white font-extrabold tracking-tight text-xl truncate">BPJS Control Center</p>
-              <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS Kesehatan Staff & Worker + SIPP Worker</p>
+              <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS Kesehatan Staff & Worker + BP Jamsostek</p>
             </div>
           </div>
           <button id="closeSidebar" class="md:hidden w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 shrink-0"><i class="fa-solid fa-xmark"></i></button>
@@ -1741,10 +1741,13 @@
           <img src="bpjsks.png" class="nav-menu-img" alt="BPJS Kesehatan"><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH">
-          <img src="bpjstk.png" class="nav-menu-img" alt="SIPP Worker"><span id="labelNavUpah">SIPP Worker</span>
+          <img src="bpjstk.png" class="nav-menu-img" alt="BP Jamsostek"><span id="labelNavUpah">BP Jamsostek</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="card-print">
           <i class="fa-solid fa-id-card w-5 text-center"></i><span>Cetak Kartu</span>
+        </button>
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="report">
+          <i class="fa-solid fa-file-lines w-5 text-center"></i><span>Laporan</span>
         </button>
 
         <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Operasional</div>
@@ -1756,9 +1759,6 @@
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="employee-out">
           <i class="fa-solid fa-user-minus w-5 text-center"></i><span>Karyawan Keluar</span>
-        </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="report">
-          <i class="fa-solid fa-arrow-right-arrow-left w-5 text-center"></i><span>Laporan In / Out</span>
         </button>
         <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="settings">
           <i class="fa-solid fa-gear w-5 text-center"></i><span>Pengaturan</span>
@@ -1884,11 +1884,11 @@
                   <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Cepat</h2>
                   <span id="globalSearchBadge" class="hidden px-3 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-bold border border-teal-200">0 Data</span>
                 </div>
-                <p class="text-xs md:text-sm text-slate-500 mt-1">Cari berdasarkan Nama, ID Pegawai, atau NIK di seluruh modul.</p>
+                <p class="text-xs md:text-sm text-slate-500 mt-1">Cari berdasarkan Nama atau Nomor ID di seluruh modul.</p>
               </div>
               <div class="relative min-w-0 w-full md:w-96">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input id="globalSearchInput" oninput="performGlobalSearch()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Ketik kata kunci pencarian..." />
+                <input id="globalSearchInput" oninput="performGlobalSearch()" class="w-full bg-white/80 border rounded-xl md:rounded-2xl pl-11 pr-4 py-2.5 md:py-3 outline-none focus:ring-2 text-sm md:text-base shadow-sm" style="border-color: var(--border);" placeholder="Cari Nama / No ID..." />
               </div>
             </div>
             <div class="overflow-x-auto min-h-[300px] w-full">
@@ -1900,11 +1900,12 @@
                     <th class="whitespace-nowrap">NIK</th>
                     <th class="whitespace-nowrap">Nama Lengkap</th>
                     <th class="whitespace-nowrap">Status</th>
+                    <th class="whitespace-nowrap">No HP</th>
                     <th class="whitespace-nowrap">No Kartu</th>
                   </tr>
                 </thead>
                 <tbody id="globalSearchBody">
-                  <tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci di kotak pencarian untuk menampilkan data.</td></tr>
+                  <tr><td colspan="7" class="px-5 py-12 text-center text-slate-500 text-sm">Ketik kata kunci di kotak pencarian untuk menampilkan data.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1973,11 +1974,11 @@
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Download Template</p>
-                  <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk BPJS gabungan atau SIPP Worker.</p>
+                  <p class="text-sm text-blue-900 mt-1">Unduh template siap upload untuk BPJS gabungan atau BP Jamsostek.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                   <button type="button" onclick="downloadTemplateFile('template-import-massal-all-bpjs.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>BPJS</button>
-                  <button type="button" onclick="downloadTemplateFile('template-import-massal-data-upah.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>SIPP</button>
+                  <button type="button" onclick="downloadTemplateFile('template-import-massal-data-upah.xlsx')" class="px-4 py-2 rounded-xl bg-white border border-blue-200 text-blue-700 font-bold text-sm hover:bg-blue-100 transition-colors"><i class="fa-solid fa-file-excel mr-2"></i>BP Jamsostek</button>
                   <button type="button" onclick="downloadTemplateFile('template-upload-bpjs-pack.zip')" class="px-4 py-2 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold text-sm hover:bg-blue-700 transition-colors"><i class="fa-solid fa-file-zipper mr-2"></i>Semua Template</button>
                 </div>
               </div>
@@ -2141,31 +2142,73 @@
           </div>
         </section>
 
+        
         <section id="tab-report" class="tab-panel space-y-6">
-          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-5xl mx-auto shadow-sm">
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan In / Out</h2>
-              <div class="flex flex-wrap gap-2 md:gap-3">
-                <button onclick="exportReportExcel()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl bg-white border font-bold text-sm md:text-base hover:bg-slate-50 transition-colors" style="border-color: var(--border)"><i class="fa-solid fa-file-excel mr-2 text-emerald-600"></i>Download Excel</button>
-                <button onclick="clearLogs()" class="flex-1 sm:flex-none px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-white font-bold text-sm md:text-base hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--danger), #7c3aed)"><i class="fa-solid fa-trash mr-2"></i>Bersihkan Log</button>
+          <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-7xl mx-auto shadow-sm space-y-5">
+            <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+              <div>
+                <h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan</h2>
+                <p class="text-sm text-slate-500 mt-1">Pilih jenis laporan dari dropdown, lalu tampilkan dan export ke Excel sesuai laporan yang sedang aktif.</p>
+              </div>
+              <div class="w-full xl:w-[26rem]">
+                <label class="block text-[11px] uppercase tracking-[0.18em] font-bold text-slate-500 mb-2">Pilih Laporan</label>
+                <select id="reportViewSelect" onchange="renderReport()" class="w-full px-4 py-3 rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm font-extrabold" style="border-color: var(--border)">
+                  <option value="bpjs_pot_1" style="color:#047857;font-weight:800;">BPJS Kesehatan - Potongan = 1%</option>
+                  <option value="bpjs_pot_above_1" style="color:#0369a1;font-weight:800;">BPJS Kesehatan - Potongan &gt; 1%</option>
+                  <option value="bpjs_pot_0" style="color:#7c3aed;font-weight:800;">BPJS Kesehatan - Potongan = 0%</option>
+                  <option value="jams_compare_all" style="color:#be123c;font-weight:800;">BP Jamsostek - Compare Tidak Valid (Semua Unit)</option>
+                  <option value="jams_compare_sr" style="color:#c2410c;font-weight:800;">BP Jamsostek - Compare Tidak Valid Unit 1 (SR)</option>
+                  <option value="jams_compare_sm" style="color:#4338ca;font-weight:800;">BP Jamsostek - Compare Tidak Valid Unit 2 (SM)</option>
+                </select>
               </div>
             </div>
-            <div class="overflow-x-auto rounded-[20px] md:rounded-[24px] border border-slate-200 bg-white">
-              <table class="table-modern min-w-[700px]">
-                <thead>
-                  <tr>
-                    <th class="whitespace-nowrap">Tanggal & Waktu</th>
-                    <th class="whitespace-nowrap">Tipe Laporan</th>
-                    <th class="whitespace-nowrap">Modul / Sheet</th>
-                    <th class="whitespace-nowrap text-center">Jumlah Baris</th>
-                    <th class="whitespace-nowrap">Nama File Sumber</th>
-                  </tr>
-                </thead>
-                <tbody id="reportBody"></tbody>
-              </table>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+              <div class="rounded-[20px] border border-emerald-100 bg-emerald-50 p-4">
+                <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-emerald-700">Potongan = 1%</p>
+                <p id="reportPot1Count" class="mt-2 text-3xl font-black text-emerald-800">0</p>
+              </div>
+              <div class="rounded-[20px] border border-sky-100 bg-sky-50 p-4">
+                <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-sky-700">Potongan &gt; 1%</p>
+                <p id="reportPotAbove1Count" class="mt-2 text-3xl font-black text-sky-800">0</p>
+              </div>
+              <div class="rounded-[20px] border border-violet-100 bg-violet-50 p-4">
+                <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-violet-700">Potongan = 0%</p>
+                <p id="reportPotZeroCount" class="mt-2 text-3xl font-black text-violet-800">0</p>
+              </div>
+              <div class="rounded-[20px] border border-rose-100 bg-rose-50 p-4">
+                <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-rose-700">Compare Tidak Valid</p>
+                <p id="compareInvalidCountBadge" class="mt-2 text-3xl font-black text-rose-800">0</p>
+              </div>
+            </div>
+
+            <div class="rounded-[20px] border border-slate-200 bg-white overflow-hidden">
+              <div class="px-4 py-3 border-b bg-slate-50/80 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div>
+                  <h3 id="reportDynamicTitle" class="font-black text-slate-800">Laporan BPJS Kesehatan · Potongan = 1%</h3>
+                  <p id="reportDynamicSubtitle" class="text-sm text-slate-500 mt-1">Menampilkan data Staff dan Worker dengan potongan tepat 1%.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span id="reportCurrentCountBadge" class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">0 data</span>
+                  <button id="reportExportBtn" onclick="exportCurrentReportExcel()" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition-colors">
+                    <i class="fa-solid fa-file-excel mr-2 text-emerald-600"></i>Export XLSX
+                  </button>
+                </div>
+              </div>
+              <div class="px-4 py-3 border-b bg-white/80">
+                <span id="reportCurrentInfo" class="table-note-chip"><i class="fa-solid fa-table-list"></i> Menampilkan laporan aktif.</span>
+              </div>
+              <div id="reportCompareSummaryWrap" class="hidden px-4 py-4 border-b bg-rose-50/30"></div>
+              <div class="overflow-x-auto">
+                <table id="reportDynamicTable" class="table-modern min-w-[980px]">
+                  <thead id="reportDynamicHead"></thead>
+                  <tbody id="reportDynamicBody"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
+
 
         <section id="tab-card-print" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-7xl mx-auto shadow-sm">
@@ -2235,7 +2278,7 @@
                 <input id="settingLabelWorker" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
               <div>
-                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul SIPP</label>
+                <label class="block text-xs md:text-sm font-bold mb-2 text-slate-700">Nama Modul BP Jamsostek</label>
                 <input id="settingLabelUpah" class="w-full px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
               </div>
               <div>
@@ -2305,12 +2348,12 @@
 
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
-      appSubtitle: 'BPJS Kesehatan Staff & Worker + SIPP Worker',
+      appSubtitle: 'BPJS Kesehatan Staff & Worker + BP Jamsostek',
       theme: 'default',
       logoData: '',
       modules: {
         ALL_BPJS: 'BPJS Kesehatan Staff & Worker',
-        DATA_UPAH: 'SIPP Worker'
+        DATA_UPAH: 'BP Jamsostek'
       }
     };
 
@@ -2338,9 +2381,9 @@
         { label: 'NOMOR ID', keys: ['ID_PEGAWAI', 'NOMOR ID', 'NEW ID NO', 'NO ID'], type: 'text' },
         { label: 'NIK', keys: ['NIK'], type: 'text' },
         { label: 'NAMA', keys: ['NAMA_LENGKAP', 'NAMA'], type: 'text' },
+        { label: 'TANGGAL LAHIR', keys: ['TGL_LAHIR', 'TANGGAL LAHIR', 'TANGGAL_LAHIR', 'DOB'], type: 'date' },
         { label: 'KPJ', keys: ['KPJ', 'NO KARTU BPJS', 'NOMOR KARTU'], type: 'text' },
-        { label: 'Upah', keys: ['UPAH'], type: 'currency' },
-        { label: 'BLTH', keys: ['BLTH'], type: 'text' }
+        { label: 'Upah', keys: ['UPAH'], type: 'currency' }
       ]
     };
 
@@ -2508,7 +2551,7 @@
     async function fetchSheetRows(sheet) {
       const aliasMap = {
         ALL_BPJS: ['ALL_BPJS', 'ALL BPJS', 'BPJS Kesehatan', 'BPJS_KESEHATAN', 'BPJSKesehatan', 'BPJS KESEHATAN', 'BPJS KESEHATAN STAFF WORKER', 'BPJS KESEHATAN STAFF & WORKER'],
-        DATA_UPAH: ['DATA_UPAH', 'DATA UPAH', 'DATA-UPAH', 'DATAUPAH', 'SIPP', 'SIPP Worker', 'SIPP_WORKER', 'SIPP WORKER'],
+        DATA_UPAH: ['DATA_UPAH', 'DATA UPAH', 'DATA-UPAH', 'DATAUPAH', 'SIPP', 'SIPP Worker', 'SIPP_WORKER', 'SIPP WORKER', 'BP JAMSOSTEK', 'BPJSTK', 'BP JAMSOSTEK WORKER'],
         APP_SETTINGS: [SETTINGS_SHEET],
         APP_LOGS: [LOGS_SHEET]
       };
@@ -2620,6 +2663,14 @@
 
     function getCardNumber(row, sheet) {
       return String(getColValue(row, CARD_KEYS[sheet] || []) || '').trim();
+    }
+
+    function getBirthDateValue(row, sheet = currentSheet) {
+      if (!row) return '';
+      if (String(sheet || '').toUpperCase() === 'ALL_BPJS') {
+        return getColValue(row, ['TANGGAL LAHIR', 'TGL_LAHIR', 'TANGGAL_LAHIR', 'DOB']);
+      }
+      return getColValue(row, ['TGL_LAHIR', 'TANGGAL LAHIR', 'TANGGAL_LAHIR', 'DOB']);
     }
     function normalizeUpper(value) {
       return String(value ?? '').trim().toUpperCase();
@@ -2915,7 +2966,8 @@ function applyDashboardSnapshot(snapshot) {
         KETERANGAN: String(getColValue(source, ['KETERANGAN']) || '-').trim() || '-',
         'NOMOR KARTU': cleanTextNumber(getColValue(source, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU'])),
         'NO HP': cleanTextNumber(getColValue(source, ['NO HP', 'HP', 'NOHP'])),
-        NIK: cleanTextNumber(getColValue(source, ['NIK']))
+        NIK: cleanTextNumber(getColValue(source, ['NIK'])),
+        'TANGGAL LAHIR': formatDateForSheet(getColValue(source, ['TANGGAL LAHIR', 'TGL_LAHIR', 'TANGGAL_LAHIR', 'DOB']))
       };
     }
 
@@ -3005,7 +3057,10 @@ function applyDashboardSnapshot(snapshot) {
         if (col.type === 'percent') return escapeHtml(formatPercentDisplay(raw));
         if (col.type === 'copyable') return renderCopyableValue(raw, col.copyMessage || 'Berhasil dicopy');
       }
-      if (currentSheet === 'DATA_UPAH' && col.type === 'currency') return escapeHtml(formatCurrency(raw));
+      if (currentSheet === 'DATA_UPAH') {
+        if (col.type === 'currency') return escapeHtml(formatCurrency(raw));
+        if (col.type === 'date') return escapeHtml(formatDateDisplay(raw));
+      }
       return escapeHtml(raw || '-');
     }
 
@@ -3246,7 +3301,7 @@ function applyDashboardSnapshot(snapshot) {
     function getTitleIconConfig(sheet) {
       const normalized = String(sheet || '').toUpperCase();
       if (normalized === 'ALL_BPJS') return { src: 'bpjsks.png', alt: 'BPJS Kesehatan' };
-      if (normalized === 'DATA_UPAH') return { src: 'bpjstk.png', alt: 'SIPP Worker' };
+      if (normalized === 'DATA_UPAH') return { src: 'bpjstk.png', alt: 'BP Jamsostek' };
       return null;
     }
 
@@ -3274,7 +3329,7 @@ function applyDashboardSnapshot(snapshot) {
         import: 'Import Massal',
         'employee-in': 'Karyawan Baru',
         'employee-out': 'Karyawan Keluar',
-        report: 'Laporan In / Out',
+        report: 'Laporan',
         'card-print': 'Cetak Kartu',
         settings: 'Pengaturan'
       };
@@ -3371,27 +3426,26 @@ function applyDashboardSnapshot(snapshot) {
       const badgeEl = document.getElementById('globalSearchBadge');
 
       if (!q) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-slate-500 font-medium">Ketik kata kunci pencarian (ID/NIK/Nama) untuk menampilkan data.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-12 text-center text-slate-500 font-medium">Ketik kata kunci pencarian (Nama / No ID) untuk menampilkan data.</td></tr>';
         countEl.textContent = '0 hasil ditemukan';
-        if(badgeEl) badgeEl.classList.add('hidden');
+        if (badgeEl) badgeEl.classList.add('hidden');
         return;
       }
 
-      let results = [];
+      const results = [];
       ['ALL_BPJS', 'DATA_UPAH'].forEach(sheet => {
         const rows = database[sheet] || [];
         rows.forEach(row => {
           const id = getEmployeeId(row).toLowerCase();
           const name = getEmployeeName(row).toLowerCase();
-          const nik = String(getColValue(row, ['NIK']) || '').toLowerCase();
-
-          if (id.includes(q) || name.includes(q) || nik.includes(q)) {
+          if (id.includes(q) || name.includes(q)) {
             results.push({
               sheet,
               id: getEmployeeId(row) || '-',
               nik: String(getColValue(row, ['NIK']) || '-'),
+              phone: String(getColValue(row, ['NO HP', 'NO_HP', 'HP']) || '-'),
               name: getEmployeeName(row),
-              status: sheet === 'ALL_BPJS' ? normalizeMembershipStatus(getColValue(row, STATUS_KEYS[sheet]) || '-') : String(getColValue(row, STATUS_KEYS[sheet]) || '-'),
+              status: sheet === 'ALL_BPJS' ? normalizeMembershipStatus(getColValue(row, STATUS_KEYS[sheet]) || '-') : '-',
               cardNo: getCardNumber(row, sheet) || '-'
             });
           }
@@ -3399,13 +3453,13 @@ function applyDashboardSnapshot(snapshot) {
       });
 
       if (!results.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-12 text-center text-rose-500 font-medium">Tidak ada data yang cocok ditemukan di seluruh modul.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="px-5 py-12 text-center text-rose-500 font-medium">Tidak ada data yang cocok ditemukan di seluruh modul.</td></tr>';
         countEl.textContent = '0 hasil ditemukan';
-        if(badgeEl) badgeEl.classList.add('hidden');
+        if (badgeEl) badgeEl.classList.add('hidden');
         return;
       }
-      
-      if(badgeEl) {
+
+      if (badgeEl) {
         badgeEl.textContent = `${results.length} Data`;
         badgeEl.classList.remove('hidden');
       }
@@ -3417,10 +3471,8 @@ function applyDashboardSnapshot(snapshot) {
           statusBadge = `<span class="px-3 py-1.5 rounded-md bg-emerald-50/80 text-emerald-700 border border-emerald-200/60 text-[10px] md:text-xs font-bold shadow-sm">Aktif / OK</span>`;
         } else if (upperStatus === 'OUT' || upperStatus === 'KELUAR') {
           statusBadge = `<span class="bpjs-inline-badge px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Keluar</span>`;
-        } else if (item.status === '-' || item.status === '') {
-          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-rose-50/80 text-rose-700 border border-rose-200/60 text-[10px] md:text-xs font-bold shadow-sm">Belum lengkap</span>`;
         } else {
-          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(item.status)}</span>`;
+          statusBadge = `<span class="px-3 py-1.5 rounded-md bg-slate-100/80 text-slate-700 border border-slate-200/60 text-[10px] md:text-xs font-bold shadow-sm">${escapeHtml(item.status || '-')}</span>`;
         }
 
         return `
@@ -3435,6 +3487,12 @@ function applyDashboardSnapshot(snapshot) {
             </td>
             <td class="whitespace-normal leading-snug max-w-[150px] md:max-w-none break-words">${escapeHtml(item.name)}</td>
             <td class="whitespace-nowrap">${statusBadge}</td>
+            <td class="whitespace-nowrap">
+               <div class="flex items-center gap-2 group cursor-pointer" onclick="copyText('${escapeJsString(item.phone)}', 'No HP berhasil dicopy')">
+                 <span class="font-semibold">${escapeHtml(item.phone)}</span>
+                 <button class="w-6 h-6 rounded bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700 transition-colors" title="Copy No HP"><i class="fa-regular fa-copy text-[10px]"></i></button>
+               </div>
+            </td>
             <td class="whitespace-nowrap">
                <div class="flex items-center gap-2 group cursor-pointer" onclick="copyText('${escapeJsString(item.cardNo)}', 'Nomor kartu berhasil dicopy')">
                  <span class="font-semibold">${escapeHtml(item.cardNo)}</span>
@@ -3643,31 +3701,18 @@ function applyDashboardSnapshot(snapshot) {
         if (col.type === 'currency') return formatCurrency(raw);
         if (col.type === 'percent') return formatPercentDisplay(raw);
       }
-      if (sheet === 'DATA_UPAH' && col.type === 'currency') return formatCurrency(raw);
+      if (sheet === 'DATA_UPAH') {
+        if (col.type === 'currency') return formatCurrency(raw);
+        if (col.type === 'date') return formatDateDisplay(raw);
+      }
       return String(raw || '').trim();
     }
 
     function buildSearchText(row, sheet = currentSheet) {
-      if (sheet === 'ALL_BPJS') {
-        return [
-          getColValue(row, ['NO']),
-          getColValue(row, ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI']),
-          getColValue(row, ['NAMA', 'NAMA_LENGKAP']),
-          getColValue(row, ['DEPARTEMENT', 'SECTION']),
-          getColValue(row, ['STATUS']),
-          getColValue(row, ['JOIN DATE']),
-          getColValue(row, ['STATUS KEPESERTAAN', 'STATUS KEPESERTAAN APR 2026', 'STATUS KEPESERTAAN TMT APR 2026', 'STATUS KEPESERTAAN  TMT APR 2026', 'STATUS_KEPESERTAAN']),
-          getColValue(row, ['NOMOR KARTU', 'NO KARTU BPJS', 'KPJ', 'NO_KARTU']),
-          getColValue(row, ['NO HP']),
-          getColValue(row, ['NIK'])
-        ].map(value => String(value ?? '').trim()).join(' ').toLowerCase();
-      }
-      const cols = DISPLAY_COLS[sheet] || [];
-      const rawValues = Object.entries(row || {})
-        .filter(([key]) => !String(key).startsWith('_'))
-        .map(([, value]) => String(value ?? ''));
-      const displayValues = cols.map(col => getFilterableValue(row, col, sheet));
-      return rawValues.concat(displayValues).join(' ').toLowerCase();
+      return [
+        getColValue(row, ['NOMOR ID', 'NEW ID NO', 'NO ID', 'ID_PEGAWAI']),
+        getColValue(row, ['NAMA', 'NAMA_LENGKAP'])
+      ].map(value => String(value ?? '').trim()).join(' ').toLowerCase();
     }
 
     function primeSheetCaches(sheet) {
@@ -3900,16 +3945,25 @@ function applyDashboardSnapshot(snapshot) {
       const resetBtnEl = document.getElementById('dataResetFilterBtn');
       const titleCountBadgeEl = document.getElementById('tableTitleCountBadge');
       if (currentSheet === 'ALL_BPJS') {
-        if (searchInputEl) searchInputEl.placeholder = 'Cari data BPJS...';
-        if (introTextEl) { introTextEl.textContent = ''; introTextEl.classList.add('hidden'); }
+        if (searchInputEl) searchInputEl.placeholder = 'Cari Nama / No ID...';
+        if (introTextEl) introTextEl.classList.add('hidden');
         if (helpBarEl) helpBarEl.classList.add('hidden');
-        if (resetBtnEl) resetBtnEl.classList.remove('hidden');
-        if (titleCountBadgeEl) { titleCountBadgeEl.textContent = ''; titleCountBadgeEl.classList.add('hidden'); }
+        if (resetBtnEl) {
+          resetBtnEl.classList.remove('hidden');
+          resetBtnEl.innerHTML = '<i class="fa-solid fa-rotate-left mr-2 text-slate-500"></i>Reset Pencarian';
+        }
+        if (titleCountBadgeEl) {
+          titleCountBadgeEl.textContent = `${filteredData.length} Data`;
+          titleCountBadgeEl.classList.remove('hidden');
+        }
       } else {
-        if (searchInputEl) searchInputEl.placeholder = 'Cari data SIPP...';
-        if (introTextEl) { introTextEl.textContent = ''; introTextEl.classList.add('hidden'); }
+        if (searchInputEl) searchInputEl.placeholder = 'Cari Nama / No ID BP Jamsostek...';
+        if (introTextEl) introTextEl.classList.add('hidden');
         if (helpBarEl) helpBarEl.classList.add('hidden');
-        if (resetBtnEl) resetBtnEl.classList.add('hidden');
+        if (resetBtnEl) {
+          resetBtnEl.classList.remove('hidden');
+          resetBtnEl.innerHTML = '<i class="fa-solid fa-rotate-left mr-2 text-slate-500"></i>Reset Pencarian';
+        }
         if (titleCountBadgeEl) {
           titleCountBadgeEl.textContent = `${filteredData.length} Data`;
           titleCountBadgeEl.classList.remove('hidden');
@@ -3917,44 +3971,8 @@ function applyDashboardSnapshot(snapshot) {
       }
 
       if (recapContainer) {
-        recapContainer.classList.remove('hidden');
-        if (currentSheet === 'ALL_BPJS') {
-          const stats = getBpjsStats(filteredData);
-          recapContainer.className = 'p-3 md:px-4 bg-slate-50/50 border-b surface-border';
-          recapContainer.innerHTML = `
-            <div class="bpjs-summary-strip compact">
-              <div class="bpjs-summary-card">
-                <h4>Total BPJS</h4>
-                <p class="bpjs-summary-total">${stats.total}</p>
-                <div class="bpjs-summary-meta">
-                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive + stats.workerActive}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-danger"><span>Keluar</span><span>${stats.staffOut + stats.workerOut}</span></div>
-                </div>
-              </div>
-              <div class="bpjs-summary-card">
-                <h4>Staff</h4>
-                <p class="bpjs-summary-total text-sky-800">${stats.staffTotal}</p>
-                <div class="bpjs-summary-meta">
-                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.staffActive}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-highlight"><span>1%</span><span>${stats.staffPot1}</span></div>
-                  <div class="bpjs-summary-pill"><span>>1%</span><span>${stats.staffPotMore}</span></div>
-                </div>
-              </div>
-              <div class="bpjs-summary-card">
-                <h4>Worker</h4>
-                <p class="bpjs-summary-total text-indigo-800">${stats.workerTotal}</p>
-                <div class="bpjs-summary-meta">
-                  <div class="bpjs-summary-pill bpjs-summary-success"><span>Aktif</span><span>${stats.workerActive}</span></div>
-                  <div class="bpjs-summary-pill bpjs-summary-accent"><span>1%</span><span>${stats.workerPot1}</span></div>
-                  <div class="bpjs-summary-pill"><span>>1%</span><span>${stats.workerPotMore}</span></div>
-                </div>
-              </div>
-            </div>
-          `;
-        } else {
-          recapContainer.classList.add('hidden');
-          recapContainer.innerHTML = '';
-        }
+        recapContainer.classList.add('hidden');
+        recapContainer.innerHTML = '';
       }
 
       const isFitViewTable = currentSheet === 'ALL_BPJS';
@@ -3975,32 +3993,15 @@ function applyDashboardSnapshot(snapshot) {
 
         const headerClass = isFitViewTable ? 'whitespace-normal' : 'whitespace-nowrap';
         const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
-        let filterRowMarkup = '';
-        if (currentSheet === 'ALL_BPJS') {
-          const filterRowCells = cols.map(col => {
-            const currentValue = String(activeFilters[col.label] || '');
-            const options = getColumnFilterOptions(col, sourceRows);
-            if (shouldUseSelectFilter(col, sourceRows)) {
-              const optionMarkup = ['<option value="">Semua</option>']
-                .concat(options.map(option => `<option value="${escapeHtml(option)}" ${currentValue === option ? 'selected' : ''}>${escapeHtml(option)}</option>`))
-                .join('');
-              return `<th><select class="filter-control" data-filter-label="${escapeHtml(col.label)}" data-filter-sheet="${currentSheet}" onchange="handleColumnFilter('${escapeJsString(col.label)}', this.value)" oninput="handleColumnFilter('${escapeJsString(col.label)}', this.value)">${optionMarkup}</select></th>`;
-            }
-            return `<th><input class="filter-control" data-filter-label="${escapeHtml(col.label)}" data-filter-sheet="${currentSheet}" value="${escapeHtml(currentValue)}" placeholder="Filter" oninput="handleColumnFilter('${escapeJsString(col.label)}', this.value)" onchange="handleColumnFilter('${escapeJsString(col.label)}', this.value)"></th>`;
-          }).join('');
-          filterRowMarkup = `<tr class="table-filter-row">${filterRowCells}<th class="text-right pr-4 sticky-action-header"><button onclick="clearTableFilters(true)" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors">Reset</button></th></tr>`;
-        }
 
         tHead.innerHTML = `
           <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
-          ${filterRowMarkup}
         `;
         tableRenderState.headerKey = headerKey;
-        bindTableFilterControls();
       }
 
       if (!filteredData.length) {
-        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan untuk pencarian / filter yang dipakai.</td></tr>`;
+        tBody.innerHTML = `<tr><td colspan="${cols.length + 1}" class="px-5 py-12 text-center text-slate-500 text-sm font-medium">Tidak ada data ditemukan untuk pencarian yang dipakai.</td></tr>`;
         document.getElementById('recordCount').textContent = `Menampilkan 0 dari ${sourceRows.length} data`;
         updateTablePaginationControls(null, { enabled: false });
         return;
@@ -4628,50 +4629,479 @@ function applyDashboardSnapshot(snapshot) {
       });
     }
 
-    function renderReport() {
-      const body = document.getElementById('reportBody');
-      if (!inOutLogs.length) {
-        body.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500 font-medium">Belum ada laporan.</td></tr>';
+    function normalizeCompareText(value) {
+      return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function normalizeCompareDigits(value) {
+      return String(value || '').replace(/\D+/g, '');
+    }
+
+    function buildBpjsReportData() {
+      const rows = Array.isArray(database.ALL_BPJS) ? database.ALL_BPJS : [];
+      const mapped = rows.map(row => ({
+        id: getEmployeeId(row) || '-',
+        name: getEmployeeName(row),
+        status: normalizeBpjsType(getColValue(row, ['STATUS'])),
+        membership: normalizeMembershipStatus(getColValue(row, STATUS_KEYS.ALL_BPJS)),
+        potonganValue: parsePercentValue(getColValue(row, ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN'])),
+        potongan: formatPercentDisplay(getColValue(row, ['POTONGAN', 'TOTAL POTONGAN', 'POTONGAN KARYAWAN'])),
+        total: formatCurrency(getColValue(row, ['TOTAL', 'TOTAL POTONGAN']))
+      }));
+      return {
+        rows: mapped,
+        one: mapped.filter(item => Math.abs(item.potonganValue - 0.01) < 0.000001),
+        aboveOne: mapped.filter(item => item.potonganValue > 0.010001),
+        zero: mapped.filter(item => item.potonganValue <= 0.000001)
+      };
+    }
+
+    function getUnitLabelByEmployeeId(id) {
+      const value = String(id || '').trim().toUpperCase();
+      if (value.startsWith('SR')) return 'Unit 1';
+      if (value.startsWith('SM')) return 'Unit 2';
+      return 'Unit Lain';
+    }
+
+    function getUnitCodeByEmployeeId(id) {
+      const value = String(id || '').trim().toUpperCase();
+      if (value.startsWith('SR')) return 'SR';
+      if (value.startsWith('SM')) return 'SM';
+      return 'LAIN';
+    }
+
+    function buildBpjamsostekCompareData() {
+      const bpjsWorkers = (Array.isArray(database.ALL_BPJS) ? database.ALL_BPJS : []).filter(row => normalizeBpjsType(getColValue(row, ['STATUS'])) === 'WORKER');
+      const jamsRows = Array.isArray(database.DATA_UPAH) ? database.DATA_UPAH : [];
+      const bpjsMap = new Map();
+      const jamsMap = new Map();
+
+      bpjsWorkers.forEach(row => {
+        const id = getEmployeeId(row);
+        if (id && !bpjsMap.has(id)) bpjsMap.set(id, row);
+      });
+      jamsRows.forEach(row => {
+        const id = getEmployeeId(row);
+        if (id && !jamsMap.has(id)) jamsMap.set(id, row);
+      });
+
+      const ids = Array.from(new Set([...bpjsMap.keys(), ...jamsMap.keys()])).sort((a, b) => a.localeCompare(b, 'id', { numeric: true, sensitivity: 'base' }));
+      const invalidRows = [];
+
+      ids.forEach(id => {
+        const bpjs = bpjsMap.get(id);
+        const jams = jamsMap.get(id);
+        const differences = [];
+        const bpjsName = bpjs ? getEmployeeName(bpjs) : '-';
+        const jamsName = jams ? getEmployeeName(jams) : '-';
+        const bpjsNik = bpjs ? String(getColValue(bpjs, ['NIK']) || '-') : '-';
+        const jamsNik = jams ? String(getColValue(jams, ['NIK']) || '-') : '-';
+        if (!bpjs) differences.push('Tidak ada di BPJS Kesehatan Worker');
+        if (!jams) differences.push('Tidak ada di BP Jamsostek');
+        if (bpjs && jams) {
+          if (normalizeCompareText(bpjsName) !== normalizeCompareText(jamsName)) differences.push('Nama beda');
+          if (normalizeCompareDigits(bpjsNik) !== normalizeCompareDigits(jamsNik)) differences.push('NIK beda');
+        }
+
+        if (differences.length) {
+          invalidRows.push({
+            id,
+            unitCode: getUnitCodeByEmployeeId(id),
+            unitLabel: getUnitLabelByEmployeeId(id),
+            bpjsName,
+            jamsName,
+            bpjsNik,
+            jamsNik,
+            differenceFlags: differences.slice(),
+            differences: differences.join(', ')
+          });
+        }
+      });
+
+      return invalidRows.sort((a, b) => {
+        const diffCompare = String(a?.differences || '').localeCompare(String(b?.differences || ''), 'id', { sensitivity: 'base' });
+        if (diffCompare !== 0) return diffCompare;
+        const unitCompare = String(a?.unitCode || '').localeCompare(String(b?.unitCode || ''), 'id', { sensitivity: 'base' });
+        if (unitCompare !== 0) return unitCompare;
+        return String(a?.id || '').localeCompare(String(b?.id || ''), 'id', { numeric: true, sensitivity: 'base' });
+      });
+    }
+
+
+    function getSelectedReportKey() {
+      return document.getElementById('reportViewSelect')?.value || 'bpjs_pot_1';
+    }
+
+    function getReportPalette(reportKey = getSelectedReportKey()) {
+      const palettes = {
+        bpjs_pot_1: { color: '#047857', border: 'rgba(16,185,129,0.35)', background: 'rgba(236,253,245,0.9)' },
+        bpjs_pot_above_1: { color: '#0369a1', border: 'rgba(14,165,233,0.35)', background: 'rgba(240,249,255,0.92)' },
+        bpjs_pot_0: { color: '#7c3aed', border: 'rgba(168,85,247,0.35)', background: 'rgba(245,243,255,0.92)' },
+        jams_compare_all: { color: '#be123c', border: 'rgba(244,63,94,0.35)', background: 'rgba(255,241,242,0.92)' },
+        jams_compare_sr: { color: '#c2410c', border: 'rgba(249,115,22,0.35)', background: 'rgba(255,247,237,0.92)' },
+        jams_compare_sm: { color: '#4338ca', border: 'rgba(99,102,241,0.35)', background: 'rgba(238,242,255,0.92)' }
+      };
+      return palettes[reportKey] || palettes.bpjs_pot_1;
+    }
+
+    function applyReportSelectAppearance() {
+      const select = document.getElementById('reportViewSelect');
+      if (!select) return;
+      const palette = getReportPalette(select.value);
+      select.style.color = palette.color;
+      select.style.borderColor = palette.border;
+      select.style.backgroundColor = palette.background;
+      select.style.fontWeight = '800';
+    }
+
+    function normalizeDifferenceFlags(item) {
+      if (Array.isArray(item?.differenceFlags) && item.differenceFlags.length) {
+        return Array.from(new Set(item.differenceFlags.map(flag => String(flag || '').trim()).filter(Boolean)));
+      }
+      return Array.from(new Set(String(item?.differences || '').split(',').map(flag => flag.trim()).filter(Boolean)));
+    }
+
+    function buildCompareSummary(rows = []) {
+      const exactSummary = new Map();
+      const flagLabels = [
+        'Nama beda',
+        'NIK beda',
+        'Tidak ada di BPJS Kesehatan Worker',
+        'Tidak ada di BP Jamsostek'
+      ];
+      const flagSummary = new Map(flagLabels.map(label => [label, 0]));
+
+      (Array.isArray(rows) ? rows : []).forEach(item => {
+        const flags = normalizeDifferenceFlags(item);
+        if (!flags.length) return;
+        const comboLabel = flags.join(', ');
+        exactSummary.set(comboLabel, (exactSummary.get(comboLabel) || 0) + 1);
+        flags.forEach(flag => flagSummary.set(flag, (flagSummary.get(flag) || 0) + 1));
+      });
+
+      return {
+        flags: Array.from(flagSummary.entries()).map(([label, count]) => ({ label, count })).filter(item => item.count > 0),
+        combos: Array.from(exactSummary.entries()).map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, 'id'))
+      };
+    }
+
+    function renderCompareSummary(reportConfig) {
+      const wrap = document.getElementById('reportCompareSummaryWrap');
+      if (!wrap) return;
+      if (!reportConfig || reportConfig.kind !== 'compare') {
+        wrap.classList.add('hidden');
+        wrap.innerHTML = '';
         return;
       }
-      body.innerHTML = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => {
-        const typeLabel = log.type === 'IN' ? 'Karyawan Baru' : log.type === 'OUT' ? 'Karyawan Keluar' : 'Import Massal';
-        const typeClass = log.type === 'IN'
-          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
-          : log.type === 'OUT'
-            ? 'bg-rose-50 text-rose-700 border border-rose-200/60'
-            : 'bg-blue-50 text-blue-700 border border-blue-200/60';
-        return `
-        <tr>
-          <td class="whitespace-nowrap font-medium">${fmtDateTime(log.createdAt)}</td>
-          <td class="whitespace-nowrap"><span class="px-3 py-1.5 rounded-md ${typeClass} text-[10px] font-bold shadow-sm">${typeLabel}</span></td>
-          <td class="whitespace-nowrap font-bold text-slate-600">${getSheetLabel(log.sheet)}</td>
-          <td class="whitespace-nowrap text-center font-black text-lg text-slate-800">${log.count}</td>
-          <td class="whitespace-nowrap max-w-[200px] truncate" title="${escapeHtml(log.fileName || '-')}">${escapeHtml(log.fileName || '-')}</td>
-        </tr>`;
-      }).join('');
+
+      const summary = buildCompareSummary(reportConfig.rows);
+      const flagCards = summary.flags.length
+        ? summary.flags.map(item => `
+            <div class="rounded-2xl border border-rose-100 bg-white p-3 shadow-sm">
+              <p class="text-[11px] uppercase tracking-[0.16em] font-bold text-rose-700">${escapeHtml(item.label)}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900">${item.count}</p>
+            </div>`).join('')
+        : '<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-4 text-sm font-medium text-slate-500">Belum ada ringkasan KETERANGAN BEDA untuk laporan yang dipilih.</div>';
+
+      const comboRows = summary.combos.length
+        ? summary.combos.map(item => `
+            <tr>
+              <td class="whitespace-normal font-semibold text-slate-700">${escapeHtml(item.label)}</td>
+              <td class="whitespace-nowrap text-right font-black text-slate-900">${item.count}</td>
+            </tr>`).join('')
+        : '<tr><td colspan="2" class="px-4 py-4 text-sm text-slate-500 text-center">Tidak ada kombinasi perbedaan.</td></tr>';
+
+      wrap.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-rose-700">Summary Keterangan Beda</p>
+              <p class="text-sm text-slate-600 mt-1">Ringkasan ini mengikuti laporan compare yang sedang dipilih dan ikut masuk ke file Excel saat export.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">${flagCards}</div>
+          <div class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+            <div class="px-4 py-3 border-b bg-slate-50/80">
+              <p class="font-bold text-slate-800">Rekap Kombinasi Keterangan</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="table-modern min-w-[480px]">
+                <thead>
+                  <tr>
+                    <th>KETERANGAN BEDA</th>
+                    <th class="text-right">JUMLAH</th>
+                  </tr>
+                </thead>
+                <tbody>${comboRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>`;
+      wrap.classList.remove('hidden');
+    }
+
+    function autoFitWorksheetColumns(rows = [], worksheet) {
+      if (!worksheet || !Array.isArray(rows) || !rows.length) return;
+      const headers = Object.keys(rows[0] || {});
+      worksheet['!cols'] = headers.map(header => {
+        const maxLen = rows.reduce((maxValue, row) => Math.max(maxValue, String(row?.[header] ?? '').length), String(header).length);
+        return { wch: Math.min(Math.max(maxLen + 2, 12), 42) };
+      });
+    }
+
+    function downloadWorkbookFile(workbook, filename) {
+      const safeFilename = String(filename || 'export.xlsx').endsWith('.xlsx') ? String(filename || 'export.xlsx') : `${String(filename || 'export')}.xlsx`;
+      try {
+        XLSX.writeFile(workbook, safeFilename, { compression: true });
+        return true;
+      } catch (error) {
+        try {
+          const output = XLSX.write(workbook, { bookType: 'xlsx', type: 'array', compression: true });
+          const blob = new Blob([output], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement('a');
+          anchor.href = url;
+          anchor.download = safeFilename;
+          document.body.appendChild(anchor);
+          anchor.click();
+          setTimeout(() => {
+            URL.revokeObjectURL(url);
+            anchor.remove();
+          }, 0);
+          return true;
+        } catch (fallbackError) {
+          console.error('Export workbook gagal', fallbackError);
+          Swal.fire('Gagal export', fallbackError?.message || 'File Excel tidak dapat dibuat.', 'error');
+          return false;
+        }
+      }
     }
 
     function exportToExcel(filename, rows, sheetName = 'Sheet1') {
-      if (!rows.length) {
+      if (!Array.isArray(rows) || !rows.length) {
         Swal.fire('Tidak ada data', 'Data kosong.', 'info');
-        return;
+        return false;
       }
-      const worksheet = XLSX.utils.json_to_sheet(rows);
       const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      autoFitWorksheetColumns(rows, worksheet);
       XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-      XLSX.writeFile(workbook, filename);
+      return downloadWorkbookFile(workbook, filename);
     }
 
-    function exportReportExcel() {
-      const rows = [...inOutLogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(log => ({
-        Tanggal: fmtDateTime(log.createdAt),
-        Tipe: log.type === 'IN' ? 'Karyawan Baru' : log.type === 'OUT' ? 'Karyawan Keluar' : 'Import Massal',
-        Modul: getSheetLabel(log.sheet),
-        Jumlah: log.count,
-        File: log.fileName || '-'
+    function getCurrentReportConfig(bpjsReport = buildBpjsReportData(), compareRows = buildBpjamsostekCompareData()) {
+      const selectedKey = getSelectedReportKey();
+      const compareAll = compareRows;
+      const compareUnit1 = compareRows.filter(item => item.unitCode === 'SR');
+      const compareUnit2 = compareRows.filter(item => item.unitCode === 'SM');
+      const configs = {
+        bpjs_pot_1: {
+          key: 'bpjs_pot_1',
+          title: 'Laporan BPJS Kesehatan · Potongan = 1%',
+          subtitle: 'Menampilkan data Staff dan Worker dengan potongan tepat 1%.',
+          info: `Total data kategori ini: ${bpjsReport.one.length} dari ${bpjsReport.rows.length} data BPJS Kesehatan.`,
+          count: bpjsReport.one.length,
+          filename: 'laporan-bpjs-kesehatan-potongan-1.xlsx',
+          kind: 'bpjs',
+          rows: bpjsReport.one
+        },
+        bpjs_pot_above_1: {
+          key: 'bpjs_pot_above_1',
+          title: 'Laporan BPJS Kesehatan · Potongan > 1%',
+          subtitle: 'Menampilkan data Staff dan Worker dengan potongan di atas 1%.',
+          info: `Total data kategori ini: ${bpjsReport.aboveOne.length} dari ${bpjsReport.rows.length} data BPJS Kesehatan.`,
+          count: bpjsReport.aboveOne.length,
+          filename: 'laporan-bpjs-kesehatan-potongan-diatas-1.xlsx',
+          kind: 'bpjs',
+          rows: bpjsReport.aboveOne
+        },
+        bpjs_pot_0: {
+          key: 'bpjs_pot_0',
+          title: 'Laporan BPJS Kesehatan · Potongan = 0%',
+          subtitle: 'Menampilkan data Staff dan Worker dengan potongan 0%.',
+          info: `Total data kategori ini: ${bpjsReport.zero.length} dari ${bpjsReport.rows.length} data BPJS Kesehatan.`,
+          count: bpjsReport.zero.length,
+          filename: 'laporan-bpjs-kesehatan-potongan-0.xlsx',
+          kind: 'bpjs',
+          rows: bpjsReport.zero
+        },
+        jams_compare_all: {
+          key: 'jams_compare_all',
+          title: 'Laporan BP Jamsostek · Compare Tidak Valid (Semua Unit)',
+          subtitle: 'Menampilkan data Worker dengan Nama atau NIK yang berbeda antara BPJS Kesehatan dan BP Jamsostek, termasuk data yang hanya ada di salah satu modul.',
+          info: `Total data compare tidak valid semua unit: ${compareAll.length} data.`,
+          count: compareAll.length,
+          filename: 'laporan-bp-jamsostek-compare-tidak-valid-semua-unit.xlsx',
+          kind: 'compare',
+          rows: compareAll
+        },
+        jams_compare_sr: {
+          key: 'jams_compare_sr',
+          title: 'Laporan BP Jamsostek · Compare Tidak Valid Unit 1 (SR)',
+          subtitle: 'Menampilkan data Worker dengan NOMOR ID diawali SR yang Nama atau NIK-nya berbeda.',
+          info: `Total data compare tidak valid Unit 1 / SR: ${compareUnit1.length} data.`,
+          count: compareUnit1.length,
+          filename: 'laporan-bp-jamsostek-compare-tidak-valid-unit-1-sr.xlsx',
+          kind: 'compare',
+          rows: compareUnit1
+        },
+        jams_compare_sm: {
+          key: 'jams_compare_sm',
+          title: 'Laporan BP Jamsostek · Compare Tidak Valid Unit 2 (SM)',
+          subtitle: 'Menampilkan data Worker dengan NOMOR ID diawali SM yang Nama atau NIK-nya berbeda.',
+          info: `Total data compare tidak valid Unit 2 / SM: ${compareUnit2.length} data.`,
+          count: compareUnit2.length,
+          filename: 'laporan-bp-jamsostek-compare-tidak-valid-unit-2-sm.xlsx',
+          kind: 'compare',
+          rows: compareUnit2
+        }
+      };
+      return configs[selectedKey] || configs.bpjs_pot_1;
+    }
+
+    function renderCurrentReportTable(reportConfig) {
+      const head = document.getElementById('reportDynamicHead');
+      const body = document.getElementById('reportDynamicBody');
+      const table = document.getElementById('reportDynamicTable');
+      if (!head || !body || !table) return;
+
+      if (reportConfig.kind === 'compare') {
+        table.className = 'table-modern min-w-[1180px]';
+        head.innerHTML = `
+          <tr>
+            <th>UNIT</th>
+            <th>NOMOR ID</th>
+            <th>NAMA BPJS</th>
+            <th>NAMA BP JAMSOSTEK</th>
+            <th>NIK BPJS</th>
+            <th>NIK BP JAMSOSTEK</th>
+            <th>KETERANGAN BEDA</th>
+          </tr>
+        `;
+        if (!reportConfig.rows.length) {
+          body.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-emerald-600 font-medium">Tidak ada perbedaan data pada laporan compare yang dipilih.</td></tr>';
+          return;
+        }
+        body.innerHTML = reportConfig.rows.map(item => `
+          <tr>
+            <td class="whitespace-nowrap"><span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">${escapeHtml(item.unitLabel)}</span></td>
+            <td class="whitespace-nowrap font-bold text-slate-800">${escapeHtml(item.id)}</td>
+            <td class="whitespace-normal">${escapeHtml(item.bpjsName)}</td>
+            <td class="whitespace-normal">${escapeHtml(item.jamsName)}</td>
+            <td class="whitespace-nowrap">${escapeHtml(item.bpjsNik)}</td>
+            <td class="whitespace-nowrap">${escapeHtml(item.jamsNik)}</td>
+            <td class="whitespace-normal text-rose-700 font-semibold">${escapeHtml(item.differences)}</td>
+          </tr>
+        `).join('');
+        return;
+      }
+
+      table.className = 'table-modern min-w-[980px]';
+      head.innerHTML = `
+        <tr>
+          <th>NOMOR ID</th>
+          <th>NAMA</th>
+          <th>STATUS</th>
+          <th>KEPESERTAAN</th>
+          <th>POTONGAN</th>
+          <th>TOTAL</th>
+        </tr>
+      `;
+      if (!reportConfig.rows.length) {
+        body.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500 font-medium">Tidak ada data pada kategori ini.</td></tr>';
+        return;
+      }
+      body.innerHTML = reportConfig.rows.map(item => `
+        <tr>
+          <td class="whitespace-nowrap font-bold text-slate-800">${escapeHtml(item.id)}</td>
+          <td class="whitespace-normal">${escapeHtml(item.name)}</td>
+          <td class="whitespace-nowrap">${renderTypeBadge(item.status)}</td>
+          <td class="whitespace-nowrap">${renderMembershipBadge(item.membership)}</td>
+          <td class="whitespace-nowrap font-bold text-slate-700">${escapeHtml(item.potongan)}</td>
+          <td class="whitespace-nowrap font-bold text-slate-700">${escapeHtml(item.total)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderReport() {
+      const dynamicBody = document.getElementById('reportDynamicBody');
+      if (!dynamicBody) return;
+
+      const bpjsReport = buildBpjsReportData();
+      const compareRows = buildBpjamsostekCompareData();
+      const currentReport = getCurrentReportConfig(bpjsReport, compareRows);
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setText('reportPot1Count', bpjsReport.one.length);
+      setText('reportPotAbove1Count', bpjsReport.aboveOne.length);
+      setText('reportPotZeroCount', bpjsReport.zero.length);
+      setText('compareInvalidCountBadge', compareRows.length);
+      setText('reportDynamicTitle', currentReport.title);
+      setText('reportDynamicSubtitle', currentReport.subtitle);
+      setText('reportCurrentCountBadge', `${currentReport.count} data`);
+      setText('reportCurrentInfo', currentReport.info);
+
+      applyReportSelectAppearance();
+      renderCompareSummary(currentReport);
+      renderCurrentReportTable(currentReport);
+    }
+
+    function exportCurrentReportExcel() {
+      const bpjsReport = buildBpjsReportData();
+      const compareRows = buildBpjamsostekCompareData();
+      const currentReport = getCurrentReportConfig(bpjsReport, compareRows);
+
+      if (currentReport.kind === 'compare') {
+        if (!currentReport.rows.length) {
+          Swal.fire('Tidak ada data', 'Tidak ada data compare untuk diexport.', 'info');
+          return;
+        }
+        const detailRows = currentReport.rows.map(item => ({
+          'UNIT': item.unitLabel,
+          'NOMOR ID': item.id,
+          'NAMA BPJS': item.bpjsName,
+          'NAMA BP JAMSOSTEK': item.jamsName,
+          'NIK BPJS': item.bpjsNik,
+          'NIK BP JAMSOSTEK': item.jamsNik,
+          'KETERANGAN BEDA': item.differences
+        }));
+        const summary = buildCompareSummary(currentReport.rows);
+        const summaryRows = [
+          ...summary.flags.map(item => ({
+            'JENIS SUMMARY': 'Per Keterangan',
+            'KETERANGAN': item.label,
+            'JUMLAH': item.count
+          })),
+          ...summary.combos.map(item => ({
+            'JENIS SUMMARY': 'Kombinasi Keterangan',
+            'KETERANGAN': item.label,
+            'JUMLAH': item.count
+          }))
+        ];
+        const workbook = XLSX.utils.book_new();
+        const detailSheet = XLSX.utils.json_to_sheet(detailRows);
+        autoFitWorksheetColumns(detailRows, detailSheet);
+        XLSX.utils.book_append_sheet(workbook, detailSheet, 'Detail Compare');
+        const finalSummaryRows = summaryRows.length ? summaryRows : [{ 'JENIS SUMMARY': 'Info', 'KETERANGAN': 'Tidak ada summary', 'JUMLAH': 0 }];
+        const summarySheet = XLSX.utils.json_to_sheet(finalSummaryRows);
+        autoFitWorksheetColumns(finalSummaryRows, summarySheet);
+        XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary Beda');
+        downloadWorkbookFile(workbook, currentReport.filename);
+        return;
+      }
+
+      const rows = currentReport.rows.map(item => ({
+        'NOMOR ID': item.id,
+        'NAMA': item.name,
+        'STATUS': item.status,
+        'KEPESERTAAN': item.membership,
+        'POTONGAN': item.potongan,
+        'TOTAL': item.total
       }));
-      exportToExcel('laporan-in-out.xlsx', rows, 'Laporan In Out');
+      exportToExcel(currentReport.filename, rows, 'Laporan BPJS');
     }
 
     async function clearLogs() {
@@ -5056,7 +5486,7 @@ Nomor Kartu: ${item.cardNumber}`;
           rows: [sippHeaders.map(key => sippExample[key] ?? '')],
           includeInstructionSheet: true,
           instructionRows: [
-            ['PETUNJUK PENGISIAN TEMPLATE SIPP'],
+            ['PETUNJUK PENGISIAN TEMPLATE BP JAMSOSTEK'],
             ['1. Isi data mulai baris ke-2 pada sheet data_upah.'],
             ['2. Jangan ubah nama sheet: data_upah.'],
             ['3. Jangan ubah nama kolom/header pada baris pertama.'],
@@ -5228,6 +5658,7 @@ Nomor Kartu: ${selected.cardNumber}`;
 
     document.addEventListener('DOMContentLoaded', () => {
       bindNavigation();
+      applyReportSelectAppearance();
       document.getElementById('openSidebar').addEventListener('click', openNav);
       document.getElementById('closeSidebar').addEventListener('click', closeNav);
       document.getElementById('overlay').addEventListener('click', closeNav);
