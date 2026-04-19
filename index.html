@@ -85,21 +85,32 @@
     }
     .nav-link {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 0;
+    }
+    .nav-link span {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.98rem;
+      line-height: 1.25;
     }
     .nav-link i {
       transition: all 0.3s ease;
       font-size: 1.25rem;
+      flex: 0 0 auto;
     }
-    .nav-link[data-tab="dashboard"] i { color: #14b8a6; }
-    .nav-link[data-tab="global-search"] i { color: #3b82f6; }
+    .nav-link[data-tab="dashboard" data-role-scope="admin"] i { color: #14b8a6; }
+    .nav-link[data-tab="global-search" data-role-scope="admin"] i { color: #3b82f6; }
     .nav-link[data-tab="data"][data-sheet="ALL_BPJS"] i { color: #0ea5e9; }
     .nav-link[data-tab="data"][data-sheet="DATA_UPAH"] i { color: #ec4899; }
-    .nav-link[data-tab="import"] i { color: #f59e0b; }
-    .nav-link[data-tab="employee-in"] i { color: #10b981; }
-    .nav-link[data-tab="employee-out"] i { color: #ef4444; }
-    .nav-link[data-tab="report"] i { color: #8b5cf6; }
-    .nav-link[data-tab="card-print"] i { color: #06b67f; }
-    .nav-link[data-tab="settings"] i { color: #64748b; }
+    .nav-link[data-tab="import" data-role-scope="admin"] i { color: #f59e0b; }
+    .nav-link[data-tab="employee-in" data-role-scope="admin"] i { color: #10b981; }
+    .nav-link[data-tab="employee-out" data-role-scope="admin"] i { color: #ef4444; }
+    .nav-link[data-tab="report" data-role-scope="admin"] i { color: #8b5cf6; }
+    .nav-link[data-tab="card-print" data-role-scope="admin,bpjamsostek"] i { color: #06b67f; }
+    .nav-link[data-tab="settings" data-role-scope="admin"] i { color: #64748b; }
     .nav-link:hover:not(.active) {
       background: rgba(255,255,255,0.08);
       color: white;
@@ -1647,6 +1658,13 @@
         border-radius: .65rem;
         padding: .2rem;
       }
+      .nav-link {
+        padding-top: .82rem !important;
+        padding-bottom: .82rem !important;
+      }
+      .nav-link span {
+        font-size: .94rem;
+      }
     }
 
   
@@ -1708,9 +1726,370 @@
       text-overflow: ellipsis;
     }
 
+
+    .auth-shell {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,0.18), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(20,184,166,0.20), transparent 28%),
+        linear-gradient(135deg, #e6fffb 0%, #f8fafc 42%, #eef2ff 100%);
+    }
+    .auth-shell.hidden { display: none !important; }
+    .auth-backdrop-orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(10px);
+      opacity: .45;
+      pointer-events: none;
+    }
+    .auth-backdrop-orb.orb-a {
+      width: 18rem; height: 18rem; top: 6%; right: 8%;
+      background: rgba(59,130,246,.16);
+    }
+    .auth-backdrop-orb.orb-b {
+      width: 22rem; height: 22rem; left: -5%; bottom: -6%;
+      background: rgba(20,184,166,.16);
+    }
+    .auth-card {
+      position: relative;
+      width: min(1080px, 100%);
+      min-height: min(720px, calc(100dvh - 2.5rem));
+      border-radius: 32px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.68);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 28px 80px rgba(15,23,42,.18);
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+    }
+    .auth-hero {
+      position: relative;
+      padding: 2rem;
+      background: linear-gradient(160deg, rgba(15,23,42,.94), rgba(15,118,110,.90) 52%, rgba(37,99,235,.88));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .auth-hero::before {
+      content: '';
+      position: absolute;
+      width: 22rem; height: 22rem;
+      right: -6rem; top: -8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+    }
+    .auth-hero::after {
+      content: '';
+      position: absolute;
+      width: 18rem; height: 18rem;
+      left: -5rem; bottom: -7rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+    }
+    .auth-brand-row,
+    .auth-hero-content,
+    .auth-hero-footer { position: relative; z-index: 1; }
+    .auth-brand-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .9rem;
+      padding: .85rem 1rem;
+      border-radius: 1.4rem;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(12px);
+    }
+    .auth-brand-logo {
+      width: 3.5rem; height: 3.5rem;
+      border-radius: 1.25rem;
+      background: rgba(255,255,255,.94);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(15,23,42,.18);
+    }
+    .auth-brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .auth-hero h2 {
+      font-size: clamp(2rem, 3.6vw, 3.35rem);
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      max-width: 12ch;
+    }
+    .auth-hero p.auth-hero-sub {
+      margin-top: 1rem;
+      max-width: 34rem;
+      color: rgba(255,255,255,.82);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .auth-highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: .85rem;
+      margin-top: 1.8rem;
+    }
+    .auth-highlight-card {
+      padding: 1rem;
+      border-radius: 1.2rem;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .auth-highlight-card span {
+      display: block;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.65);
+      font-weight: 800;
+    }
+    .auth-highlight-card strong {
+      display: block;
+      margin-top: .45rem;
+      font-size: 1rem;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    .auth-form-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+    }
+    .auth-form-wrap {
+      width: min(410px, 100%);
+    }
+    .auth-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      border-radius: 999px;
+      padding: .5rem .85rem;
+      background: rgba(20,184,166,.12);
+      color: #0f766e;
+      border: 1px solid rgba(20,184,166,.16);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .auth-form-title {
+      margin-top: 1rem;
+      font-size: 2rem;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .auth-form-subtitle {
+      margin-top: .75rem;
+      color: #64748b;
+      font-size: .96rem;
+      line-height: 1.65;
+    }
+    .auth-input-wrap { margin-top: 1rem; }
+    .auth-label {
+      display: block;
+      margin-bottom: .55rem;
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #64748b;
+    }
+    .auth-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border-radius: 1.2rem;
+      background: rgba(248,250,252,.96);
+      border: 1px solid rgba(203,213,225,.9);
+      box-shadow: inset 0 1px 2px rgba(15,23,42,.04);
+    }
+    .auth-field i {
+      width: 3rem;
+      text-align: center;
+      color: #94a3b8;
+      font-size: .95rem;
+      flex: 0 0 auto;
+    }
+    .auth-field input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      outline: none;
+      padding: 1rem .95rem 1rem 0;
+      font-size: .98rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .auth-password-toggle {
+      width: 3rem;
+      height: 3rem;
+      border: 0;
+      background: transparent;
+      color: #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 999px;
+      margin-right: .35rem;
+      transition: all .2s ease;
+    }
+    .auth-password-toggle:hover {
+      color: #0f766e;
+      background: rgba(20,184,166,.08);
+    }
+    .auth-field:focus-within {
+      border-color: rgba(20,184,166,.72);
+      box-shadow: 0 0 0 4px rgba(20,184,166,.10);
+      background: white;
+    }
+    .auth-login-btn {
+      width: 100%;
+      margin-top: 1.35rem;
+      border: 0;
+      border-radius: 1.2rem;
+      padding: 1rem 1.15rem;
+      font-size: .98rem;
+      font-weight: 900;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 16px 34px rgba(20,184,166,.22);
+      transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+    }
+    .auth-login-btn:hover { transform: translateY(-1px); box-shadow: 0 20px 36px rgba(20,184,166,.26); }
+    .auth-login-btn:disabled { opacity: .7; cursor: wait; }
+    .auth-helper-box {
+      margin-top: 1.1rem;
+      padding: .9rem 1rem;
+      border-radius: 1rem;
+      background: rgba(248,250,252,.95);
+      border: 1px solid rgba(226,232,240,.92);
+      color: #64748b;
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+    .auth-session-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .75rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.14);
+      font-size: .74rem;
+      font-weight: 800;
+      color: rgba(255,255,255,.88);
+    }
+    .auth-mobile-hero-logo {
+      display:none;
+      width:4rem;height:4rem;border-radius:1.25rem;overflow:hidden;
+      background:#fff;box-shadow:0 12px 28px rgba(15,23,42,.14);
+      align-items:center;justify-content:center;margin-bottom:1rem;
+    }
+    .auth-mobile-hero-logo img { width:100%; height:100%; object-fit:contain; }
+    .auth-user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,.06);
+      color: #334155;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+    .session-badge-icon {
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 999px;
+      object-fit: contain;
+      display: none;
+      flex: 0 0 auto;
+    }
+    .session-badge-icon.show { display: inline-block; }
+    .session-badge-fa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.15rem;
+      height: 1.15rem;
+      border-radius: 999px;
+      flex: 0 0 auto;
+    }
+    .session-badge-fa.admin {
+      color: #2563eb;
+      background: rgba(37,99,235,.12);
+    }
+    .auth-user-chip.hidden { display:none !important; }
+    @media (max-width: 980px) {
+      .auth-card { grid-template-columns: 1fr; min-height: auto; }
+      .auth-hero { padding: 1.5rem; min-height: 18rem; }
+      .auth-form-side { padding: 1.5rem; }
+      .auth-mobile-hero-logo { display:flex; }
+      .auth-highlight-grid { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
+  <div id="loginScreen" class="auth-shell">
+    <div class="auth-backdrop-orb orb-a"></div>
+    <div class="auth-backdrop-orb orb-b"></div>
+    <div class="auth-card">
+      <div class="auth-hero">
+        <div class="auth-brand-row">
+          <div class="auth-brand-chip">
+            <div class="auth-brand-logo"><img src="hoplun.png" alt="Hoplun"></div>
+            <div>
+              <p id="authHeroAppName" class="text-2xl font-black tracking-tight text-white">BPJS Control Center</p>
+            </div>
+          </div>
+        </div>
+        <div class="auth-hero-content">
+          <div class="auth-mobile-hero-logo"><img src="hoplun.png" alt="Hoplun"></div>
+          <h2>Secure Access</h2>
+        </div>
+
+      </div>
+      <div class="auth-form-side">
+        <div class="auth-form-wrap">
+          
+          <div class="auth-user-chip hidden" id="currentUserBadge"><i class="fa-solid fa-user-check"></i><span id="currentUserBadgeText"></span></div>
+          <h2 class="auth-form-title">Sign in</h2>
+          <form id="loginForm" class="mt-6">
+            <div class="auth-input-wrap">
+              <div class="auth-field">
+                <i class="fa-solid fa-user"></i>
+                <input id="loginUsername" type="text" autocomplete="username" placeholder="Username" />
+              </div>
+            </div>
+            <div class="auth-input-wrap">
+              <div class="auth-field">
+                <i class="fa-solid fa-key"></i>
+                <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" />
+                <button id="togglePasswordBtn" type="button" class="auth-password-toggle" aria-label="Tampilkan password" title="Tampilkan password">
+                  <i id="togglePasswordIcon" class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            <button id="loginSubmitBtn" type="submit" class="auth-login-btn"><i class="fa-solid fa-right-to-bracket mr-2"></i>Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="flex h-full w-full overflow-hidden">
     <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-80 max-w-[85vw] sidebar-glass text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
       <div class="px-6 py-6 border-b border-white/10 shrink-0">
@@ -1731,36 +2110,36 @@
 
       <div class="px-5 py-4 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Monitor</div>
       <nav class="px-4 space-y-2 overflow-y-auto flex-1 pb-5">
-        <button class="nav-link active w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="dashboard">
+        <button class="nav-link active w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="dashboard" data-role-scope="admin">
           <i class="fa-solid fa-chart-pie w-5 text-center"></i><span>Dashboard</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="global-search">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="global-search" data-role-scope="admin">
           <i class="fa-solid fa-magnifying-glass w-5 text-center"></i><span>Pencarian Cepat</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="ALL_BPJS">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="ALL_BPJS" data-role-scope="admin">
           <img src="bpjsks.png" class="nav-menu-img" alt="BPJS Kesehatan"><span id="labelNavStaff">BPJS Kesehatan Staff &amp; Worker</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="data" data-sheet="DATA_UPAH" data-role-scope="admin,bpjamsostek">
           <img src="bpjstk.png" class="nav-menu-img" alt="BP Jamsostek"><span id="labelNavUpah">BP Jamsostek</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="card-print">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="card-print" data-role-scope="admin,bpjamsostek">
           <i class="fa-solid fa-id-card w-5 text-center"></i><span>Cetak Kartu</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="report">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="report" data-role-scope="admin">
           <i class="fa-solid fa-file-lines w-5 text-center"></i><span>Laporan</span>
         </button>
 
         <div class="px-3 pt-5 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500 font-bold shrink-0">Operasional</div>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="import">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="import" data-role-scope="admin">
           <i class="fa-solid fa-file-import w-5 text-center"></i><span>Import Massal</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="employee-in">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="employee-in" data-role-scope="admin">
           <i class="fa-solid fa-user-plus w-5 text-center"></i><span>Karyawan Baru</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="employee-out">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="employee-out" data-role-scope="admin">
           <i class="fa-solid fa-user-minus w-5 text-center"></i><span>Karyawan Keluar</span>
         </button>
-        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="settings">
+        <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl transition-all" data-tab="settings" data-role-scope="admin">
           <i class="fa-solid fa-gear w-5 text-center"></i><span>Pengaturan</span>
         </button>
       </nav>
@@ -1793,6 +2172,8 @@
             </div>
           </div>
           <div class="flex items-center gap-2 md:gap-3 flex-wrap justify-start md:justify-end">
+            <div id="activeUserChip" class="hidden items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-slate-100 text-slate-700 text-xs md:text-sm font-semibold border border-slate-200"><img id="activeUserChipLogo" class="session-badge-icon" src="bpjstk.png" alt="BP Jamsostek"><i id="activeUserChipIcon" class="fa-solid fa-user-shield session-badge-fa admin"></i><span id="activeUserChipText">-</span></div>
+            <button id="logoutBtn" class="hidden items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-rose-50 text-rose-700 text-xs md:text-sm font-semibold border border-rose-100 hover:bg-rose-100 transition-colors"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
             <div id="loadingIndicator" class="hidden items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-teal-50 text-teal-700 text-xs md:text-sm font-semibold border border-teal-100">
               <i class="fa-solid fa-circle-notch fa-spin"></i> <span class="hidden sm:inline">Sinkronisasi data...</span><span class="sm:hidden">Sinkron...</span>
             </div>
@@ -2346,6 +2727,12 @@
     const TABLE_SEARCH_DEBOUNCE_MS = 180;
 
 
+    const AUTH_STORAGE_KEY = 'bpjs_auth_session_v1';
+    const DEFAULT_AUTH = {
+      admin: { username: 'ADMIN', password: 'AGUNG' },
+      bpjamsostek: { username: 'BPJS', password: 'JAMSOSTEK' }
+    };
+
     const DEFAULT_SETTINGS = {
       appName: 'BPJS Control Center',
       appSubtitle: 'BPJS Kesehatan Staff & Worker + BP Jamsostek',
@@ -2354,7 +2741,8 @@
       modules: {
         ALL_BPJS: 'BPJS Kesehatan Staff & Worker',
         DATA_UPAH: 'BP Jamsostek'
-      }
+      },
+      auth: structuredClone(DEFAULT_AUTH)
     };
 
     const FULL_KEYS = {
@@ -2429,7 +2817,11 @@
         return {
           ...structuredClone(DEFAULT_SETTINGS),
           ...(saved || {}),
-          modules: { ...DEFAULT_SETTINGS.modules, ...((saved && saved.modules) || {}) }
+          modules: { ...DEFAULT_SETTINGS.modules, ...((saved && saved.modules) || {}) },
+          auth: {
+            admin: { ...DEFAULT_SETTINGS.auth.admin, ...(((saved || {}).auth || {}).admin || {}) },
+            bpjamsostek: { ...DEFAULT_SETTINGS.auth.bpjamsostek, ...(((saved || {}).auth || {}).bpjamsostek || {}) }
+          }
         };
       } catch (e) {
         return structuredClone(DEFAULT_SETTINGS);
@@ -2490,6 +2882,16 @@
         modules: {
           ALL_BPJS: String(pickAny(row, ['MODULE_ALL_BPJS', 'MODULE ALL BPJS', 'MODULE_STAFF', 'MODULE STAFF', 'STAFF_LABEL', 'MODULE_WORKER', 'MODULE WORKER', 'WORKER_LABEL']) || DEFAULT_SETTINGS.modules.ALL_BPJS),
           DATA_UPAH: String(pickAny(row, ['MODULE_DATA_UPAH', 'MODULE DATA UPAH', 'MODULE_UPAH', 'UPAH_LABEL']) || DEFAULT_SETTINGS.modules.DATA_UPAH)
+        },
+        auth: {
+          admin: {
+            username: String(pickAny(row, ['LOGIN_ADMIN_USER', 'ADMIN_USER', 'USERNAME_ADMIN']) || DEFAULT_SETTINGS.auth.admin.username),
+            password: String(pickAny(row, ['LOGIN_ADMIN_PASS', 'ADMIN_PASS', 'PASSWORD_ADMIN']) || DEFAULT_SETTINGS.auth.admin.password)
+          },
+          bpjamsostek: {
+            username: String(pickAny(row, ['LOGIN_BPJS_USER', 'BPJAMSOSTEK_USER', 'USERNAME_BPJS']) || DEFAULT_SETTINGS.auth.bpjamsostek.username),
+            password: String(pickAny(row, ['LOGIN_BPJS_PASS', 'BPJAMSOSTEK_PASS', 'PASSWORD_BPJS']) || DEFAULT_SETTINGS.auth.bpjamsostek.password)
+          }
         }
       };
     }
@@ -2503,7 +2905,11 @@
         MODULE_ALL_BPJS: settings.modules.ALL_BPJS,
         MODULE_STAFF: settings.modules.ALL_BPJS,
         MODULE_WORKER: settings.modules.ALL_BPJS,
-        MODULE_DATA_UPAH: settings.modules.DATA_UPAH
+        MODULE_DATA_UPAH: settings.modules.DATA_UPAH,
+        LOGIN_ADMIN_USER: settings.auth?.admin?.username || '',
+        LOGIN_ADMIN_PASS: settings.auth?.admin?.password || '',
+        LOGIN_BPJS_USER: settings.auth?.bpjamsostek?.username || '',
+        LOGIN_BPJS_PASS: settings.auth?.bpjamsostek?.password || ''
       };
     }
 
@@ -2591,10 +2997,15 @@
       try {
         const rows = await fetchSheetRows(SETTINGS_SHEET);
         if (rows.length) {
+          const remoteSettings = mapSettingsFromRow(rows[0]);
           appSettings = {
             ...structuredClone(DEFAULT_SETTINGS),
-            ...mapSettingsFromRow(rows[0]),
-            modules: { ...DEFAULT_SETTINGS.modules, ...mapSettingsFromRow(rows[0]).modules }
+            ...remoteSettings,
+            modules: { ...DEFAULT_SETTINGS.modules, ...(remoteSettings.modules || {}) },
+            auth: {
+              admin: { ...DEFAULT_SETTINGS.auth.admin, ...((remoteSettings.auth || {}).admin || {}) },
+              bpjamsostek: { ...DEFAULT_SETTINGS.auth.bpjamsostek, ...((remoteSettings.auth || {}).bpjamsostek || {}) }
+            }
           };
           tempLogoData = appSettings.logoData || '';
           saveSettingsStorage();
@@ -3145,6 +3556,7 @@ function applyDashboardSnapshot(snapshot) {
       setText('appNameSidebar', appSettings.appName);
       setText('appSubtitleSidebar', appSettings.appSubtitle);
       setText('appNameHeaderSmall', appSettings.appName);
+      setText('authHeroAppName', appSettings.appName);
 
       setText('labelNavStaff', getSheetLabel('ALL_BPJS'));
       
@@ -3175,6 +3587,168 @@ function applyDashboardSnapshot(snapshot) {
       if (document.getElementById('tab-report').classList.contains('active')) renderReport();
       if (document.getElementById('tab-card-print').classList.contains('active')) renderCardPrint();
       updatePageTitleForCurrentTab();
+      applyRoleBasedMenu();
+      updateCurrentUserUI();
+    }
+
+    function getAuthSession() {
+      try {
+        const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveAuthSession(session) {
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+      } catch (e) {}
+    }
+
+    function clearAuthSession() {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      } catch (e) {}
+    }
+
+    function getAllowedTabsByRole(role) {
+      if (role === 'bpjamsostek') return ['data:DATA_UPAH', 'card-print'];
+      return ['dashboard', 'global-search', 'data:ALL_BPJS', 'data:DATA_UPAH', 'card-print', 'report', 'import', 'employee-in', 'employee-out', 'settings'];
+    }
+
+    function canAccessTab(tabId, sheet = null, role = getAuthSession()?.role || 'admin') {
+      const allowed = getAllowedTabsByRole(role);
+      const key = tabId === 'data' ? `data:${String(sheet || '').toUpperCase()}` : tabId;
+      return allowed.includes(key);
+    }
+
+    function getDefaultLandingByRole(role = getAuthSession()?.role || 'admin') {
+      return role === 'bpjamsostek' ? { tab: 'data', sheet: 'DATA_UPAH' } : { tab: 'dashboard', sheet: null };
+    }
+
+    function setAppChromeLocked(isLocked) {
+      const mainApp = document.querySelector('body > .flex.h-full.w-full.overflow-hidden');
+      if (mainApp) mainApp.style.visibility = isLocked ? 'hidden' : 'visible';
+      document.body.style.overflow = isLocked ? 'hidden' : 'hidden';
+    }
+
+    function updateCurrentUserUI(session = getAuthSession()) {
+      const badge = document.getElementById('currentUserBadge');
+      const badgeText = document.getElementById('currentUserBadgeText');
+      const activeChip = document.getElementById('activeUserChip');
+      const activeChipText = document.getElementById('activeUserChipText');
+      const activeChipLogo = document.getElementById('activeUserChipLogo');
+      const activeChipIcon = document.getElementById('activeUserChipIcon');
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (session && session.role) {
+        const isBpjs = session.role === 'bpjamsostek';
+        const label = isBpjs ? 'BPJamsostek' : 'Admin';
+        if (badge) badge.classList.remove('hidden');
+        if (badgeText) badgeText.textContent = `Terhubung sebagai ${label}`;
+        if (activeChip) activeChip.classList.remove('hidden');
+        if (activeChipText) activeChipText.textContent = `${label} • ${session.username || '-'}`;
+        if (activeChipLogo) activeChipLogo.classList.toggle('show', isBpjs);
+        if (activeChipIcon) {
+          activeChipIcon.classList.toggle('hidden', isBpjs);
+          activeChipIcon.classList.toggle('admin', !isBpjs);
+        }
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+      } else {
+        if (badge) badge.classList.add('hidden');
+        if (activeChip) activeChip.classList.add('hidden');
+        if (activeChipLogo) activeChipLogo.classList.remove('show');
+        if (activeChipIcon) {
+          activeChipIcon.classList.remove('hidden');
+          activeChipIcon.classList.add('admin');
+        }
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+      }
+    }
+
+    function applyRoleBasedMenu(session = getAuthSession()) {
+      const role = session?.role || null;
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        const scope = String(btn.dataset.roleScope || 'admin').split(',').map(v => v.trim()).filter(Boolean);
+        const allowed = !!role && scope.includes(role);
+        btn.classList.toggle('hidden', !allowed);
+      });
+      const cardSource = document.getElementById('cardSource');
+      if (role === 'bpjamsostek' && cardSource) cardSource.value = 'DATA_UPAH';
+      const cardLabelWrap = document.querySelector('#tab-card-print h2');
+      if (cardLabelWrap) cardLabelWrap.textContent = role === 'bpjamsostek' ? 'Cetak Kartu (BPJamsostek)' : 'Cetak Kartu';
+    }
+
+    function applyAuthState(session = getAuthSession(), options = {}) {
+      const loginScreen = document.getElementById('loginScreen');
+      const { redirect = true } = options || {};
+      const authenticated = !!(session && session.role);
+      if (loginScreen) loginScreen.classList.toggle('hidden', authenticated);
+      setAppChromeLocked(!authenticated);
+      updateCurrentUserUI(session);
+      applyRoleBasedMenu(session);
+      if (!authenticated) return;
+      if (redirect) {
+        const landing = getDefaultLandingByRole(session.role);
+        switchTab(landing.tab, landing.sheet);
+      }
+    }
+
+    async function handleLoginSubmit(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('loginSubmitBtn');
+      const username = String(document.getElementById('loginUsername')?.value || '').trim();
+      const password = String(document.getElementById('loginPassword')?.value || '').trim();
+      if (!username || !password) {
+        Swal.fire('Login gagal', 'Username dan password wajib diisi.', 'warning');
+        return;
+      }
+      if (submitBtn) submitBtn.disabled = true;
+      try {
+        await loadSharedSettingsRemote().catch(() => false);
+        const auth = appSettings.auth || structuredClone(DEFAULT_AUTH);
+        let role = '';
+        if (username === String(auth.admin?.username || '').trim() && password === String(auth.admin?.password || '').trim()) role = 'admin';
+        if (username === String(auth.bpjamsostek?.username || '').trim() && password === String(auth.bpjamsostek?.password || '').trim()) role = 'bpjamsostek';
+        if (!role) throw new Error('Username atau password tidak sesuai dengan data di sheet APP_SETTINGS.');
+        const session = { role, username, loginAt: new Date().toISOString() };
+        saveAuthSession(session);
+        applyAuthState(session, { redirect: true });
+        document.getElementById('loginForm')?.reset();
+        Swal.fire({ icon: 'success', title: 'Login berhasil', text: `Selamat datang ${role === 'admin' ? 'Admin' : 'BPJamsostek'}.`, timer: 1600, showConfirmButton: false });
+      } catch (error) {
+        Swal.fire('Login gagal', error?.message || 'Terjadi kendala saat memverifikasi akun.', 'error');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('loginPassword');
+      const icon = document.getElementById('togglePasswordIcon');
+      const button = document.getElementById('togglePasswordBtn');
+      if (!passwordInput) return;
+      const visible = passwordInput.type === 'text';
+      passwordInput.type = visible ? 'password' : 'text';
+      if (icon) icon.className = visible ? 'fa-regular fa-eye' : 'fa-regular fa-eye-slash';
+      if (button) {
+        button.setAttribute('aria-label', visible ? 'Tampilkan password' : 'Sembunyikan password');
+        button.setAttribute('title', visible ? 'Tampilkan password' : 'Sembunyikan password');
+      }
+    }
+
+    function logoutApp() {
+      clearAuthSession();
+      applyAuthState(null, { redirect: false });
+      const usernameInput = document.getElementById('loginUsername');
+      const passwordInput = document.getElementById('loginPassword');
+      const icon = document.getElementById('togglePasswordIcon');
+      if (usernameInput) usernameInput.focus();
+      if (passwordInput) {
+        passwordInput.value = '';
+        passwordInput.type = 'password';
+      }
+      if (icon) icon.className = 'fa-regular fa-eye';
     }
 
     function updateLogoUI(logoData) {
@@ -3221,10 +3795,13 @@ function applyDashboardSnapshot(snapshot) {
       employeeOutTarget.innerHTML = `
         <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
       `;
-      cardSource.innerHTML = `
-        <option value="DATA_UPAH">${getSheetLabel('DATA_UPAH')}</option>
-        <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
-      `;
+      const role = getAuthSession()?.role || 'admin';
+      cardSource.innerHTML = role === 'bpjamsostek'
+        ? `<option value="DATA_UPAH">${getSheetLabel('DATA_UPAH')}</option>`
+        : `
+            <option value="DATA_UPAH">${getSheetLabel('DATA_UPAH')}</option>
+            <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
+          `;
       cardSource.value = 'DATA_UPAH';
     }
 
@@ -3248,6 +3825,10 @@ function applyDashboardSnapshot(snapshot) {
         modules: {
           ALL_BPJS: document.getElementById('settingLabelStaff').value.trim() || DEFAULT_SETTINGS.modules.ALL_BPJS,
           DATA_UPAH: document.getElementById('settingLabelUpah').value.trim() || DEFAULT_SETTINGS.modules.DATA_UPAH,
+        },
+        auth: {
+          admin: { ...(appSettings.auth?.admin || DEFAULT_SETTINGS.auth.admin) },
+          bpjamsostek: { ...(appSettings.auth?.bpjamsostek || DEFAULT_SETTINGS.auth.bpjamsostek) }
         }
       };
       saveSettingsStorage();
@@ -3365,6 +3946,11 @@ function applyDashboardSnapshot(snapshot) {
     }
 
     function switchTab(tabId, sheet = null) {
+      if (!canAccessTab(tabId, sheet || currentSheet)) {
+        const landing = getDefaultLandingByRole();
+        tabId = landing.tab;
+        sheet = landing.sheet;
+      }
       const mainScroll = document.getElementById('mainScrollContainer');
       if (mainScroll) mainScroll.scrollTop = 0;
 
@@ -5412,7 +5998,12 @@ Nomor Kartu: ${item.cardNumber}`;
     }
 
     function renderCardPrint() {
-      const source = document.getElementById('cardSource').value || 'ALL_BPJS';
+      let source = document.getElementById('cardSource').value || 'ALL_BPJS';
+      if ((getAuthSession()?.role || '') === 'bpjamsostek') {
+        source = 'DATA_UPAH';
+        const sourceSelect = document.getElementById('cardSource');
+        if (sourceSelect) sourceSelect.value = 'DATA_UPAH';
+      }
       const template = document.getElementById('cardTemplate').value;
       const query = (document.getElementById('cardSearch').value || '').toLowerCase().trim();
       const baseRows = makeCardRows(source);
@@ -5658,6 +6249,8 @@ Nomor Kartu: ${selected.cardNumber}`;
 
     document.addEventListener('DOMContentLoaded', () => {
       bindNavigation();
+      document.getElementById('loginForm')?.addEventListener('submit', handleLoginSubmit);
+      document.getElementById('logoutBtn')?.addEventListener('click', logoutApp);
       applyReportSelectAppearance();
       document.getElementById('openSidebar').addEventListener('click', openNav);
       document.getElementById('closeSidebar').addEventListener('click', closeNav);
@@ -5676,8 +6269,15 @@ Nomor Kartu: ${selected.cardNumber}`;
       window.clearTableFilters = clearTableFilters;
       window.selectCardRow = selectCardRow;
       window.downloadCardImage = downloadCardImage;
+      document.getElementById('togglePasswordBtn')?.addEventListener('click', togglePasswordVisibility);
       applySettingsToUI();
-      setDashboardViewportMode('dashboard');
+      const existingSession = getAuthSession();
+      applyAuthState(existingSession, { redirect: false });
+      setDashboardViewportMode(existingSession?.role === 'bpjamsostek' ? 'data' : 'dashboard');
+      if (existingSession?.role) {
+        const landing = getDefaultLandingByRole(existingSession.role);
+        switchTab(landing.tab, landing.sheet);
+      }
       loadAllDataForDashboard();
     });
   </script>
