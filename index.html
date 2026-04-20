@@ -2170,6 +2170,14 @@
     }
     .auth-user-chip.hidden { display:none !important; }
 
+    /* === tampilkan hanya judul bawah pada tab data === */
+    #headerTitleBlock.header-title-hidden {
+      display: none !important;
+    }
+
+
+
+
     /* === login single card override === */
     .auth-card {
       width: min(460px, calc(100vw - 2rem));
@@ -2281,8 +2289,7 @@
             <div id="authFormLogoWrap" class="auth-form-brand-logo logo-host logo-shape-square"><img id="authFormLogoImg" src="hoplun.png" alt="Logo Perusahaan" class="adaptive-logo logo-shape-square"></div>
             <div>
               <p class="auth-single-welcome">Welcome</p>
-              <p class="auth-form-brand-label">Secure Access</p>
-              <p id="authFormAppName" class="auth-form-brand-name">HopLun BPJS</p>
+                            <p id="authFormAppName" class="auth-form-brand-name">HopLun BPJS</p>
             </div>
           </div>
           <div class="auth-user-chip hidden" id="currentUserBadge"><i class="fa-solid fa-user-check"></i><span id="currentUserBadgeText"></span></div>
@@ -2387,7 +2394,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
           <div class="flex items-center gap-4 min-w-0 w-full md:w-auto">
             <button id="openSidebar" class="md:hidden w-11 h-11 shrink-0 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
-            <div class="min-w-0 flex-1">
+            <div id="headerTitleBlock" class="min-w-0 flex-1">
               <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500 truncate">HopLun BPJS</p>
               <div class="menu-title-with-icon"><img id="pageTitleIcon" class="menu-title-icon" alt=""><h1 id="pageTitle" class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1></div>
             </div>
@@ -4309,6 +4316,14 @@ function applyDashboardSnapshot(snapshot) {
       });
     }
 
+
+    function updateHeaderTitleVisibility(tab = document.querySelector('.nav-link.active')?.dataset.tab) {
+      const headerTitleBlock = document.getElementById('headerTitleBlock');
+      if (!headerTitleBlock) return;
+      const tabsWithOwnTitle = ['global-search', 'data', 'import', 'employee-in', 'employee-out', 'report', 'card-print', 'settings'];
+      headerTitleBlock.classList.toggle('header-title-hidden', tabsWithOwnTitle.includes(tab));
+    }
+
     function bindNavigation() {
       document.querySelectorAll('.nav-link').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -4369,6 +4384,7 @@ function applyDashboardSnapshot(snapshot) {
       if (tabId === 'report') renderReport();
       if (tabId === 'card-print') renderCardPrint();
       updatePageTitleForCurrentTab(tabId, sheet || currentSheet);
+      updateHeaderTitleVisibility(tabId);
       setDashboardViewportMode(tabId);
       closeNav();
     }
