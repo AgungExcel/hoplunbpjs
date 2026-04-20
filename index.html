@@ -2170,6 +2170,44 @@
     }
     .auth-user-chip.hidden { display:none !important; }
 
+
+    /* === icon judul untuk semua menu === */
+    .section-title-with-icon {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+    .section-title-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: .75rem;
+      background: #ffffff;
+      border: 1px solid rgba(148,163,184,.18);
+      box-shadow: 0 6px 18px rgba(15,23,42,.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+      flex: 0 0 auto;
+    }
+    .section-title-icon.search { color: #2563eb; }
+    .section-title-icon.import { color: #f59e0b; }
+    .section-title-icon.in { color: #10b981; }
+    .section-title-icon.out { color: #ef4444; }
+    .section-title-icon.report { color: #8b5cf6; }
+    .section-title-icon.card { color: #06b67f; }
+    .section-title-icon.settings { color: #64748b; }
+
+    @media (max-width: 768px) {
+      .section-title-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: .65rem;
+      }
+    }
+
     /* === tampilkan hanya judul bawah pada tab data === */
     #headerTitleBlock.header-title-hidden {
       display: none !important;
@@ -2489,7 +2527,8 @@
           <div class="glass rounded-[24px] md:rounded-[28px] overflow-hidden flex flex-col shadow-sm">
             <div class="p-4 md:p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 surface-border">
               <div>
-                <div class="flex items-center gap-3">
+                <div class="section-title-with-icon gap-3">
+                  <span class="section-title-icon search"><i class="fa-solid fa-magnifying-glass"></i></span>
                   <h2 class="text-xl md:text-2xl font-black tracking-tight">Pencarian Cepat</h2>
                   <span id="globalSearchBadge" class="hidden px-3 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-bold border border-teal-200">0 Data</span>
                 </div>
@@ -2576,7 +2615,7 @@
         <section id="tab-import" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6">
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Import Massal Semua Data</h2>
+              <div class="section-title-with-icon"><span class="section-title-icon import"><i class="fa-solid fa-file-import"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Import Massal Semua Data</h2></div>
               <span class="px-3 py-1.5 md:px-3 md:py-2 rounded-full bg-blue-50 text-blue-700 text-[10px] md:text-xs font-bold border border-blue-100 self-start sm:self-auto">Upsert Mode</span>
             </div>
             <div class="rounded-[20px] md:rounded-[24px] border border-blue-100 bg-blue-50 p-4 md:p-5 mb-5">
@@ -2648,7 +2687,7 @@
               </div>
             </div>
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Baru</h2>
+              <div class="section-title-with-icon"><span class="section-title-icon in"><i class="fa-solid fa-user-plus"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Baru</h2></div>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <select id="employeeInTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto shadow-sm" style="border-color: var(--border)"></select>
                 <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap shadow-lg hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--primary), var(--secondary));">
@@ -2709,7 +2748,7 @@
               </div>
             </div>
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Keluar</h2>
+              <div class="section-title-with-icon"><span class="section-title-icon out"><i class="fa-solid fa-user-minus"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Karyawan Keluar</h2></div>
               <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <select id="employeeOutTarget" class="px-4 py-3 rounded-xl md:rounded-2xl border bg-white outline-none w-full sm:w-auto shadow-sm" style="border-color: var(--border)"></select>
                 <label class="px-5 py-3 rounded-xl md:rounded-2xl text-white font-bold cursor-pointer text-center w-full sm:w-auto whitespace-nowrap shadow-lg hover:opacity-90 transition-opacity" style="background: linear-gradient(90deg, var(--danger), color-mix(in srgb, var(--danger) 60%, #7c3aed));">
@@ -2756,7 +2795,7 @@
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-6 max-w-7xl mx-auto shadow-sm space-y-5">
             <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
               <div>
-                <h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan</h2>
+                <div class="section-title-with-icon"><span class="section-title-icon report"><i class="fa-solid fa-file-lines"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Laporan</h2></div>
                 <p class="text-sm text-slate-500 mt-1">Pilih jenis laporan dari dropdown, lalu tampilkan dan export ke Excel sesuai laporan yang sedang aktif.</p>
               </div>
               <div class="w-full xl:w-[26rem]">
@@ -2822,7 +2861,7 @@
         <section id="tab-card-print" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-7xl mx-auto shadow-sm">
             <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Cetak Kartu</h2>
+              <div class="section-title-with-icon"><span class="section-title-icon card"><i class="fa-solid fa-id-card"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Cetak Kartu</h2></div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full xl:w-auto">
                 <select id="cardSource" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)"></select>
                 <select id="cardTemplate" onchange="renderCardPrint()" class="px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl border bg-white outline-none text-sm md:text-base shadow-sm" style="border-color: var(--border)">
@@ -2867,7 +2906,7 @@
         <section id="tab-settings" class="tab-panel space-y-6">
           <div class="glass rounded-[24px] md:rounded-[28px] p-5 md:p-7 max-w-5xl mx-auto shadow-sm space-y-6">
             <div>
-              <h2 class="text-xl md:text-2xl font-black tracking-tight">Pengaturan Aplikasi</h2>
+              <div class="section-title-with-icon"><span class="section-title-icon settings"><i class="fa-solid fa-gear"></i></span><h2 class="text-xl md:text-2xl font-black tracking-tight">Pengaturan Aplikasi</h2></div>
             </div>
             <div class="grid md:grid-cols-2 gap-4 md:gap-5">
               <div>
@@ -4307,13 +4346,12 @@ function applyDashboardSnapshot(snapshot) {
         smallTitle.textContent = '';
         smallTitle.classList.add('single-title-mode');
       }
-      ['pageTitleIcon', 'tableTitleIcon'].forEach(id => {
-        const img = document.getElementById(id);
-        if (!img) return;
-        img.removeAttribute('src');
-        img.alt = '';
-        img.classList.remove('show');
-      });
+      const headerIcon = document.getElementById('pageTitleIcon');
+      if (headerIcon) {
+        headerIcon.removeAttribute('src');
+        headerIcon.alt = '';
+        headerIcon.classList.remove('show');
+      }
     }
 
 
