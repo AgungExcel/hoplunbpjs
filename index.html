@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>BPJS Control Center Pro</title>
+  <title>HopLun BPJS Pro</title>
   <link rel="icon" type="image/png" href="hoplun.png?v=4" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -1798,6 +1798,19 @@
     .auth-brand-row,
     .auth-hero-content,
     .auth-hero-footer { position: relative; z-index: 1; }
+    .auth-hero-content {
+      text-align: center;
+      align-items: center;
+
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: .65rem;
+      padding-top: 0 !important;
+    }
     .auth-brand-chip {
       display: inline-flex;
       align-items: center;
@@ -1811,12 +1824,37 @@
     .auth-brand-logo {
       width: 3.5rem; height: 3.5rem;
       border-radius: 1.25rem;
-      background: rgba(255,255,255,.94);
+      background: transparent;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      box-shadow: 0 12px 30px rgba(15,23,42,.18);
+      box-shadow: none;
     }
-    .auth-brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .auth-brand-logo img { width: 100%; height: 100%; object-fit: contain; background: transparent; }
+    .logo-host {
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(148,163,184,.16);
+      box-shadow: 0 12px 28px rgba(15,23,42,.10);
+      overflow: hidden;
+      transition: border-radius .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .logo-host.has-image {
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+    .logo-host.logo-shape-circle,
+    .adaptive-logo.logo-shape-circle {
+      border-radius: 999px !important;
+    }
+    .logo-host.logo-shape-square,
+    .adaptive-logo.logo-shape-square {
+      border-radius: .8rem !important;
+    }
+    .adaptive-logo {
+      background: transparent !important;
+      object-fit: contain !important;
+    }
     .auth-hero h2 {
       font-size: clamp(2rem, 3.6vw, 3.35rem);
       line-height: 1.02;
@@ -1866,7 +1904,47 @@
       background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
     }
     .auth-form-wrap {
-      width: min(410px, 100%);
+      width: min(430px, 100%);
+    }
+    .auth-form-brand {
+      display: flex;
+      align-items: center;
+      gap: .95rem;
+      margin-bottom: 1rem;
+    }
+    .auth-form-brand-logo {
+      width: 3.15rem;
+      height: 3.15rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      flex: 0 0 auto;
+    }
+    .auth-form-brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: transparent;
+    }
+    .auth-form-brand-label {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+    .auth-form-brand-name {
+      margin-top: .2rem;
+      font-size: 1.5rem;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+      background: linear-gradient(135deg, #0f172a 0%, #0f766e 45%, #2563eb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .auth-pill {
       display: inline-flex;
@@ -1883,8 +1961,8 @@
       text-transform: uppercase;
     }
     .auth-form-title {
-      margin-top: 1rem;
-      font-size: 2rem;
+      margin-top: .35rem;
+      font-size: 1.7rem;
       line-height: 1.05;
       letter-spacing: -0.04em;
       font-weight: 900;
@@ -1896,7 +1974,11 @@
       font-size: .96rem;
       line-height: 1.65;
     }
-    .auth-input-wrap { margin-top: 1rem; }
+        .auth-input-wrap { margin-top: 1rem; }
+    .auth-field,
+    .auth-select-field {
+      min-height: 3.55rem;
+    }
     .auth-label {
       display: block;
       margin-bottom: .55rem;
@@ -1928,9 +2010,13 @@
       background: transparent;
       outline: none;
       padding: 1rem .95rem 1rem 0;
-      font-size: .98rem;
-      font-weight: 700;
+      font-size: 1rem;
+      font-weight: 800;
       color: #0f172a;
+    }
+    .auth-field input::placeholder {
+      color: #94a3b8;
+      font-weight: 700;
     }
     .auth-password-toggle {
       width: 3rem;
@@ -1970,6 +2056,56 @@
     }
     .auth-login-btn:hover { transform: translateY(-1px); box-shadow: 0 20px 36px rgba(20,184,166,.26); }
     .auth-login-btn:disabled { opacity: .7; cursor: wait; }
+    .auth-card { animation: authFloatIn .7s cubic-bezier(0.22, 1, 0.36, 1); }
+    .auth-hero, .auth-form-side { position: relative; overflow: hidden; }
+    .auth-hero::after, .auth-form-side::after {
+      content: '';
+      position: absolute;
+      inset: auto -20% -35% auto;
+      width: 16rem;
+      height: 16rem;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 68%);
+      pointer-events: none;
+    }
+    @keyframes authFloatIn {
+      from { opacity: 0; transform: translateY(22px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .auth-select-field select {
+      width: 100%;
+      appearance: none;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: #0f172a;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      padding-left: .1rem;
+      padding-right: 2.75rem;
+      height: 100%;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .auth-select-field select option[value=""] {
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: none;
+    }
+    .auth-select-caret {
+      position: absolute;
+      right: 1rem;
+      font-size: 0.95rem;
+      color: #64748b;
+      pointer-events: none;
+    }
+    #appNameHeaderSmall.single-title-mode { display: none !important; }
+    #cardSource[disabled] {
+      background: rgba(241,245,249,0.9);
+      color: #334155;
+      cursor: not-allowed;
+    }
     .auth-helper-box {
       margin-top: 1.1rem;
       padding: .9rem 1rem;
@@ -1995,7 +2131,7 @@
     .auth-mobile-hero-logo {
       display:none;
       width:4rem;height:4rem;border-radius:1.25rem;overflow:hidden;
-      background:#fff;box-shadow:0 12px 28px rgba(15,23,42,.14);
+      background:transparent;box-shadow:none;
       align-items:center;justify-content:center;margin-bottom:1rem;
     }
     .auth-mobile-hero-logo img { width:100%; height:100%; object-fit:contain; }
@@ -2049,30 +2185,30 @@
     <div class="auth-backdrop-orb orb-b"></div>
     <div class="auth-card">
       <div class="auth-hero">
-        <div class="auth-brand-row">
-          <div class="auth-brand-chip">
-            <div class="auth-brand-logo"><img src="hoplun.png" alt="Hoplun"></div>
-            <div>
-              <p id="authHeroAppName" class="text-2xl font-black tracking-tight text-white">BPJS Control Center</p>
-            </div>
-          </div>
-        </div>
         <div class="auth-hero-content">
-          <div class="auth-mobile-hero-logo"><img src="hoplun.png" alt="Hoplun"></div>
-          <h2>Secure Access</h2>
+          <div id="authMobileLogoWrap" class="auth-mobile-hero-logo logo-host logo-shape-square"><img id="authMobileLogoImg" src="hoplun.png" alt="Logo Perusahaan" class="adaptive-logo logo-shape-square"></div>
+          <h2>Welcome</h2>
         </div>
 
       </div>
       <div class="auth-form-side">
         <div class="auth-form-wrap">
-          
+          <div class="auth-form-brand">
+            <div id="authFormLogoWrap" class="auth-form-brand-logo logo-host logo-shape-square"><img id="authFormLogoImg" src="hoplun.png" alt="Logo Perusahaan" class="adaptive-logo logo-shape-square"></div>
+            <div>
+              <p class="auth-form-brand-label">Secure Access</p>
+              <p id="authFormAppName" class="auth-form-brand-name">HopLun BPJS</p>
+            </div>
+          </div>
           <div class="auth-user-chip hidden" id="currentUserBadge"><i class="fa-solid fa-user-check"></i><span id="currentUserBadgeText"></span></div>
-          <h2 class="auth-form-title">Sign in</h2>
-          <form id="loginForm" class="mt-6">
+          <form id="loginForm" class="mt-4">
             <div class="auth-input-wrap">
-              <div class="auth-field">
-                <i class="fa-solid fa-user"></i>
-                <input id="loginUsername" type="text" autocomplete="username" placeholder="Username" />
+              <div class="auth-field auth-select-field">
+                <i class="fa-solid fa-user-tie"></i>
+                <select id="loginRoleSelect" autocomplete="username">
+                  <option value="">- Pilih -</option>
+                </select>
+                <i class="fa-solid fa-chevron-down auth-select-caret"></i>
               </div>
             </div>
             <div class="auth-input-wrap">
@@ -2095,12 +2231,12 @@
       <div class="px-6 py-6 border-b border-white/10 shrink-0">
         <div class="flex items-center justify-between gap-3">
           <div class="flex items-center gap-3 min-w-0">
-            <div id="brandLogoWrap" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow-lg shadow-teal-500/20 overflow-hidden shrink-0">
+            <div id="brandLogoWrap" class="logo-host w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400 to-blue-500 flex items-center justify-center shadow-lg shadow-teal-500/20 overflow-hidden shrink-0">
               <i id="brandLogoIcon" class="fa-solid fa-shield-heart text-white text-lg"></i>
               <img id="brandLogoImg" class="hidden w-full h-full object-cover" alt="Logo Aplikasi" />
             </div>
             <div class="min-w-0">
-              <p id="appNameSidebar" class="text-white font-extrabold tracking-tight text-xl truncate">BPJS Control Center</p>
+              <p id="appNameSidebar" class="text-white font-extrabold tracking-tight text-xl truncate">HopLun BPJS</p>
               <p id="appSubtitleSidebar" class="text-slate-400 text-xs truncate">BPJS Kesehatan Staff & Worker + BP Jamsostek</p>
             </div>
           </div>
@@ -2167,7 +2303,7 @@
           <div class="flex items-center gap-4 min-w-0 w-full md:w-auto">
             <button id="openSidebar" class="md:hidden w-11 h-11 shrink-0 rounded-2xl glass"><i class="fa-solid fa-bars"></i></button>
             <div class="min-w-0 flex-1">
-              <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500 truncate">BPJS Control Center</p>
+              <p id="appNameHeaderSmall" class="text-xs uppercase tracking-[0.25em] font-bold text-slate-500 truncate">HopLun BPJS</p>
               <div class="menu-title-with-icon"><img id="pageTitleIcon" class="menu-title-icon" alt=""><h1 id="pageTitle" class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 truncate">Dashboard</h1></div>
             </div>
           </div>
@@ -2678,7 +2814,7 @@
                   <i class="fa-solid fa-image mr-2 text-slate-400 text-xl"></i><span class="text-sm md:text-base font-semibold text-slate-700">Pilih File Logo Baru</span>
                 </label>
                 <div class="mt-4 flex items-center gap-3">
-                  <img id="settingLogoPreview" class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-cover border hidden bg-white shadow-sm" style="border-color: var(--border)">
+                  <img id="settingLogoPreview" class="adaptive-logo w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl object-contain border hidden bg-transparent shadow-sm" style="border-color: var(--border)">
                   <div class="text-[10px] md:text-xs text-slate-500 font-medium">Aplikasi akan memakai icon default bila dikosongkan.</div>
                 </div>
               </div>
@@ -2728,13 +2864,14 @@
 
 
     const AUTH_STORAGE_KEY = 'bpjs_auth_session_v1';
+    const LAST_LOGIN_ROLE_KEY = 'bpjs_last_login_role_v1';
     const DEFAULT_AUTH = {
       admin: { username: 'ADMIN', password: 'AGUNG' },
       bpjamsostek: { username: 'BPJS', password: 'JAMSOSTEK' }
     };
 
     const DEFAULT_SETTINGS = {
-      appName: 'BPJS Control Center',
+      appName: 'HopLun BPJS',
       appSubtitle: 'BPJS Kesehatan Staff & Worker + BP Jamsostek',
       theme: 'default',
       logoData: '',
@@ -3557,6 +3694,8 @@ function applyDashboardSnapshot(snapshot) {
       setText('appSubtitleSidebar', appSettings.appSubtitle);
       setText('appNameHeaderSmall', appSettings.appName);
       setText('authHeroAppName', appSettings.appName);
+      setText('authFormAppName', appSettings.appName);
+      setText('authHeroAppName', appSettings.appName);
 
       setText('labelNavStaff', getSheetLabel('ALL_BPJS'));
       
@@ -3645,9 +3784,9 @@ function applyDashboardSnapshot(snapshot) {
         const isBpjs = session.role === 'bpjamsostek';
         const label = isBpjs ? 'BPJamsostek' : 'Admin';
         if (badge) badge.classList.remove('hidden');
-        if (badgeText) badgeText.textContent = `Terhubung sebagai ${label}`;
+        if (badgeText) badgeText.textContent = label;
         if (activeChip) activeChip.classList.remove('hidden');
-        if (activeChipText) activeChipText.textContent = `${label} • ${session.username || '-'}`;
+        if (activeChipText) activeChipText.textContent = label;
         if (activeChipLogo) activeChipLogo.classList.toggle('show', isBpjs);
         if (activeChipIcon) {
           activeChipIcon.classList.toggle('hidden', isBpjs);
@@ -3674,9 +3813,13 @@ function applyDashboardSnapshot(snapshot) {
         btn.classList.toggle('hidden', !allowed);
       });
       const cardSource = document.getElementById('cardSource');
-      if (role === 'bpjamsostek' && cardSource) cardSource.value = 'DATA_UPAH';
+      if (cardSource) {
+        const locked = role === 'bpjamsostek';
+        cardSource.disabled = locked;
+        if (locked) cardSource.value = 'DATA_UPAH';
+      }
       const cardLabelWrap = document.querySelector('#tab-card-print h2');
-      if (cardLabelWrap) cardLabelWrap.textContent = role === 'bpjamsostek' ? 'Cetak Kartu (BPJamsostek)' : 'Cetak Kartu';
+      if (cardLabelWrap) cardLabelWrap.textContent = role === 'bpjamsostek' ? 'Cetak Kartu BPJamsostek' : 'Cetak Kartu';
     }
 
     function applyAuthState(session = getAuthSession(), options = {}) {
@@ -3687,6 +3830,7 @@ function applyDashboardSnapshot(snapshot) {
       setAppChromeLocked(!authenticated);
       updateCurrentUserUI(session);
       applyRoleBasedMenu(session);
+      updatePageTitleForCurrentTab();
       if (!authenticated) return;
       if (redirect) {
         const landing = getDefaultLandingByRole(session.role);
@@ -3697,24 +3841,63 @@ function applyDashboardSnapshot(snapshot) {
     async function handleLoginSubmit(event) {
       event.preventDefault();
       const submitBtn = document.getElementById('loginSubmitBtn');
-      const username = String(document.getElementById('loginUsername')?.value || '').trim();
+      const selectedRoleKey = String(document.getElementById('loginRoleSelect')?.value || 'ADMIN').trim().toUpperCase();
       const password = String(document.getElementById('loginPassword')?.value || '').trim();
-      if (!username || !password) {
-        Swal.fire('Login gagal', 'Username dan password wajib diisi.', 'warning');
+      if (!password) {
+        Swal.fire('Login gagal', 'Isi password terlebih dahulu.', 'warning');
         return;
       }
       if (submitBtn) submitBtn.disabled = true;
       try {
-        await loadSharedSettingsRemote().catch(() => false);
-        const auth = appSettings.auth || structuredClone(DEFAULT_AUTH);
+        let auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
+        try {
+          const remoteRows = await fetchSheetRows(SETTINGS_SHEET);
+          if (Array.isArray(remoteRows) && remoteRows.length) {
+            const remoteSettings = mapSettingsFromRow(remoteRows[0]);
+            auth = {
+              admin: { ...DEFAULT_AUTH.admin, ...((remoteSettings.auth || {}).admin || {}) },
+              bpjamsostek: { ...DEFAULT_AUTH.bpjamsostek, ...((remoteSettings.auth || {}).bpjamsostek || {}) }
+            };
+            appSettings.auth = structuredClone(auth);
+            saveSettingsStorage();
+          } else {
+            await loadSharedSettingsRemote().catch(() => false);
+            auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
+          }
+        } catch (e) {
+          await loadSharedSettingsRemote().catch(() => false);
+          auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
+        }
+
+        const adminUser = String(auth.admin?.username || 'ADMIN').trim() || 'ADMIN';
+        const bpjsUser = String(auth.bpjamsostek?.username || 'BPJS').trim() || 'BPJS';
+        const adminPass = String(auth.admin?.password || '').trim();
+        const bpjsPass = String(auth.bpjamsostek?.password || '').trim();
+
         let role = '';
-        if (username === String(auth.admin?.username || '').trim() && password === String(auth.admin?.password || '').trim()) role = 'admin';
-        if (username === String(auth.bpjamsostek?.username || '').trim() && password === String(auth.bpjamsostek?.password || '').trim()) role = 'bpjamsostek';
-        if (!role) throw new Error('Username atau password tidak sesuai dengan data di sheet APP_SETTINGS.');
+        let username = '';
+        if (selectedRoleKey === 'ADMIN') {
+          if (!adminPass) throw new Error('Password ADMIN belum terbaca dari APP_SETTINGS.');
+          if (password === adminPass) {
+            role = 'admin';
+            username = adminUser;
+          }
+        }
+        if (selectedRoleKey === 'BPJS') {
+          if (!bpjsPass) throw new Error('Password BPJS belum terbaca dari APP_SETTINGS.');
+          if (password === bpjsPass) {
+            role = 'bpjamsostek';
+            username = bpjsUser;
+          }
+        }
+        if (!role) throw new Error('Password tidak sesuai dengan APP_SETTINGS.');
+
         const session = { role, username, loginAt: new Date().toISOString() };
         saveAuthSession(session);
+        try { localStorage.setItem(LAST_LOGIN_ROLE_KEY, selectedRoleKey); } catch (e) {}
         applyAuthState(session, { redirect: true });
-        document.getElementById('loginForm')?.reset();
+        const passwordInput = document.getElementById('loginPassword');
+        if (passwordInput) passwordInput.value = '';
         Swal.fire({ icon: 'success', title: 'Login berhasil', text: `Selamat datang ${role === 'admin' ? 'Admin' : 'BPJamsostek'}.`, timer: 1600, showConfirmButton: false });
       } catch (error) {
         Swal.fire('Login gagal', error?.message || 'Terjadi kendala saat memverifikasi akun.', 'error');
@@ -3740,15 +3923,71 @@ function applyDashboardSnapshot(snapshot) {
     function logoutApp() {
       clearAuthSession();
       applyAuthState(null, { redirect: false });
-      const usernameInput = document.getElementById('loginUsername');
+      const roleSelect = document.getElementById('loginRoleSelect');
       const passwordInput = document.getElementById('loginPassword');
       const icon = document.getElementById('togglePasswordIcon');
-      if (usernameInput) usernameInput.focus();
+      if (roleSelect) roleSelect.focus();
       if (passwordInput) {
         passwordInput.value = '';
         passwordInput.type = 'password';
       }
+      if (roleSelect) {
+        let preferredRole = 'ADMIN';
+        try {
+          const savedRole = String(localStorage.getItem(LAST_LOGIN_ROLE_KEY) || '').trim().toUpperCase();
+          if (savedRole === 'BPJS' || savedRole === 'ADMIN') preferredRole = savedRole;
+        } catch (e) {}
+        roleSelect.value = preferredRole;
+      }
       if (icon) icon.className = 'fa-regular fa-eye';
+    }
+
+
+    function resetAdaptiveLogoState(img, wrapper = null) {
+      [img, wrapper].forEach(el => {
+        if (!el) return;
+        el.classList.remove('logo-shape-circle', 'logo-shape-square', 'has-image');
+      });
+    }
+
+    function detectLogoShape(src) {
+      return new Promise(resolve => {
+        if (!src) return resolve('square');
+        const image = new Image();
+        image.crossOrigin = 'anonymous';
+        image.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            const size = 64;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            ctx.clearRect(0, 0, size, size);
+            ctx.drawImage(image, 0, 0, size, size);
+            const sample = (x, y) => ctx.getImageData(x, y, 1, 1).data[3];
+            const transparentCorners = [sample(3, 3), sample(size - 4, 3), sample(3, size - 4), sample(size - 4, size - 4)].every(v => v < 32);
+            const nearSquare = Math.abs((image.naturalWidth || size) - (image.naturalHeight || size)) <= Math.max(6, Math.min(image.naturalWidth || size, image.naturalHeight || size) * 0.08);
+            resolve(transparentCorners && nearSquare ? 'circle' : 'square');
+          } catch (error) {
+            resolve('square');
+          }
+        };
+        image.onerror = () => resolve('square');
+        image.src = src;
+      });
+    }
+
+    function applyAdaptiveLogo(img, src, wrapper = null) {
+      if (!img || !src) return;
+      img.src = src;
+      if (wrapper) wrapper.classList.add('has-image');
+      detectLogoShape(src).then(shape => {
+        [img, wrapper].forEach(el => {
+          if (!el) return;
+          el.classList.remove('logo-shape-circle', 'logo-shape-square');
+          el.classList.add(shape === 'circle' ? 'logo-shape-circle' : 'logo-shape-square');
+        });
+      });
     }
 
     function updateLogoUI(logoData) {
@@ -3757,14 +3996,29 @@ function applyDashboardSnapshot(snapshot) {
       const previewImg = document.getElementById('brandPreviewImg');
       const previewIcon = document.getElementById('brandPreviewIcon');
       const settingPreview = document.getElementById('settingLogoPreview');
+      const brandWrap = document.getElementById('brandLogoWrap');
+      const authBrandImg = document.getElementById('authBrandLogoImg');
+      const authBrandWrap = document.getElementById('authBrandLogoWrap');
+      const authMobileImg = document.getElementById('authMobileLogoImg');
+      const authMobileWrap = document.getElementById('authMobileLogoWrap');
+      const authFormImg = document.getElementById('authFormLogoImg');
+      const authFormWrap = document.getElementById('authFormLogoWrap');
+      const effectiveAuthLogo = logoData || 'hoplun.png';
 
       const show = (el) => el && el.classList.remove('hidden');
       const hide = (el) => el && el.classList.add('hidden');
 
+      [logoImg, previewImg, settingPreview].forEach(img => resetAdaptiveLogoState(img));
+      [brandWrap, authBrandWrap, authMobileWrap, authFormWrap].forEach(wrap => resetAdaptiveLogoState(null, wrap));
+
+      applyAdaptiveLogo(authBrandImg, effectiveAuthLogo, authBrandWrap);
+      applyAdaptiveLogo(authMobileImg, effectiveAuthLogo, authMobileWrap);
+      applyAdaptiveLogo(authFormImg, effectiveAuthLogo, authFormWrap);
+
       if (logoData) {
-        if (logoImg) logoImg.src = logoData;
-        if (previewImg) previewImg.src = logoData;
-        if (settingPreview) settingPreview.src = logoData;
+        applyAdaptiveLogo(logoImg, logoData, brandWrap);
+        applyAdaptiveLogo(previewImg, logoData);
+        applyAdaptiveLogo(settingPreview, logoData);
         show(logoImg);
         show(previewImg);
         show(settingPreview);
@@ -3803,6 +4057,27 @@ function applyDashboardSnapshot(snapshot) {
             <option value="ALL_BPJS">${getSheetLabel('ALL_BPJS')}</option>
           `;
       cardSource.value = 'DATA_UPAH';
+      cardSource.disabled = role === 'bpjamsostek';
+
+      const roleSelect = document.getElementById('loginRoleSelect');
+      if (roleSelect) {
+        const adminUser = String(appSettings.auth?.admin?.username || 'ADMIN').trim() || 'ADMIN';
+        const bpjsUser = String(appSettings.auth?.bpjamsostek?.username || 'BPJS').trim() || 'BPJS';
+        roleSelect.innerHTML = `
+          <option value="ADMIN">${adminUser}</option>
+          <option value="BPJS">${bpjsUser}</option>
+        `;
+        const activeSession = getAuthSession();
+        let preferredRole = 'ADMIN';
+        if (activeSession?.role === 'bpjamsostek') preferredRole = 'BPJS';
+        if (!activeSession) {
+          try {
+            const savedRole = String(localStorage.getItem(LAST_LOGIN_ROLE_KEY) || '').trim().toUpperCase();
+            if (savedRole === 'BPJS' || savedRole === 'ADMIN') preferredRole = savedRole;
+          } catch (e) {}
+        }
+        roleSelect.value = preferredRole;
+      }
     }
 
     function handleLogoUpload(event) {
@@ -3904,22 +4179,22 @@ function applyDashboardSnapshot(snapshot) {
     }
 
     function updatePageTitleForCurrentTab(tab = document.querySelector('.nav-link.active')?.dataset.tab, sheet = currentSheet) {
-      const map = {
-        dashboard: 'Dashboard',
-        'global-search': 'Pencarian Cepat',
-        import: 'Import Massal',
-        'employee-in': 'Karyawan Baru',
-        'employee-out': 'Karyawan Keluar',
-        report: 'Laporan',
-        'card-print': 'Cetak Kartu',
-        settings: 'Pengaturan'
-      };
-      if (tab === 'data') {
-        document.getElementById('pageTitle').textContent = getSheetLabel(sheet);
-      } else {
-        document.getElementById('pageTitle').textContent = map[tab] || 'Dashboard';
+      const sessionRole = getAuthSession()?.role || '';
+      const singleTitle = sessionRole === 'bpjamsostek' ? getSheetLabel('DATA_UPAH') : (appSettings.appName || 'HopLun BPJS');
+      const pageTitle = document.getElementById('pageTitle');
+      const smallTitle = document.getElementById('appNameHeaderSmall');
+      if (pageTitle) pageTitle.textContent = singleTitle;
+      if (smallTitle) {
+        smallTitle.textContent = '';
+        smallTitle.classList.add('single-title-mode');
       }
-      applyTitleIconState(tab, sheet);
+      ['pageTitleIcon', 'tableTitleIcon'].forEach(id => {
+        const img = document.getElementById(id);
+        if (!img) return;
+        img.removeAttribute('src');
+        img.alt = '';
+        img.classList.remove('show');
+      });
     }
 
     function bindNavigation() {
