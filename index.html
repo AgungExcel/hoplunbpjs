@@ -2169,6 +2169,90 @@
       background: rgba(37,99,235,.12);
     }
     .auth-user-chip.hidden { display:none !important; }
+
+    /* === login single card override === */
+    .auth-card {
+      width: min(460px, calc(100vw - 2rem));
+      min-height: auto;
+      display: block;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 24px 60px rgba(15,23,42,.16);
+    }
+    .auth-hero {
+      display: none !important;
+    }
+    .auth-form-side {
+      padding: 2rem 1.5rem;
+      background: transparent;
+    }
+    .auth-form-wrap {
+      width: 100%;
+      max-width: none;
+    }
+    .auth-form-brand {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+    .auth-form-brand-logo {
+      width: 4.1rem;
+      height: 4.1rem;
+      border-radius: 1.2rem;
+    }
+    .auth-single-welcome {
+      font-size: 1.85rem;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+      margin-bottom: .32rem;
+    }
+    .auth-form-brand-label {
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+    .auth-form-brand-name {
+      margin-top: .3rem;
+      font-size: 1.45rem;
+      line-height: 1.05;
+    }
+    #currentUserBadge {
+      justify-content: center;
+      margin: 0 auto .95rem;
+    }
+    .auth-input-wrap {
+      margin-top: .9rem;
+    }
+    .auth-login-btn {
+      margin-top: 1.15rem;
+    }
+    @media (max-width: 640px) {
+      .auth-card {
+        width: min(100%, calc(100vw - 1.5rem));
+        border-radius: 24px;
+      }
+      .auth-form-side {
+        padding: 1.5rem 1rem;
+      }
+      .auth-form-brand-logo {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+      .auth-single-welcome {
+        font-size: 1.55rem;
+      }
+      .auth-form-brand-name {
+        font-size: 1.25rem;
+      }
+    }
+
     @media (max-width: 980px) {
       .auth-card { grid-template-columns: 1fr; min-height: auto; }
       .auth-hero { padding: 1.5rem; min-height: 18rem; }
@@ -2196,6 +2280,7 @@
           <div class="auth-form-brand">
             <div id="authFormLogoWrap" class="auth-form-brand-logo logo-host logo-shape-square"><img id="authFormLogoImg" src="hoplun.png" alt="Logo Perusahaan" class="adaptive-logo logo-shape-square"></div>
             <div>
+              <p class="auth-single-welcome">Welcome</p>
               <p class="auth-form-brand-label">Secure Access</p>
               <p id="authFormAppName" class="auth-form-brand-name">HopLun BPJS</p>
             </div>
@@ -2848,6 +2933,7 @@
   <script>
     const gasApiUrl = 'https://script.google.com/macros/s/AKfycbxpizb32MDEht_lJVAQ4rjMhQ-rUw2FahLGtvNd_cpilOJxlAqZ11bDpPN-Bof_8qOFxg/exec';
     const SETTINGS_SHEET = 'APP_SETTINGS';
+    const LOGIN_SHEET = 'LOG_IN';
     const LOGS_SHEET = 'APP_LOGS';
     const CACHE_KEY_DB = 'bpjs_database_cache_v13';
     const SIPP_ROWS_SNAPSHOT_KEY = 'bpjs_sipp_rows_snapshot_v13';
@@ -3019,18 +3105,59 @@
         modules: {
           ALL_BPJS: String(pickAny(row, ['MODULE_ALL_BPJS', 'MODULE ALL BPJS', 'MODULE_STAFF', 'MODULE STAFF', 'STAFF_LABEL', 'MODULE_WORKER', 'MODULE WORKER', 'WORKER_LABEL']) || DEFAULT_SETTINGS.modules.ALL_BPJS),
           DATA_UPAH: String(pickAny(row, ['MODULE_DATA_UPAH', 'MODULE DATA UPAH', 'MODULE_UPAH', 'UPAH_LABEL']) || DEFAULT_SETTINGS.modules.DATA_UPAH)
-        },
-        auth: {
-          admin: {
-            username: String(pickAny(row, ['LOGIN_ADMIN_USER', 'ADMIN_USER', 'USERNAME_ADMIN']) || DEFAULT_SETTINGS.auth.admin.username),
-            password: String(pickAny(row, ['LOGIN_ADMIN_PASS', 'ADMIN_PASS', 'PASSWORD_ADMIN']) || DEFAULT_SETTINGS.auth.admin.password)
-          },
-          bpjamsostek: {
-            username: String(pickAny(row, ['LOGIN_BPJS_USER', 'BPJAMSOSTEK_USER', 'USERNAME_BPJS']) || DEFAULT_SETTINGS.auth.bpjamsostek.username),
-            password: String(pickAny(row, ['LOGIN_BPJS_PASS', 'BPJAMSOSTEK_PASS', 'PASSWORD_BPJS']) || DEFAULT_SETTINGS.auth.bpjamsostek.password)
-          }
         }
       };
+    }
+
+    function mapLoginFromRow(row) {
+      return {
+        admin: {
+          username: String(pickAny(row, ['LOGIN_ADMIN_USER', 'ADMIN_USER', 'USERNAME_ADMIN']) || DEFAULT_AUTH.admin.username),
+          password: String(pickAny(row, ['LOGIN_ADMIN_PASS', 'ADMIN_PASS', 'PASSWORD_ADMIN']) || '').trim()
+        },
+        bpjamsostek: {
+          username: String(pickAny(row, ['LOGIN_BPJS_USER', 'BPJAMSOSTEK_USER', 'USERNAME_BPJS']) || DEFAULT_AUTH.bpjamsostek.username),
+          password: String(pickAny(row, ['LOGIN_BPJS_PASS', 'BPJAMSOSTEK_PASS', 'PASSWORD_BPJS']) || '').trim()
+        }
+      };
+    }
+
+    function mapLoginToRow(auth) {
+      return {
+        LOGIN_ADMIN_USER: auth?.admin?.username || DEFAULT_AUTH.admin.username,
+        LOGIN_ADMIN_PASS: auth?.admin?.password || '',
+        LOGIN_BPJS_USER: auth?.bpjamsostek?.username || DEFAULT_AUTH.bpjamsostek.username,
+        LOGIN_BPJS_PASS: auth?.bpjamsostek?.password || ''
+      };
+    }
+
+    async function loadLoginRemote() {
+      const rows = await fetchSheetRows(LOGIN_SHEET);
+      if (!Array.isArray(rows) || !rows.length) {
+        throw new Error('Sheet LOG_IN kosong atau belum tersedia.');
+      }
+      const remoteAuth = mapLoginFromRow(rows[0]);
+      appSettings.auth = {
+        admin: { ...DEFAULT_AUTH.admin, ...((remoteAuth || {}).admin || {}) },
+        bpjamsostek: { ...DEFAULT_AUTH.bpjamsostek, ...((remoteAuth || {}).bpjamsostek || {}) }
+      };
+      saveSettingsStorage();
+      return structuredClone(appSettings.auth);
+    }
+
+    async function persistLoginRemote() {
+      const payload = mapLoginToRow(appSettings.auth || DEFAULT_AUTH);
+      try {
+        const rows = await fetchSheetRows(LOGIN_SHEET).catch(() => []);
+        if (rows.length) {
+          await postAction({ sheetName: LOGIN_SHEET, action: 'edit', rowIndex: rows[0]._rowIndex, data: payload });
+        } else {
+          await postAction({ sheetName: LOGIN_SHEET, action: 'add', data: payload });
+        }
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
 
     function mapSettingsToRow(settings) {
@@ -3042,11 +3169,7 @@
         MODULE_ALL_BPJS: settings.modules.ALL_BPJS,
         MODULE_STAFF: settings.modules.ALL_BPJS,
         MODULE_WORKER: settings.modules.ALL_BPJS,
-        MODULE_DATA_UPAH: settings.modules.DATA_UPAH,
-        LOGIN_ADMIN_USER: settings.auth?.admin?.username || '',
-        LOGIN_ADMIN_PASS: settings.auth?.admin?.password || '',
-        LOGIN_BPJS_USER: settings.auth?.bpjamsostek?.username || '',
-        LOGIN_BPJS_PASS: settings.auth?.bpjamsostek?.password || ''
+        MODULE_DATA_UPAH: settings.modules.DATA_UPAH
       };
     }
 
@@ -3096,6 +3219,7 @@
         ALL_BPJS: ['ALL_BPJS', 'ALL BPJS', 'BPJS Kesehatan', 'BPJS_KESEHATAN', 'BPJSKesehatan', 'BPJS KESEHATAN', 'BPJS KESEHATAN STAFF WORKER', 'BPJS KESEHATAN STAFF & WORKER'],
         DATA_UPAH: ['DATA_UPAH', 'DATA UPAH', 'DATA-UPAH', 'DATAUPAH', 'SIPP', 'SIPP Worker', 'SIPP_WORKER', 'SIPP WORKER', 'BP JAMSOSTEK', 'BPJSTK', 'BP JAMSOSTEK WORKER'],
         APP_SETTINGS: [SETTINGS_SHEET],
+        LOG_IN: [LOGIN_SHEET, 'LOGIN', 'LOG IN'],
         APP_LOGS: [LOGS_SHEET]
       };
       const aliases = Array.from(new Set([...(aliasMap[sheet] || []), sheet].filter(Boolean)));
@@ -3140,8 +3264,8 @@
             ...remoteSettings,
             modules: { ...DEFAULT_SETTINGS.modules, ...(remoteSettings.modules || {}) },
             auth: {
-              admin: { ...DEFAULT_SETTINGS.auth.admin, ...((remoteSettings.auth || {}).admin || {}) },
-              bpjamsostek: { ...DEFAULT_SETTINGS.auth.bpjamsostek, ...((remoteSettings.auth || {}).bpjamsostek || {}) }
+              admin: { ...DEFAULT_AUTH.admin, ...((appSettings.auth || {}).admin || {}) },
+              bpjamsostek: { ...DEFAULT_AUTH.bpjamsostek, ...((appSettings.auth || {}).bpjamsostek || {}) }
             }
           };
           tempLogoData = appSettings.logoData || '';
@@ -3849,25 +3973,7 @@ function applyDashboardSnapshot(snapshot) {
       }
       if (submitBtn) submitBtn.disabled = true;
       try {
-        let auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
-        try {
-          const remoteRows = await fetchSheetRows(SETTINGS_SHEET);
-          if (Array.isArray(remoteRows) && remoteRows.length) {
-            const remoteSettings = mapSettingsFromRow(remoteRows[0]);
-            auth = {
-              admin: { ...DEFAULT_AUTH.admin, ...((remoteSettings.auth || {}).admin || {}) },
-              bpjamsostek: { ...DEFAULT_AUTH.bpjamsostek, ...((remoteSettings.auth || {}).bpjamsostek || {}) }
-            };
-            appSettings.auth = structuredClone(auth);
-            saveSettingsStorage();
-          } else {
-            await loadSharedSettingsRemote().catch(() => false);
-            auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
-          }
-        } catch (e) {
-          await loadSharedSettingsRemote().catch(() => false);
-          auth = structuredClone(appSettings.auth || DEFAULT_AUTH);
-        }
+        const auth = await loadLoginRemote();
 
         const adminUser = String(auth.admin?.username || 'ADMIN').trim() || 'ADMIN';
         const bpjsUser = String(auth.bpjamsostek?.username || 'BPJS').trim() || 'BPJS';
@@ -3877,20 +3983,20 @@ function applyDashboardSnapshot(snapshot) {
         let role = '';
         let username = '';
         if (selectedRoleKey === 'ADMIN') {
-          if (!adminPass) throw new Error('Password ADMIN belum terbaca dari APP_SETTINGS.');
+          if (!adminPass) throw new Error('Kolom LOGIN_ADMIN_PASS di sheet LOG_IN kosong atau belum terbaca.');
           if (password === adminPass) {
             role = 'admin';
             username = adminUser;
           }
         }
         if (selectedRoleKey === 'BPJS') {
-          if (!bpjsPass) throw new Error('Password BPJS belum terbaca dari APP_SETTINGS.');
+          if (!bpjsPass) throw new Error('Kolom LOGIN_BPJS_PASS di sheet LOG_IN kosong atau belum terbaca.');
           if (password === bpjsPass) {
             role = 'bpjamsostek';
             username = bpjsUser;
           }
         }
-        if (!role) throw new Error('Password tidak sesuai dengan APP_SETTINGS.');
+        if (!role) throw new Error('Password yang anda masukkan Salah');
 
         const session = { role, username, loginAt: new Date().toISOString() };
         saveAuthSession(session);
@@ -3900,7 +4006,13 @@ function applyDashboardSnapshot(snapshot) {
         if (passwordInput) passwordInput.value = '';
         Swal.fire({ icon: 'success', title: 'Login berhasil', text: `Selamat datang ${role === 'admin' ? 'Admin' : 'BPJamsostek'}.`, timer: 1600, showConfirmButton: false });
       } catch (error) {
-        Swal.fire('Login gagal', error?.message || 'Terjadi kendala saat memverifikasi akun.', 'error');
+        {
+        const rawMessage = String(error?.message || '').trim();
+        const message = rawMessage === 'Password yang anda masukkan Salah'
+          ? 'Password yang anda masukkan Salah'
+          : (rawMessage || 'Terjadi kendala saat memverifikasi akun.');
+        Swal.fire('Login gagal', message, 'error');
+      }
       } finally {
         if (submitBtn) submitBtn.disabled = false;
       }
@@ -4404,6 +4516,7 @@ function applyDashboardSnapshot(snapshot) {
 
         await Promise.allSettled([
           loadSharedSettingsRemote().catch(() => false),
+          loadLoginRemote().catch(() => false),
           loadSharedLogsRemote().catch(() => false)
         ]);
 
