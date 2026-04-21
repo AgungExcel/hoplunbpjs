@@ -2307,6 +2307,124 @@
       .auth-highlight-grid { grid-template-columns: 1fr; }
     }
 
+  
+
+    /* === table alignment fix === */
+    #tableWrap {
+      overflow: auto !important;
+    }
+    #bpjsDataTable.table-fit-view {
+      width: max(100%, 1880px) !important;
+      min-width: 1880px !important;
+      table-layout: fixed !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+    }
+    #bpjsDataTable.table-fit-view thead th,
+    #bpjsDataTable.table-fit-view tbody td {
+      vertical-align: middle !important;
+      box-sizing: border-box !important;
+    }
+    #bpjsDataTable.table-fit-view thead th {
+      top: 0 !important;
+      padding: 0.95rem 0.75rem !important;
+      font-size: 0.66rem !important;
+      line-height: 1.2 !important;
+      letter-spacing: 0.12em !important;
+      white-space: nowrap !important;
+      text-align: left !important;
+    }
+    #bpjsDataTable.table-fit-view tbody td {
+      padding: 0.9rem 0.75rem !important;
+      font-size: 0.8rem !important;
+      line-height: 1.3 !important;
+      white-space: nowrap !important;
+      word-break: normal !important;
+      overflow-wrap: normal !important;
+    }
+    #bpjsDataTable.table-fit-view tbody td:nth-child(3),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(4) {
+      white-space: normal !important;
+      word-break: break-word !important;
+      overflow-wrap: anywhere !important;
+    }
+    #bpjsDataTable.table-fit-view thead th:nth-child(1),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(1),
+    #bpjsDataTable.table-fit-view thead th:nth-child(5),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(5),
+    #bpjsDataTable.table-fit-view thead th:nth-child(7),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(7),
+    #bpjsDataTable.table-fit-view thead th:nth-child(8),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(8),
+    #bpjsDataTable.table-fit-view thead th:nth-child(13),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(13) {
+      text-align: center !important;
+    }
+    #bpjsDataTable.table-fit-view thead th:nth-child(9),
+    #bpjsDataTable.table-fit-view tbody td:nth-child(9) {
+      text-align: right !important;
+    }
+    #bpjsDataTable.table-fit-view .filter-control {
+      min-width: 100% !important;
+      width: 100% !important;
+      padding: 0.5rem 0.6rem !important;
+      font-size: 0.72rem !important;
+      border-radius: 0.75rem !important;
+    }
+    #bpjsDataTable.table-fit-view .bpjs-inline-badge,
+    #bpjsDataTable.table-fit-view .membership-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-width: 4.75rem !important;
+      padding: 0.38rem 0.65rem !important;
+      font-size: 0.68rem !important;
+      white-space: nowrap !important;
+      border-radius: 999px !important;
+    }
+    #bpjsDataTable.table-fit-view .copyable-cell {
+      white-space: nowrap !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.35rem !important;
+      max-width: 100% !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-text {
+      font-size: 0.78rem !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+    }
+    #bpjsDataTable.table-fit-view .copy-inline-btn {
+      width: 1.4rem !important;
+      height: 1.4rem !important;
+      border-radius: 0.45rem !important;
+      flex-shrink: 0 !important;
+    }
+    #bpjsDataTable.table-fit-view .sticky-action-header,
+    #bpjsDataTable.table-fit-view .sticky-action-cell {
+      position: sticky !important;
+      right: 0 !important;
+      z-index: 8 !important;
+      background: rgba(255,255,255,0.98) !important;
+      box-shadow: -1px 0 0 rgba(226,232,240,1) !important;
+    }
+    #bpjsDataTable.table-fit-view tbody tr:hover .sticky-action-cell {
+      background: rgba(248,250,252,0.98) !important;
+    }
+    @media (max-width: 1280px) {
+      #bpjsDataTable.table-fit-view {
+        min-width: 1700px !important;
+      }
+      #bpjsDataTable.table-fit-view thead th {
+        font-size: 0.62rem !important;
+      }
+      #bpjsDataTable.table-fit-view tbody td {
+        font-size: 0.76rem !important;
+      }
+    }
+
   </style>
 </head>
 <body class="h-[100dvh] w-full overflow-hidden" data-theme="default">
@@ -5013,7 +5131,19 @@ function applyDashboardSnapshot(snapshot) {
         if (colgroupEl) {
           if (isFitViewTable) {
             colgroupEl.innerHTML = `
-              <col style="width:3.5%"><col style="width:8%"><col style="width:13%"><col style="width:8.5%"><col style="width:5%"><col style="width:7.5%"><col style="width:6.5%"><col style="width:5.5%"><col style="width:7%"><col style="width:12%"><col style="width:9%"><col style="width:10.5%"><col style="width:4.5%">`;
+              <col style="width:60px">
+              <col style="width:120px">
+              <col style="width:260px">
+              <col style="width:180px">
+              <col style="width:100px">
+              <col style="width:120px">
+              <col style="width:130px">
+              <col style="width:100px">
+              <col style="width:170px">
+              <col style="width:220px">
+              <col style="width:170px">
+              <col style="width:200px">
+              <col style="width:96px">`;
           } else {
             colgroupEl.innerHTML = '';
           }
@@ -5023,7 +5153,7 @@ function applyDashboardSnapshot(snapshot) {
         const filterHeadCells = cols.map(col => `<th class="${headerClass}">${col.label}</th>`).join('');
 
         tHead.innerHTML = `
-          <tr>${filterHeadCells}<th class="whitespace-nowrap text-right pr-6 sticky-action-header">Aksi</th></tr>
+          <tr>${filterHeadCells}<th class="whitespace-nowrap text-center sticky-action-header">Aksi</th></tr>
         `;
         tableRenderState.headerKey = headerKey;
       }
@@ -5059,8 +5189,8 @@ function applyDashboardSnapshot(snapshot) {
         return `
           <tr>
             ${cells}
-            <td class="whitespace-nowrap text-right pr-5 sticky-action-cell">
-              <div class="inline-flex gap-2 justify-end">
+            <td class="whitespace-nowrap text-center sticky-action-cell">
+              <div class="inline-flex gap-2 justify-center">
                 <button onclick="openModal('edit', decodeURIComponent('${safeJson}'))" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors shadow-sm" title="Edit Data"><i class="fa-solid fa-pen text-xs"></i></button>
                 <button onclick="deleteRow(${row._rowIndex})" class="w-8 h-8 md:w-9 md:h-9 rounded-lg bg-white border border-slate-200 text-rose-600 hover:bg-rose-50 transition-colors shadow-sm" title="Hapus Data"><i class="fa-solid fa-trash text-xs"></i></button>
               </div>
